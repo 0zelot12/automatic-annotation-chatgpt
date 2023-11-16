@@ -9,3 +9,4 @@ class PetDocument:
         self.tokens_ids = tokens_ids
         self.ner_tags = ner_tags
         self.sentence_ids = sentence_ids
+        self.relations = {}
