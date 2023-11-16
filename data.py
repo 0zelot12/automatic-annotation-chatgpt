@@ -9,6 +9,7 @@ df = pd.read_parquet("./assets/pet_dataset.parquet")
 # Convert to objects
 pet_documents = df.to_dict(orient="records")
 records = []
+# TODO: Refactor
 for document in pet_documents:
     converted_document = PetDocument(
         name=document["document name"],
@@ -52,16 +53,18 @@ min_tokens = min(get_lengths(records))
 max_tokens = max(get_lengths(records))
 
 # Calculate stats for ner-tags
+print("============= ner-tags =============")
 ner_tags = []
 for record in records:
     ner_tags.extend(record.ner_tags)
 
 ner_tags_counts = Counter(ner_tags)
 
-# for string, count in ner_tags_counts.items():
-#     print(f"{string}: {count}")
+for string, count in ner_tags_counts.items():
+    print(f"{string}: {count}")
 
 # Calculate stats for relations
+print("============= relations =============")
 relations = []
 for record in records:
     relations.extend(record.relations["relation_type"])
