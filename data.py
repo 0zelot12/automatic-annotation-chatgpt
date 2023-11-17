@@ -1,6 +1,8 @@
 import pandas as pd
-from collections import Counter
+import matplotlib.pyplot as plt
+import numpy as np
 
+from collections import Counter
 from pet_document import PetDocument
 
 # Load data
@@ -53,7 +55,6 @@ min_tokens = min(get_lengths(records))
 max_tokens = max(get_lengths(records))
 
 # Calculate stats for ner-tags
-print("============= ner-tags =============")
 ner_tags = []
 for record in records:
     ner_tags.extend(record.ner_tags)
@@ -64,12 +65,37 @@ for string, count in ner_tags_counts.items():
     print(f"{string}: {count}")
 
 # Calculate stats for relations
-print("============= relations =============")
 relations = []
 for record in records:
     relations.extend(record.relations["relation_type"])
 
 relations_counts = Counter(relations)
 
+# Plot data
+plot_categories = []
+plot_values = []
+
 for string, count in relations_counts.items():
-    print(f"{string}: {count}")
+    plot_categories.append(string)
+    plot_values.append(count)
+
+# Set the width of the bars
+bar_width = 0.35
+
+# Set the positions of the bars on the x-axis
+bar_positions = np.arange(len(plot_categories))
+
+# Create the bar plot
+plt.bar(bar_positions, plot_values, width=bar_width)
+
+# Add labels and title
+plt.xlabel("Relationen")
+plt.ylabel("Anzahl der Vorkommen im Datensatz")
+plt.title("Verteilung von Relationen im PET-Datensatz")
+plt.xticks(bar_positions, plot_categories)
+
+for i, value in enumerate(plot_values):
+    plt.text(bar_positions[i], value + 0.1, str(value), ha="center", va="bottom")
+
+# Display the plot
+plt.show()

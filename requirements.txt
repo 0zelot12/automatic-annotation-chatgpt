@@ -1,3 +1,5 @@
 openai
 pandas
 fastparquet
+matplotlib
+numpy
