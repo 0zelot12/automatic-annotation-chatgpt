@@ -52,7 +52,17 @@ Identify and annotate the main activity in the sentence. Include only the verbal
 
 An Activity Data object represents the data or the object directly used by an activity. Usually an Activity Data is expressed by a nominal expression (a noun phrase). Please annotate the entire noun phrase describing the Activity Data. Otherwise, mark the prepositional phrase describing the activity data. Underline the annotation in the output.
 
-## Output format
+## Definition AND Gateway
+
+## Definition XOR Gateway
+
+## Definition Condition Specicifaction
+
+## Defintion Further Specification
+
+## Definition O
+
+# Output format
 
 {
     actors: ["Actor 1", "Actor 2"],
