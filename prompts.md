@@ -1,3 +1,17 @@
+# Ansätze
+
+Alle Definitionen aufzählen
+
+    Ohne Beispiele
+
+    Mit Beispiele
+
+IOB-Format einführen
+
+    Ohne Beispiele
+
+    Mit Beispielen
+
 # Simple Actor
 
 Given this ruleset:
@@ -24,9 +38,9 @@ Given this definition:
 
 ABC Company transmits the data to Company B.
 
-<--> 
+<-->
 Identify and annotate the main activity in the sentence. Include only the verbal or nominal expression of the activity, excluding any objects, prepositional phrases, articles, or conjunctions. If there are multiple activities, annotate each separately.
-<--> 
+<-->
 
 # Simple activity data
 
@@ -40,19 +54,23 @@ The client sends a message to the customer.
 
 # Actor + Activity + Activity Data
 
-## Definition actor
+## Definition Actor
 
 Annotate the entire noun phrase mentioning the actor. In this context, an actor is any organizational element responsible for the action. If there are multiple actors, annotate each separately.
 
-## Definition activity
+## Definition Activity
 
 Identify and annotate the main activity in the sentence. Include only the verbal or nominal expression of the activity, excluding any objects, prepositional phrases, articles, or conjunctions. If there are multiple activities, annotate each separately.
 
-## Definition activity data
+## Definition Activity Data
 
 An Activity Data object represents the data or the object directly used by an activity. Usually an Activity Data is expressed by a nominal expression (a noun phrase). Please annotate the entire noun phrase describing the Activity Data. Otherwise, mark the prepositional phrase describing the activity data. Underline the annotation in the output.
 
 ## Definition AND Gateway
+
+A gateway represents a control flow point in a process model where the process flow is split into alternative paths, or whether multiple possible paths are merged (aka joined).
+
+An AND split or parallel split is a point in a process model where a single thread of control splits into multiple threads of control which are executed concurrently.
 
 ## Definition XOR Gateway
 
@@ -60,12 +78,26 @@ An Activity Data object represents the data or the object directly used by an ac
 
 ## Defintion Further Specification
 
+The Further Specification layer captures important details of an Activity, such as the mean or the manner of its execution.
+
 ## Definition O
 
 # Output format
 
+```
+Use the following output format:
+
 {
     actors: ["Actor 1", "Actor 2"],
     activities: ["Activity 1", "Activity 2"],
-    activity_data: ["Activity Data 1", "Activity Data 2"]
+    activity_data: ["Activity Data 1", "Activity Data 2"],
 }
+```
+
+# Complete prompt
+
+# Example sentences
+
+The MPON sents the dismissal to the MPOO.
+The MPOO reviews the dismissal.
+The EC tells the INQ about the change of his maste rdata.
