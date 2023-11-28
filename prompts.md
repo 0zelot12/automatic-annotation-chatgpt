@@ -1,5 +1,7 @@
 # Ansätze
 
+Einführung in den Kontext der Annotation
+
 Alle Definitionen aufzählen
 
     Ohne Beispiele
@@ -58,9 +60,19 @@ The client sends a message to the customer.
 
 Annotate the entire noun phrase mentioning the actor. In this context, an actor is any organizational element responsible for the action. If there are multiple actors, annotate each separately.
 
+This is an example:
+
+"The MPON reports the meter operation to the GO."
+{ actors: ["The MPON", "the GO"] }
+
 ## Definition Activity
 
-Identify and annotate the main activity in the sentence. Include only the verbal or nominal expression of the activity, excluding any objects, prepositional phrases, articles, or conjunctions. If there are multiple activities, annotate each separately.
+Annotate the main activity in the sentence. Include only the verbal or nominal expression of the activity, excluding any objects, prepositional phrases, articles, or conjunctions. If there are multiple activities, annotate each separately.
+
+This is an example:
+
+"The MPON reports the meter operation to the GO."
+{ activies: ["reports"] }
 
 ## Definition Activity Data
 
@@ -100,4 +112,4 @@ Use the following output format:
 
 The MPON sents the dismissal to the MPOO.
 The MPOO reviews the dismissal.
-The EC tells the INQ about the change of his maste rdata.
+The EC tells the INQ about the change of his master data.
