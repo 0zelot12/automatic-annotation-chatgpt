@@ -6,6 +6,8 @@
 
 ## One-Shot (Beispiele + IOB-Format (Meta-Language Definition Pattern))
 
+## One-Shot (Keine Definitionen, sondern nur ein Beispiel)
+
 ## Model temperature
 
 # Metrics
