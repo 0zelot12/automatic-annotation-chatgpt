@@ -3,4 +3,4 @@ pandas
 fastparquet
 matplotlib
 numpy
-dotenv
+python-dotenv
