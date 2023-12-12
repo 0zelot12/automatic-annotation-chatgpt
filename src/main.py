@@ -2,7 +2,7 @@ from langchain.llms import OpenAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 
-from templates import actor_template
+from templates import actor_template, activity_template, activity_data_template
 
 from dotenv import load_dotenv
 
