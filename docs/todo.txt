@@ -1,0 +1,3 @@
+Daten filtern
+    -> Alle Annotation bis auf Actor, Activity, Activity Data filtern
+Lesbares Output Format
