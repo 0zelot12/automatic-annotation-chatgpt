@@ -6,7 +6,7 @@ If there are multiple actors, annotate each separately.
 This is an example:
 
 Example input: ['The', 'MPON', 'sents', 'the', 'dismissal', 'to', 'the', 'MPOO', '.']
-Example output: ['<A>The<A>', '<A>MPON<A>', 'sents', 'the', 'dismissal', 'to', '<A>the<A>', '<A>MPOO<A>', '.']
+Example output: ['The', 'MPON', 'O', 'O', 'O', 'O', 'the', 'MPOO', '.']
 
 {input}
 """
