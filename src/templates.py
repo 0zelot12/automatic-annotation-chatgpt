@@ -11,15 +11,14 @@ actors: ["The MPON", "the MPOO"]
 {input}
 """
 
-activity_template = """
-Annotate the main activity in the sentence. 
-Include only the verbal or nominal expression of the activity, excluding any objects, prepositional phrases, articles, or conjunctions. 
-If there are multiple activities, annotate each separately.
+activity_template = """Annotate the main activity in the sentence. Include only the verbal or nominal expression of 
+the activity, excluding any objects, prepositional phrases, articles, or conjunctions. If there are multiple 
+activities, annotate each separately.
 
 This is an example:
 
 ['The', 'MPON', 'reports', 'the', 'meter', 'operation', 'to', 'the', 'GO', '.'] 
-activties: ["reports"]
+activities: ["reports"]
 
 {input}
 """

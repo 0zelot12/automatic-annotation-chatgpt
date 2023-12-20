@@ -2,5 +2,6 @@ openai
 pandas
 fastparquet
 matplotlib
-numpy
-python-dotenv
+numpy~=1.26.2
+python-dotenv~=1.0.0
+langchain~=0.0.351
