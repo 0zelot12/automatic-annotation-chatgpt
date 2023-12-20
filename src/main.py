@@ -8,6 +8,16 @@ from dotenv import load_dotenv
 
 from templates import actor_template
 
+import json
+
+def convert_string_to_list(string_repr):
+    try:
+        # Model adds newlines sometimes
+        return json.loads(string_repr.replace("'", "\"").replace("\\n", ""))
+    except (json.JSONDecodeError, ValueError) as e:
+        print(f"Error: {e}")
+        return None
+
 load_dotenv()
 
 df = pd.read_parquet("./assets/pet_dataset.parquet")
@@ -24,6 +34,8 @@ print(f"Model used: {model.model_name}")
 
 response = chain.invoke({"input": df["tokens"][document_number]})
 
+response = convert_string_to_list(response)
+
 # TODO: Implement evaluation of the result
 
-print(response)
+print(len(response))
