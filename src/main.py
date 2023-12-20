@@ -11,12 +11,9 @@ from templates import actor_template
 import json
 
 def convert_string_to_list(string_repr):
-    try:
-        # Model adds newlines sometimes
-        return json.loads(string_repr.replace("'", "\"").replace("\\n", ""))
-    except (json.JSONDecodeError, ValueError) as e:
-        print(f"Error: {e}")
-        return None
+    # Model adds newlines sometimes
+    return json.loads(string_repr.replace("'", "\"").replace("\\n", ""))
+        
 
 load_dotenv()
 
@@ -26,16 +23,18 @@ document_number = 1
 
 prompt = ChatPromptTemplate.from_template(actor_template)
 model = ChatOpenAI(model="gpt-3.5-turbo")
-# TODO: Use Pydantic parser
-parser = StrOutputParser()
+parser = StrOutputParser() # TODO: Use Pydantic parser
+input_tokens = df["tokens"][document_number]
+
 chain = prompt | model | parser
 
 print(f"Model used: {model.model_name}")
 
-response = chain.invoke({"input": df["tokens"][document_number]})
+response = chain.invoke({"input": input_tokens})
 
 response = convert_string_to_list(response)
 
 # TODO: Implement evaluation of the result
 
+print(len(input_tokens))
 print(len(response))
