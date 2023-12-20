@@ -1,16 +1,18 @@
+import json
+import sys
+import logging
+
 import pandas as pd
 
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
+from datetime import datetime
+
 from dotenv import load_dotenv
 
 from templates import actor_template
-
-import json
-import sys
-import logging
 
 def convert_string_to_list(string_repr):
     # Model adds newlines sometimes
@@ -43,13 +45,10 @@ def annotate_document(document_number):
 
     # TODO: Implement evaluation of the result
 
-    logging.debug(input_tokens)
-    logging.debug(response)
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     logging.basicConfig(
         level=logging.DEBUG, 
-        filename=f'pet.log'
+        filename=f"./logs/annotation-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.log"
     )
     document_number = int(sys.argv[1])
     annotate_document(document_number)
