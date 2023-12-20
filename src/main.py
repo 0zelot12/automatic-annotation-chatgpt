@@ -1,23 +1,16 @@
-from langchain.llms import OpenAI
-from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain
-
-from templates import actor_template, activity_template, activity_data_template
+from langchain.chat_models import ChatOpenAI
+from langchain.prompts import ChatPromptTemplate
 
 from dotenv import load_dotenv
 
+from templates import actor_template
+
 load_dotenv()
 
-llm = OpenAI()
+prompt = ChatPromptTemplate.from_template(actor_template)
+model = ChatOpenAI()
+chain = prompt | model
 
-prompt_template_actor = PromptTemplate(
-    input_variables=["input"], template=actor_template
-)
+response = chain.invoke({"input": '["The", "EC", "tells", "the", "INQ", "about", "the", "change", "of", "his", "master", "data", "."]'})
 
-actor_chain = LLMChain(llm=llm, prompt=prompt_template_actor)
-
-# TODO: Read input from file
-
-# response = actor_chain({"input": actor_input})
-
-# print(response["text"])
+print(response)
