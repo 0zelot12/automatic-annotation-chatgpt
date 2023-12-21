@@ -18,6 +18,24 @@ def convert_string_to_list(string_repr):
     # Model adds newlines sometimes
     return json.loads(string_repr.replace("'", "\"").replace("\\n", ""))
 
+def convert_tags(tags, entity):
+    filtered_tags = []
+    for tag in tags:
+        if tag == f'B-{entity}' or tag == f'I-{entity}':
+            filtered_tags.append(entity)
+        else:
+            filtered_tags.append('O')
+    return filtered_tags
+
+def convert_result(annotations, entity):
+    converted_results = []
+    for annotation in annotations:
+        if annotation == "O":
+            converted_results.append("O")
+        else:
+            converted_results.append(entity)
+    return converted_results
+
 def annotate_document(document_number):
     load_dotenv()
     df = pd.read_parquet("./assets/pet_dataset.parquet")
@@ -28,6 +46,7 @@ def annotate_document(document_number):
 
     input_tokens = df["tokens"][document_number]
     document_name = df['document name'][document_number]
+    reference_annotations = df['ner_tags'][document_number]
 
     chain = prompt | model | parser
 
@@ -36,12 +55,16 @@ def annotate_document(document_number):
     logging.debug(f"Input tokens: {input_tokens}")
 
     response = chain.invoke({"input": input_tokens})
-
     logging.debug(f"API response: {response}")
 
-    response = convert_string_to_list(response)
+    parsed_response = convert_string_to_list(response)
+    logging.debug(f"Parsed response: {parsed_response}")
 
-    logging.debug(f"Parsed response: {response}")
+    converted_response = convert_result(parsed_response, "Actor")
+    logging.debug(f"Converted response: {converted_response}")
+
+    logging.debug(f"Length of input: {len(input_tokens)}")
+    logging.debug(f"Length of output: {len(converted_response)}")
 
     # TODO: Implement evaluation of the result
 
