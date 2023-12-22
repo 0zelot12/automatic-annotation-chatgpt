@@ -14,6 +14,7 @@ from datetime import datetime
 from dotenv import load_dotenv
 
 from templates import actor_template, activity_template, activity_data_template
+from annotation_result import AnnotationResult
 
 
 def convert_string_to_list(string_repr):
@@ -88,29 +89,45 @@ def annotate_document(document_number, model_name, entity_type):
 
     reference_annotations = convert_tags(reference_annotations, entity_type)
 
-    # TODO: Implement data structure for results
-    hit_count_o = 0
-    hit_count_actor = 0
+    annotation_result = AnnotationResult(input_length=len(input_tokens))
+
     for reference, result in zip(reference_annotations, converted_response):
         logging.debug(f"Expected tag: {reference} - Result: {result}")
         if result == reference:
-            if result == entity_type:
-                hit_count_actor += 1
+            if result == "Actor":
+                annotation_result.recognized_actor += 1
+            if result == "Activity":
+                annotation_result.recognized_activity += 1
+            if result == "Activity Data":
+                annotation_result.recognized_activity_data += 1
             if result == "O":
-                hit_count_o += 1
+                annotation_result.recognized_o
 
     # TODO: Implement method to extract all stats at once
-    total_count_actor = 0
-    total_count_o = 0
     for tag in reference_annotations:
         if tag == "O":
-            total_count_o += 1
-        if tag == entity_type:
-            total_count_actor += 1
+            annotation_result.expected_o += 1
+        if tag == "Actor":
+            annotation_result.expected_actor += 1
+        if tag == "Actitvity":
+            annotation_result.expected_activity += 1
+        if tag == "Actitvity Data":
+            annotation_result.expected_activity_data += 1
 
-    logging.debug(f"Hits O: {hit_count_o} - Total: {total_count_o}")
-    logging.debug(f"Hits {entity_type}: {hit_count_actor} - Total: {total_count_actor}")
-    logging.debug(f"Input length: {len(df['ner_tags'][document_number])}")
+    logging.debug(
+        f"O recognized: {annotation_result.recognized_o} - Expected: {annotation_result.recognized_o}"
+    )
+    logging.debug(
+        f"Actor recognized: {annotation_result.recognized_actor} - Expected: {annotation_result.expected_actor}"
+    )
+    logging.debug(
+        f"Activity recognized: {annotation_result.recognized_activity} - Expected: {annotation_result.expected_activity}"
+    )
+    logging.debug(
+        f"Activity Data recognized: {annotation_result.recognized_activity_data} - Expected: {annotation_result.expected_activity_data}"
+    )
+
+    logging.debug(f"Input length: {annotation_result.input_length}")
 
 
 if __name__ == "__main__":

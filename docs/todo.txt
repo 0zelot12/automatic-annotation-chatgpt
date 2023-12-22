@@ -1,3 +1,1 @@
-Daten filtern
-    -> Alle Annotation bis auf Actor, Activity, Activity Data filtern
-Lesbares Output Format
+Problem: Wenn man nacheinander annotiert, kann es passieren, dass ein Token als zwei verschiedene Entitäten erkannt wird
