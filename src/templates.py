@@ -5,7 +5,7 @@ Annotate the entire noun phrase mentioning the actor.
 In this context, an actor is any organizational element responsible for the action. 
 If there are multiple actors, annotate each separately.
 
-The output must be an valid Python array.
+The output must be a valid Python array.
 
 This is an example:
 
@@ -22,10 +22,12 @@ Annotate the main activity in the sentence. Include only the verbal or nominal e
 the activity, excluding any objects, prepositional phrases, articles, or conjunctions. If there are multiple 
 activities, annotate each separately.
 
+The output must be a valid Python array.
+
 This is an example:
 
 Example input: ['The', 'MPON', 'reports', 'the', 'meter', 'operation', 'to', 'the', 'GO', '.'] 
-Example output: ['The', 'MPON', '<B>reports<B>', 'the', 'meter', 'operation', 'to', 'the', 'GO', '.'] 
+Example output: ['The', 'MPON', '<A>reports<A>', 'the', 'meter', 'operation', 'to', 'the', 'GO', '.'] 
 
 {input}
 """
@@ -38,10 +40,12 @@ Usually an Activity Data is expressed by a nominal expression (a noun phrase).
 Please annotate the entire noun phrase describing the Activity Data. 
 Otherwise, mark the prepositional phrase describing the activity data.
 
+The output must be a valid Python array.
+
 This is an example:
 
 Example input: ['The', 'manager', 'sends', 'the', 'data', 'by', 'email' '.'] 
-Example output: ['The', 'manager', 'sends', '<C>the<C>', '<C>data<C>', 'by', 'email' '.'] 
+Example output: ['The', 'manager', 'sends', '<A>the<A>', '<A>data<A>', 'by', 'email' '.'] 
 
 {input}
 """
