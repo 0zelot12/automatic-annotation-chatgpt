@@ -10,7 +10,7 @@ The output must be an valid Python array.
 This is an example:
 
 Example input: ['The', 'MPON', 'sents', 'the', 'dismissal', 'to', 'the', 'MPOO', '.']
-Example output: ['The', 'MPON', 'O', 'O', 'O', 'O', 'the', 'MPOO', 'O']
+Example output: ['<A>The<A>', '<A>MPON<A>', 'sents', 'the', 'dismissal', 'to', '<A>the<A>', '<A>MPOO<A>', '.']
 
 {input}
 """

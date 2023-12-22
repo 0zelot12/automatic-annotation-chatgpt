@@ -30,11 +30,18 @@ def convert_tags(tags, entity):
 def convert_result(annotations, entity):
     converted_results = []
     for annotation in annotations:
-        if annotation == "O":
-            converted_results.append("O")
-        else:
+        if annotation.startswith("<A>"):
             converted_results.append(entity)
+        else:
+            converted_results.append("O")
     return converted_results
+
+def get_entity_type_count(tags, entity):
+    count = 0
+    for tag in tags:
+        if tag == f'B-{entity}' or tag == f'I-{entity}':
+            count += 1
+    return count
 
 def annotate_document(document_number):
     load_dotenv()
@@ -63,10 +70,24 @@ def annotate_document(document_number):
     converted_response = convert_result(parsed_response, "Actor")
     logging.debug(f"Converted response: {converted_response}")
 
-    logging.debug(f"Length of input: {len(input_tokens)}")
-    logging.debug(f"Length of output: {len(converted_response)}")
+    assert len(input_tokens) == len(converted_response)
 
-    # TODO: Implement evaluation of the result
+    reference_annotations = convert_tags(reference_annotations, "Actor")
+
+    # TODO: Implement data structure for results
+    hit_count_o = 0
+    hit_count_actor = 0
+    for reference, result in zip(reference_annotations, converted_response):
+        logging.debug(f"Expected: {reference} - Result: {result}")
+        if result == reference:
+            if result == "Actor":
+                hit_count_actor += 1
+            if result == "O":
+                hit_count_o += 1
+
+    logging.debug(f"Hits O: {hit_count_o}")
+    logging.debug(f"Actor O: {hit_count_actor}")
+    logging.debug(f"Total: {len(df['ner_tags'][document_number])}")
 
 if __name__ == "__main__":
     logging.basicConfig(
