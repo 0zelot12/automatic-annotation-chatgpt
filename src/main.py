@@ -1,5 +1,6 @@
 import json
 import sys
+import getopt
 import logging
 
 import pandas as pd
@@ -48,12 +49,12 @@ def get_entity_type_count(tags, entity):
     return count
 
 
-def annotate_document(document_number):
+def annotate_document(document_number, model_name):
     load_dotenv()
     df = pd.read_parquet("./assets/pet_dataset.parquet")
 
     prompt = ChatPromptTemplate.from_template(actor_template)
-    model = ChatOpenAI(model="gpt-3.5-turbo")
+    model = ChatOpenAI(model=model_name)
     parser = StrOutputParser()  # TODO: Use Pydantic parser
 
     input_tokens = df["tokens"][document_number]
@@ -109,5 +110,16 @@ if __name__ == "__main__":
         level=logging.DEBUG,
         filename=f"./logs/annotation-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.log",
     )
-    document_number = int(sys.argv[1])
-    annotate_document(document_number)
+    # TODO: Evaluate argparse module
+    arguments = sys.argv[1:]
+    short_options = ""
+    long_options = ["document_number=", "model="]
+    options, values = getopt.getopt(arguments, short_options, long_options)
+    document_number = 0
+    model = "gpt-3.5-turbo"
+    for o, v in options:
+        if o == "--document_number":
+            document_number = int(v)
+        if o == "--model":
+            model = v
+    annotate_document(document_number, model)
