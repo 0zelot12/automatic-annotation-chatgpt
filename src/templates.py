@@ -24,8 +24,8 @@ activities, annotate each separately.
 
 This is an example:
 
-['The', 'MPON', 'reports', 'the', 'meter', 'operation', 'to', 'the', 'GO', '.'] 
-activities: ["reports"]
+Example input: ['The', 'MPON', 'reports', 'the', 'meter', 'operation', 'to', 'the', 'GO', '.'] 
+Example output: ['The', 'MPON', '<B>reports<B>', 'the', 'meter', 'operation', 'to', 'the', 'GO', '.'] 
 
 {input}
 """
@@ -40,8 +40,8 @@ Otherwise, mark the prepositional phrase describing the activity data.
 
 This is an example:
 
-['The', 'manager', 'sends', 'the', 'data', 'by', 'email' '.'] 
-activity_data: ["the data"]
+Example input: ['The', 'manager', 'sends', 'the', 'data', 'by', 'email' '.'] 
+Example output: ['The', 'manager', 'sends', '<C>the<C>', '<C>data<C>', 'by', 'email' '.'] 
 
 {input}
 """
