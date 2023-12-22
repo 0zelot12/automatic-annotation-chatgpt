@@ -14,18 +14,21 @@ from dotenv import load_dotenv
 
 from templates import actor_template
 
+
 def convert_string_to_list(string_repr):
     # Model adds newlines sometimes
-    return json.loads(string_repr.replace("'", "\"").replace("\\n", ""))
+    return json.loads(string_repr.replace("'", '"').replace("\\n", ""))
+
 
 def convert_tags(tags, entity):
     filtered_tags = []
     for tag in tags:
-        if tag == f'B-{entity}' or tag == f'I-{entity}':
+        if tag == f"B-{entity}" or tag == f"I-{entity}":
             filtered_tags.append(entity)
         else:
-            filtered_tags.append('O')
+            filtered_tags.append("O")
     return filtered_tags
+
 
 def convert_result(annotations, entity):
     converted_results = []
@@ -36,12 +39,14 @@ def convert_result(annotations, entity):
             converted_results.append("O")
     return converted_results
 
+
 def get_entity_type_count(tags, entity):
     count = 0
     for tag in tags:
-        if tag == f'B-{entity}' or tag == f'I-{entity}':
+        if tag == f"B-{entity}" or tag == f"I-{entity}":
             count += 1
     return count
+
 
 def annotate_document(document_number):
     load_dotenv()
@@ -49,11 +54,11 @@ def annotate_document(document_number):
 
     prompt = ChatPromptTemplate.from_template(actor_template)
     model = ChatOpenAI(model="gpt-3.5-turbo")
-    parser = StrOutputParser() # TODO: Use Pydantic parser
+    parser = StrOutputParser()  # TODO: Use Pydantic parser
 
     input_tokens = df["tokens"][document_number]
-    document_name = df['document name'][document_number]
-    reference_annotations = df['ner_tags'][document_number]
+    document_name = df["document name"][document_number]
+    reference_annotations = df["ner_tags"][document_number]
 
     chain = prompt | model | parser
 
@@ -78,21 +83,31 @@ def annotate_document(document_number):
     hit_count_o = 0
     hit_count_actor = 0
     for reference, result in zip(reference_annotations, converted_response):
-        logging.debug(f"Expected: {reference} - Result: {result}")
+        logging.debug(f"Expected tag: {reference} - Result: {result}")
         if result == reference:
             if result == "Actor":
                 hit_count_actor += 1
             if result == "O":
                 hit_count_o += 1
 
-    logging.debug(f"Hits O: {hit_count_o}")
-    logging.debug(f"Actor O: {hit_count_actor}")
-    logging.debug(f"Total: {len(df['ner_tags'][document_number])}")
+    # TODO: Implement method to extract all stats at once
+    total_count_actor = 0
+    total_count_o = 0
+    for tag in reference_annotations:
+        if tag == "O":
+            total_count_o += 1
+        if tag == "Actor":
+            total_count_actor += 1
+
+    logging.debug(f"Hits O: {hit_count_o} - Total: {total_count_o}")
+    logging.debug(f"Hits Actor: {hit_count_actor} - Total: {total_count_actor}")
+    logging.debug(f"Input length: {len(df['ner_tags'][document_number])}")
+
 
 if __name__ == "__main__":
     logging.basicConfig(
-        level=logging.DEBUG, 
-        filename=f"./logs/annotation-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.log"
+        level=logging.DEBUG,
+        filename=f"./logs/annotation-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.log",
     )
     document_number = int(sys.argv[1])
     annotate_document(document_number)
