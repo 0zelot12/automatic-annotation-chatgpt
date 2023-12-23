@@ -73,14 +73,15 @@ def annotate_document(document_number, model_name, entity_type):
     logging.info(f"Evaluated document: {document_name}")
     logging.info(f"Model used: {model.model_name}")
     logging.debug(f"Input tokens: {input_tokens}")
+    logging.debug(f"Input length: {input_tokens}")
 
     response = chain.invoke({"input": input_tokens})
     logging.debug(f"API response: {response}")
 
+    assert len(input_tokens) == len(response.result)
+
     converted_response = convert_result(response.result, entity_type)
     logging.debug(f"Converted response: {converted_response}")
-
-    assert len(input_tokens) == len(converted_response)
 
     reference_annotations = convert_tags(reference_annotations, entity_type)
 
@@ -112,12 +113,15 @@ def annotate_document(document_number, model_name, entity_type):
     logging.debug(
         f"O recognized: {annotation_result.recognized_o} - Expected: {annotation_result.recognized_o}"
     )
+
     logging.debug(
         f"Actor recognized: {annotation_result.recognized_actor} - Expected: {annotation_result.expected_actor}"
     )
+
     logging.debug(
         f"Activity recognized: {annotation_result.recognized_activity} - Expected: {annotation_result.expected_activity}"
     )
+
     logging.debug(
         f"Activity Data recognized: {annotation_result.recognized_activity_data} - Expected: {annotation_result.expected_activity_data}"
     )
