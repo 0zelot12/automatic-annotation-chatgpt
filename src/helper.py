@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+
 def generate_simple_bar_chart(values, categories, xLabel, yLabel, title):
     # Set the width of the bars
     bar_width = 0.35
@@ -29,6 +30,7 @@ def generate_simple_bar_chart(values, categories, xLabel, yLabel, title):
     # Display the plot
     plt.show()
 
+
 def generate_horizontal_bar_chart(values, categories, xLabel, yLabel, title):
     # Set the height of the bars
     bar_height = 0.35
@@ -56,3 +58,20 @@ def generate_horizontal_bar_chart(values, categories, xLabel, yLabel, title):
 
     # Display the plot
     plt.show()
+
+
+def generate_html(records):
+    with open("../assets/template.html", "r") as file:
+        html_template = file.read()
+
+    data = ""
+
+    for record in records:
+        html_content = html_template
+        html_content = html_content.replace("<!-- TITLE -->", record.name)
+        for token, ner_tag in zip(record.tokens, record.ner_tags):
+            data += f"<span class='{ner_tag}'>{token}</span>"
+        html_content = html_content.replace("<!-- CONTENT  -->", data)
+        with open(f"../out/{record.name}.html", "w") as file:
+            file.write(html_content)
+        data = ""
