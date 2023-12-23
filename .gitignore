@@ -1,8 +1,13 @@
+# IDEs
 .vscode
-out/
+.idea/
+
+# API key is supposed to be stored here
+.env
+
+# Ignore logs
+logs/
+*.log
+
 .DS_Store
 **/__pycache__/
-.env
-.idea/
-*.log
-logs/
