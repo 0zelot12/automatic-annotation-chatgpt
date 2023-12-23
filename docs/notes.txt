@@ -1,1 +1,2 @@
 Man kann Dokumente als Wissensbasis in Langchain laden.
+Problem: Wenn man nacheinander annotiert, kann es passieren, dass ein Token als zwei verschiedene Entitäten erkannt wird

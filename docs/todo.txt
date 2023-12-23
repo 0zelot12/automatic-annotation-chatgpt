@@ -1,1 +1,2 @@
-Problem: Wenn man nacheinander annotiert, kann es passieren, dass ein Token als zwei verschiedene Entitäten erkannt wird
+Few-Shot Beispiele implementieren
+PET.ipynb entfernen
