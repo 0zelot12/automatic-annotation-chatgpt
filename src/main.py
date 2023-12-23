@@ -7,7 +7,7 @@ import pandas as pd
 
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
-from langchain_core.output_parsers import StrOutputParser
+from langchain.output_parsers import PydanticOutputParser
 
 from datetime import datetime
 
@@ -15,11 +15,7 @@ from dotenv import load_dotenv
 
 from templates import actor_template, activity_template, activity_data_template
 from annotation_result import AnnotationResult
-
-
-def convert_string_to_list(string_repr):
-    # Model adds newlines sometimes
-    return json.loads(string_repr.replace("'", '"').replace("\\n", ""))
+from model_response import ModelResponse
 
 
 def convert_tags(tags, entity):
@@ -64,9 +60,11 @@ def annotate_document(document_number, model_name, entity_type):
 
     prompt = ChatPromptTemplate.from_template(input_template)
     model = ChatOpenAI(model=model_name)
-    parser = StrOutputParser()  # TODO: Use Pydantic parser
+    parser = PydanticOutputParser(pydantic_object=ModelResponse)
 
-    input_tokens = df["tokens"][document_number]
+    # TODO: Generate input format via parser.get_format_instructions()
+
+    input_tokens = df["tokens"][document_number].tolist()
     document_name = df["document name"][document_number]
     reference_annotations = df["ner_tags"][document_number]
 
@@ -79,10 +77,7 @@ def annotate_document(document_number, model_name, entity_type):
     response = chain.invoke({"input": input_tokens})
     logging.debug(f"API response: {response}")
 
-    parsed_response = convert_string_to_list(response)
-    logging.debug(f"Parsed response: {parsed_response}")
-
-    converted_response = convert_result(parsed_response, entity_type)
+    converted_response = convert_result(response.result, entity_type)
     logging.debug(f"Converted response: {converted_response}")
 
     assert len(input_tokens) == len(converted_response)
@@ -101,7 +96,7 @@ def annotate_document(document_number, model_name, entity_type):
             if result == "Activity Data":
                 annotation_result.recognized_activity_data += 1
             if result == "O":
-                annotation_result.recognized_o
+                annotation_result.recognized_o += 1
 
     # TODO: Implement method to extract all stats at once
     for tag in reference_annotations:
@@ -138,13 +133,16 @@ if __name__ == "__main__":
     # TODO: Evaluate argparse module
     arguments = sys.argv[1:]
     short_options = ""
-    long_options = ["document_number=", "model="]
+    long_options = ["document_number=", "model=", "entity_type="]
     options, values = getopt.getopt(arguments, short_options, long_options)
     document_number = 0
+    entity_type = "Actor"
     model = "gpt-3.5-turbo"
     for o, v in options:
         if o == "--document_number":
             document_number = int(v)
         if o == "--model":
             model = v
-    annotate_document(document_number, model, "Activity")
+        if o == "--entity_type":
+            entity_type = v
+    annotate_document(document_number, model, entity_type)

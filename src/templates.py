@@ -5,12 +5,15 @@ Annotate the entire noun phrase mentioning the actor.
 In this context, an actor is any organizational element responsible for the action. 
 If there are multiple actors, annotate each separately.
 
-The output must be a valid Python array.
+The output must be valid JSON.
 
 This is an example:
 
-Example input: ['The', 'MPON', 'sents', 'the', 'dismissal', 'to', 'the', 'MPOO', '.']
-Example output: ['<A>The<A>', '<A>MPON<A>', 'sents', 'the', 'dismissal', 'to', '<A>the<A>', '<A>MPOO<A>', '.']
+['The', 'MPON', 'sents', 'the', 'dismissal', 'to', 'the', 'MPOO', '.']
+
+{{
+    result: ['<A>The<A>', '<A>MPON<A>', 'sents', 'the', 'dismissal', 'to', '<A>the<A>', '<A>MPOO<A>', '.']
+}}
 
 {input}
 """
