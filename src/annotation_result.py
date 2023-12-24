@@ -5,6 +5,7 @@ from dataclasses import dataclass
 class AnnotationResult:
     document_name: str
     input_length: int = 0
+    response_time: int = 0
     recognized_o: int = 0
     expected_o: int = 0
     expected_actor: int = 0
