@@ -84,7 +84,9 @@ def annotate_document(document_number, model_name, entity_type):
 
     reference_annotations = convert_tags(reference_annotations, entity_type)
 
-    annotation_result = AnnotationResult(input_length=len(input_tokens))
+    annotation_result = AnnotationResult(
+        document_name=document_name, input_length=len(input_tokens)
+    )
 
     for reference, result in zip(reference_annotations, converted_response):
         logging.debug(f"Expected tag: {reference} - Result: {result}")
