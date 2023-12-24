@@ -1,2 +1,2 @@
 Few-Shot Beispiele implementieren
-PET.ipynb entfernen
+Längere Beispiele
