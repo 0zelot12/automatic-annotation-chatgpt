@@ -47,8 +47,10 @@ def get_entity_type_count(tags, entity):
 
 
 def annotate_document(document_number, model_name, entity_type):
-    load_dotenv()
-    df = pd.read_parquet("./assets/pet_dataset.parquet")
+    load_dotenv()  # TODO: Move to different location
+    df = pd.read_parquet(
+        "./assets/pet_dataset.parquet"
+    )  # TODO: Move to different location
 
     input_template = actor_template
 
@@ -70,8 +72,10 @@ def annotate_document(document_number, model_name, entity_type):
 
     chain = prompt | model | parser
 
-    logging.info(f"Evaluated document: {document_name}")
-    logging.info(f"Model used: {model.model_name}")
+    logging.debug(
+        f"Evaluated document: {document_name} - Model used: {model.model_name}"
+    )
+
     logging.debug(f"Input tokens: {input_tokens}")
     logging.debug(f"Input length: {input_tokens}")
 
