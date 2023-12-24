@@ -6,7 +6,6 @@
 .env
 
 # Ignore logs
-logs/
 *.log
 
 .DS_Store
