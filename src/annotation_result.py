@@ -3,6 +3,8 @@ from dataclasses import dataclass
 
 @dataclass
 class AnnotationResult:
+    """Class to hold the statistics of an annotated document."""
+
     document_name: str
     input_length: int = 0
     response_time: int = 0
