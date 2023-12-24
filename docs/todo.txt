@@ -1,2 +1,4 @@
 Few-Shot Beispiele implementieren
 Längere Beispiele
+Visualisierung (Plot+HTML)
+Pfad Problem lösen (Pfade stimmen nicht mehr, wenn man das Script nicht aus dem src Verzeichnis ausführt)

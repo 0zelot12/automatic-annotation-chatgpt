@@ -60,18 +60,18 @@ def generate_horizontal_bar_chart(values, categories, xLabel, yLabel, title):
     plt.show()
 
 
-def generate_html(records):
+def generate_html(title, tokens, ner_tags):
     with open("../assets/template.html", "r") as file:
         html_template = file.read()
+        content = ""
+        for token, ner_tag in zip(tokens, ner_tags):
+            if ner_tag == "O":
+                content += f"{token} "
+            else:
+                content += f"<span class='{ner_tag}'>{token}</span> "
 
-    data = ""
+        result_string = html_template.replace("<!-- CONTENT  -->", content)
+        result_string = result_string.replace("<!-- TITLE -->", title)
 
-    for record in records:
-        html_content = html_template
-        html_content = html_content.replace("<!-- TITLE -->", record.name)
-        for token, ner_tag in zip(record.tokens, record.ner_tags):
-            data += f"<span class='{ner_tag}'>{token}</span>"
-        html_content = html_content.replace("<!-- CONTENT  -->", data)
-        with open(f"../out/{record.name}.html", "w") as file:
-            file.write(html_content)
-        data = ""
+        with open(f"../out/{title}.html", "w") as file:
+            file.write(result_string)

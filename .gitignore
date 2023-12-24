@@ -8,5 +8,7 @@
 # Ignore logs
 *.log
 
+out/*.html
+
 .DS_Store
 **/__pycache__/
