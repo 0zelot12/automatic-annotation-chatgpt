@@ -1,6 +1,7 @@
 import sys
 import getopt
 import logging
+import time
 
 import pandas as pd
 
@@ -74,8 +75,13 @@ def annotate_document(document_number, model_name, entity_type):
     logging.debug(f"Input tokens: {input_tokens}")
     logging.debug(f"Input length: {input_tokens}")
 
+    api_start_time = time.time()
     response = chain.invoke({"input": input_tokens})
-    logging.debug(f"API response: {response}")
+    api_end_time = time.time()
+
+    api_reponse_time = api_start_time - api_end_time
+
+    logging.debug(f"API response: {response} - Duration: {api_reponse_time}")
 
     assert len(input_tokens) == len(response.result)
 
@@ -85,7 +91,9 @@ def annotate_document(document_number, model_name, entity_type):
     reference_annotations = convert_tags(reference_annotations, entity_type)
 
     annotation_result = AnnotationResult(
-        document_name=document_name, input_length=len(input_tokens)
+        document_name=document_name,
+        input_length=len(input_tokens),
+        response_time=api_reponse_time,
     )
 
     for reference, result in zip(reference_annotations, converted_response):
