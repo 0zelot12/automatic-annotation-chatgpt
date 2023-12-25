@@ -16,3 +16,4 @@ class AnnotationResult:
     recognized_activity: int = 0
     expected_activity_data: int = 0
     recognized_activity_data: int = 0
+    incorrect_entities: int = 0

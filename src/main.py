@@ -121,6 +121,8 @@ def annotate_document(document_number, model_name, entity_type):
                 annotation_result.recognized_activity_data += 1
             elif result == "O":
                 annotation_result.recognized_o += 1
+        else:
+            annotation_result.incorrect_entities += 1
 
     logging.debug(
         f"O recognized: {annotation_result.recognized_o} - Expected: {annotation_result.expected_o}"
@@ -137,6 +139,8 @@ def annotate_document(document_number, model_name, entity_type):
     logging.debug(
         f"Activity Data recognized: {annotation_result.recognized_activity_data} - Expected: {annotation_result.expected_activity_data}"
     )
+
+    logging.debug(f"Not recognized correctly: {annotation_result.incorrect_entities}")
 
     logging.debug(f"Input length: {annotation_result.input_length}")
 
