@@ -13,7 +13,12 @@ from datetime import datetime
 
 from dotenv import load_dotenv
 
-from templates import actor_template, activity_template, activity_data_template
+from templates import (
+    actor_template,
+    actor_template_extended_example,
+    activity_template,
+    activity_data_template,
+)
 from annotation_result import AnnotationResult
 from model_response import ModelResponse
 
@@ -144,6 +149,8 @@ def annotate_document(document_number, model_name, entity_type):
 
     logging.debug(f"Input length: {annotation_result.input_length}")
 
+    return annotation_result
+
 
 if __name__ == "__main__":
     logging.basicConfig(
@@ -165,4 +172,8 @@ if __name__ == "__main__":
             model = v
         if o == "--entity_type":
             entity_type = v
-    annotate_document(document_number, model, entity_type)
+    for i in range(10):
+        try:
+            annotate_document(i, model, entity_type)
+        except:
+            logging.error("An has error occured")

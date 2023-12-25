@@ -18,6 +18,26 @@ This is an example:
 {input}
 """
 
+actor_template_extended_example = """
+You are an expert in process management.
+
+Annotate the entire noun phrase mentioning the actor. 
+In this context, an actor is any organizational element responsible for the action.
+If there are multiple actors, annotate each separately.
+
+The output must be valid JSON.
+
+This is an example:
+
+[ 'The', 'process', 'starts', 'periodically', 'on', 'the', 'first', 'of', 'each', 'month', ',', 'when', 'Assembler', 'AG', 'places', 'an', 'order', 'with', 'the', 'supplier', 'in', 'order', 'to', 'request', 'more', 'product', 'parts', '.', 'a', ')', 'Assembler', 'AG', 'sends', 'the', 'order', 'to', 'the', 'supplier', '.', 'b', ')', 'The', 'supplier', 'processes', 'the', 'order', '.', 'c', ')', 'The', 'supplier', 'sends', 'an', 'invoice', 'to', 'Assembler', 'AG', '.', 'd', ')', 'Assembler', 'AG', 'receives', 'the', 'invoice', '.' ]
+
+{{
+    result: [ 'The', 'process', 'starts', 'periodically', 'on', 'the', 'first', 'of', 'each', 'month', ',', 'when', 'Assembler', 'AG', 'places', 'an', 'order', 'with', '<A>the<A>', '<A>supplier<A>', 'in', 'order', 'to', 'request', 'more', 'product', 'parts', '.', 'a', ')', '<A>Assembler<A>', '<A>AG<A>', 'sends', 'the', 'order', 'to', '<A>the<A>', '<A>supplier<A>', '.', 'b', ')', '<A>The<A>', '<A>supplier<A>', 'processes', 'the', 'order', '.', 'c', ')', '<A>The<A>', '<A>supplier<A>', 'sends', 'an', 'invoice', 'to', '<A>Assembler<A>', '<A>AG<A>', '.', 'd', ')', '<A>Assembler<A>', '<A>AG<A>', 'receives', 'the', 'invoice', '.' ]
+}}
+
+{input}
+"""
+
 activity_template = """
 You are an expert in process management.
 
