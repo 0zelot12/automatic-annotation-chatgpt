@@ -106,3 +106,31 @@ Entities identified incorretly: {annotation_result.incorrect_entities}
         "w",
     ) as file:
         file.write(result_string)
+
+
+def convert_tags(tags, entity):
+    filtered_tags = []
+    for tag in tags:
+        if tag == f"B-{entity}" or tag == f"I-{entity}":
+            filtered_tags.append(entity)
+        else:
+            filtered_tags.append("O")
+    return filtered_tags
+
+
+def convert_result(annotations, entity):
+    converted_results = []
+    for annotation in annotations:
+        if annotation.startswith("<A>"):
+            converted_results.append(entity)
+        else:
+            converted_results.append("O")
+    return converted_results
+
+
+def get_entity_type_count(tags, entity):
+    count = 0
+    for tag in tags:
+        if tag == f"B-{entity}" or tag == f"I-{entity}":
+            count += 1
+    return count

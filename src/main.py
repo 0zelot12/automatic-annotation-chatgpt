@@ -15,41 +15,12 @@ from dotenv import load_dotenv
 
 from templates import (
     actor_template,
-    actor_template_extended_example,
     activity_template,
     activity_data_template,
 )
 from annotation_result import AnnotationResult
 from model_response import ModelResponse
-from helper import write_annotation_result_to_file
-
-
-def convert_tags(tags, entity):
-    filtered_tags = []
-    for tag in tags:
-        if tag == f"B-{entity}" or tag == f"I-{entity}":
-            filtered_tags.append(entity)
-        else:
-            filtered_tags.append("O")
-    return filtered_tags
-
-
-def convert_result(annotations, entity):
-    converted_results = []
-    for annotation in annotations:
-        if annotation.startswith("<A>"):
-            converted_results.append(entity)
-        else:
-            converted_results.append("O")
-    return converted_results
-
-
-def get_entity_type_count(tags, entity):
-    count = 0
-    for tag in tags:
-        if tag == f"B-{entity}" or tag == f"I-{entity}":
-            count += 1
-    return count
+from helper import convert_result, convert_tags, write_annotation_result_to_file
 
 
 def annotate_document(document_number, model_name, entity_type):
