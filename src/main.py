@@ -57,7 +57,7 @@ def annotate_document(document_number, model_name, entity_type):
     if entity_type == "Activity":
         input_template = activity_template
 
-    if entity_type == "Actibity Data":
+    if entity_type == "Activity Data":
         input_template = activity_data_template
 
     prompt = ChatPromptTemplate.from_template(input_template)
@@ -66,7 +66,7 @@ def annotate_document(document_number, model_name, entity_type):
 
     # TODO: Generate input format via parser.get_format_instructions()
 
-    input_tokens = df["tokens"][document_number].tolist()
+    input_tokens = df["tokens"][document_number]
     document_name = df["document name"][document_number]
     reference_annotations = df["ner_tags"][document_number]
 
@@ -76,8 +76,7 @@ def annotate_document(document_number, model_name, entity_type):
         f"Evaluated document: {document_name} - Model used: {model.model_name}"
     )
 
-    logging.debug(f"Input tokens: {input_tokens}")
-    logging.debug(f"Input length: {input_tokens}")
+    logging.debug(f"Input length: {len(input_tokens)} - Input tokens: {input_tokens}")
 
     api_start_time = time.time()
     response = chain.invoke({"input": input_tokens})
