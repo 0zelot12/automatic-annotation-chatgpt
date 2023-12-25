@@ -82,7 +82,7 @@ def annotate_document(document_number, model_name, entity_type):
     response = chain.invoke({"input": input_tokens})
     api_end_time = time.time()
 
-    api_reponse_time = api_start_time - api_end_time
+    api_reponse_time = api_end_time - api_start_time
 
     logging.debug(f"API response: {response} - Duration: {api_reponse_time}")
 
@@ -99,31 +99,31 @@ def annotate_document(document_number, model_name, entity_type):
         response_time=api_reponse_time,
     )
 
+    # TODO: Implement method to extract all stats at once
+    for tag in reference_annotations:
+        if tag == "O":
+            annotation_result.expected_o += 1
+        elif tag == "Actor":
+            annotation_result.expected_actor += 1
+        elif tag == "Actitvity":
+            annotation_result.expected_activity += 1
+        elif tag == "Actitvity Data":
+            annotation_result.expected_activity_data += 1
+
     for reference, result in zip(reference_annotations, converted_response):
         logging.debug(f"Expected tag: {reference} - Result: {result}")
         if result == reference:
             if result == "Actor":
                 annotation_result.recognized_actor += 1
-            if result == "Activity":
+            elif result == "Activity":
                 annotation_result.recognized_activity += 1
-            if result == "Activity Data":
+            elif result == "Activity Data":
                 annotation_result.recognized_activity_data += 1
-            if result == "O":
+            elif result == "O":
                 annotation_result.recognized_o += 1
 
-    # TODO: Implement method to extract all stats at once
-    for tag in reference_annotations:
-        if tag == "O":
-            annotation_result.expected_o += 1
-        if tag == "Actor":
-            annotation_result.expected_actor += 1
-        if tag == "Actitvity":
-            annotation_result.expected_activity += 1
-        if tag == "Actitvity Data":
-            annotation_result.expected_activity_data += 1
-
     logging.debug(
-        f"O recognized: {annotation_result.recognized_o} - Expected: {annotation_result.recognized_o}"
+        f"O recognized: {annotation_result.recognized_o} - Expected: {annotation_result.expected_o}"
     )
 
     logging.debug(
