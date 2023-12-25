@@ -1,6 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+from annotation_result import AnnotationResult
+from datetime import datetime
+
 
 def generate_simple_bar_chart(values, categories, xLabel, yLabel, title):
     # Set the width of the bars
@@ -75,3 +78,31 @@ def generate_html(title, tokens, ner_tags):
 
         with open(f"../out/{title}.html", "w") as file:
             file.write(result_string)
+
+
+def write_annotation_result_to_file(annotation_result):
+    result_string = f"""====================================
+
+Document name: {annotation_result.document_name}
+
+Input length: {annotation_result.input_length}
+
+Expected O: {annotation_result.expected_o}
+Correctly Identified O: {annotation_result.recognized_o} 
+
+Expected Actor: {annotation_result.expected_actor}
+Correctly Identified Actor: {annotation_result.recognized_actor} 
+
+Expected Activity: {annotation_result.expected_activity}
+Correctly Identified Activity: {annotation_result.recognized_activity} 
+
+Expected Activity: {annotation_result.expected_activity_data}
+Correctly Identified Activity: {annotation_result.recognized_activity_data}
+
+Entities identified incorretly: {annotation_result.incorrect_entities}
+    """
+    with open(
+        f"./out/annotation-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.txt",
+        "w",
+    ) as file:
+        file.write(result_string)

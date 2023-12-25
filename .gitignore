@@ -9,6 +9,7 @@
 *.log
 
 out/*.html
+out/*.txt
 
 .DS_Store
 **/__pycache__/

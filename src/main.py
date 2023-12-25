@@ -21,6 +21,7 @@ from templates import (
 )
 from annotation_result import AnnotationResult
 from model_response import ModelResponse
+from helper import write_annotation_result_to_file
 
 
 def convert_tags(tags, entity):
@@ -174,6 +175,9 @@ if __name__ == "__main__":
             entity_type = v
     for i in range(10):
         try:
-            annotate_document(i, model, entity_type)
+            print(f"Annotating document {i} ...")
+            r = annotate_document(i, model, entity_type)
+            write_annotation_result_to_file(r)
+            print(f"Annotating document {i} completed.")
         except:
             logging.error("An has error occured")
