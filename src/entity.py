@@ -1,7 +1,7 @@
-from enum import StrEnum
+from enum import Enum
 
 
-class Entity(StrEnum):
+class Entity(Enum):
     """Enum representing the entities present in the PET dataset."""
 
     ACTOR = "Actor"
