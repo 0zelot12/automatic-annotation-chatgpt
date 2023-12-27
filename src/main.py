@@ -144,7 +144,7 @@ if __name__ == "__main__":
             model = v
         if o == "--entity_type":
             entity_type = v
-    for i in range(10):
+    for i in range(5):
         try:
             print(f"Annotating document {i} ...")
             r = annotate_document(i, model, entity_type)

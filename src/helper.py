@@ -82,7 +82,6 @@ def generate_html(title, tokens, ner_tags):
 
 def write_annotation_result_to_file(annotation_result):
     result_string = f"""====================================
-
 Document name: {annotation_result.document_name}
 
 Input length: {annotation_result.input_length}
@@ -100,6 +99,7 @@ Expected Activity: {annotation_result.expected_activity_data}
 Correctly Identified Activity: {annotation_result.recognized_activity_data}
 
 Entities identified incorretly: {annotation_result.incorrect_entities}
+====================================
     """
     with open(
         f"./out/annotation-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.txt",
