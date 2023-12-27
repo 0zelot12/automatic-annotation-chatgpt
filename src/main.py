@@ -25,7 +25,7 @@ from model_response import ModelResponse
 from helper import convert_result, convert_tags, write_annotation_result_to_file
 
 
-def annotate_document(document_number, model_name, entity_type):
+def annotate_document(document_number: int, model_name: str, entity_type: Entity):
     load_dotenv()  # TODO: Move to different location
     df = pd.read_parquet(
         "./assets/pet_dataset.parquet"
