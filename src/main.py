@@ -11,6 +11,8 @@ from langchain.output_parsers import PydanticOutputParser
 
 from datetime import datetime
 
+from entity import Entity, str_to_entity
+
 from dotenv import load_dotenv
 
 from templates import (
@@ -31,10 +33,10 @@ def annotate_document(document_number, model_name, entity_type):
 
     input_template = actor_template
 
-    if entity_type == "Activity":
+    if entity_type == Entity.ACTIVITY:
         input_template = activity_template
 
-    if entity_type == "Activity Data":
+    if entity_type == Entity.ACTIVITY_DATA:
         input_template = activity_data_template
 
     prompt = ChatPromptTemplate.from_template(input_template)
@@ -63,12 +65,14 @@ def annotate_document(document_number, model_name, entity_type):
 
     logging.debug(f"API response: {response} - Duration: {api_reponse_time}")
 
-    assert len(input_tokens) == len(response.result)
+    assert len(input_tokens) == len(
+        response.result
+    ), "Lengths of input_tokens and response.result do not match"
 
-    converted_response = convert_result(response.result, entity_type)
+    converted_response = convert_result(response.result, entity_type.value)
     logging.debug(f"Converted response: {converted_response}")
 
-    reference_annotations = convert_tags(reference_annotations, entity_type)
+    reference_annotations = convert_tags(reference_annotations, entity_type.value)
 
     annotation_result = AnnotationResult(
         document_name=document_name,
@@ -78,25 +82,25 @@ def annotate_document(document_number, model_name, entity_type):
 
     # TODO: Implement method to extract all stats at once
     for tag in reference_annotations:
-        if tag == "O":
+        if tag == Entity.NO_ENTITY:
             annotation_result.expected_o += 1
-        elif tag == "Actor":
+        elif tag == Entity.ACTOR:
             annotation_result.expected_actor += 1
-        elif tag == "Actitvity":
+        elif tag == Entity.ACTIVITY:
             annotation_result.expected_activity += 1
-        elif tag == "Actitvity Data":
+        elif tag == Entity.ACTIVITY_DATA.value:
             annotation_result.expected_activity_data += 1
 
     for reference, result in zip(reference_annotations, converted_response):
         logging.debug(f"Expected tag: {reference} - Result: {result}")
         if result == reference:
-            if result == "Actor":
+            if result == Entity.ACTOR.value:
                 annotation_result.recognized_actor += 1
-            elif result == "Activity":
+            elif result == Entity.ACTIVITY.value:
                 annotation_result.recognized_activity += 1
-            elif result == "Activity Data":
+            elif result == Entity.ACTIVITY_DATA.value:
                 annotation_result.recognized_activity_data += 1
-            elif result == "O":
+            elif result == Entity.NO_ENTITY.value:
                 annotation_result.recognized_o += 1
         else:
             annotation_result.incorrect_entities += 1
@@ -143,12 +147,12 @@ if __name__ == "__main__":
         if o == "--model":
             model = v
         if o == "--entity_type":
-            entity_type = v
-    for i in range(5):
+            entity_type = str_to_entity(v)
+    for i in range(1):
         try:
             print(f"Annotating document {i} ...")
             r = annotate_document(i, model, entity_type)
             write_annotation_result_to_file(r)
             print(f"Annotating document {i} completed.")
-        except:
-            logging.error("An has error occured")
+        except Exception as e:
+            logging.fatal(e)
