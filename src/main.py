@@ -33,8 +33,6 @@ from helper import convert_result, convert_tags, write_annotation_results_to_fil
 def annotate_document(
     document: PetDocument, model_name: str, entity_type: Entity
 ) -> AnnotationResult:
-    load_dotenv()  # TODO: Move to different location
-
     input_template = actor_template
 
     if entity_type == Entity.ACTIVITY:
@@ -63,6 +61,7 @@ def annotate_document(
     response = chain.invoke({"input": input_tokens})
     api_end_time = time.time()
 
+    # TODO: Funktioniert nicht richtig
     api_reponse_time = api_end_time - api_start_time
 
     logging.debug(f"API response: {response} - Duration: {api_reponse_time}")
@@ -125,6 +124,8 @@ if __name__ == "__main__":
         level=logging.DEBUG,
         filename=f"./logs/{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.log",
     )
+
+    load_dotenv()
 
     # TODO: Evaluate argparse module
     arguments = sys.argv[1:]
