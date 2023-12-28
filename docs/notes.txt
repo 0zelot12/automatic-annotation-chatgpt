@@ -3,3 +3,10 @@ Problem: Wenn man nacheinander annotiert, kann es passieren, dass ein Token als 
 Länge kann variieren, wenn z.B. Satzzeichen entfernt werden
     -> Könnte durch längere Beispiele gelöst werden
 Problem: Nur wenn Beispiele ähnlich zur Eingabe sind, können gut Ergebnisse erwartet werden
+
+TODO: 
+
+Mehre Entitäten gleichzeitig annotieren
+Few-Shot Beispiele implementieren
+Längere Beispiele
+Visualisierung (Plot + HTML)
