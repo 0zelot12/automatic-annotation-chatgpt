@@ -1,10 +1,8 @@
-class PetDocument:
-    """Class representing one document in the PET dataset."""
+from dataclasses import dataclass
 
-    def __init__(self, name, tokens, tokens_ids, ner_tags, sentence_ids):
-        self.name = name
-        self.tokens = tokens
-        self.tokens_ids = tokens_ids
-        self.ner_tags = ner_tags
-        self.sentence_ids = sentence_ids
-        self.relations = {}
+
+@dataclass
+class PetDocument:
+    name: str
+    tokens: list[str]
+    ner_tags: list[str]
