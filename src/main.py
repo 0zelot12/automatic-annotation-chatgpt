@@ -27,9 +27,6 @@ from pet_dataset import PetDataset
 from helper import convert_result, convert_tags, write_annotation_results_to_file
 
 
-# TODO: Use list of entities to annotate instead of a single one
-
-
 def annotate_document(
     document: PetDocument, model_name: str, entity_type: Entity
 ) -> AnnotationResult:
@@ -132,9 +129,12 @@ if __name__ == "__main__":
     short_options = ""
     long_options = ["document_number=", "model=", "entity_type="]
     options, values = getopt.getopt(arguments, short_options, long_options)
+
+    # Set default values
     document_number = 0
     entity_type = Entity.ACTOR
     model = "gpt-3.5-turbo"
+
     pet_dataset = PetDataset()
     annotation_results = []
 
@@ -148,11 +148,11 @@ if __name__ == "__main__":
 
     for i in range(document_number):
         try:
-            print(f"Annotating document {i} ...")
+            print(f"Processing document {i}")
             annotation_results.append(
                 annotate_document(pet_dataset.get_document(i), model, entity_type)
             )
-            print(f"Annotating document {i} completed.")
+            print(f"Processing document {i} completed.")
         except Exception as e:
             logging.fatal(e)
 
