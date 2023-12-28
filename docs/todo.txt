@@ -1,4 +1,5 @@
 Mehre Entitäten gleichzeitig annotieren
+Wrapperklasse um PET bereitzustellen
 Few-Shot Beispiele implementieren
 Längere Beispiele
 Visualisierung (Plot + HTML)
