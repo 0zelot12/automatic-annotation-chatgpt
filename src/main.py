@@ -3,8 +3,6 @@ import getopt
 import logging
 import time
 
-import pandas as pd
-
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain.output_parsers import PydanticOutputParser
@@ -14,6 +12,7 @@ from datetime import datetime
 from entity import Entity, str_to_entity
 
 from dotenv import load_dotenv
+from pet_document import PetDocument
 
 from templates import (
     actor_template,
@@ -22,16 +21,17 @@ from templates import (
 )
 from annotation_result import AnnotationResult
 from model_response import ModelResponse
+from pet_dataset import PetDataset
 from helper import convert_result, convert_tags, write_annotation_result_to_file
 
 
 # TODO: Use list of entities to annotate instead of a single one
 
-def annotate_document(document_number: int, model_name: str, entity_type: Entity) -> AnnotationResult:
+
+def annotate_document(
+    document: PetDocument, model_name: str, entity_type: Entity
+) -> AnnotationResult:
     load_dotenv()  # TODO: Move to different location
-    df = pd.read_parquet(
-        "./assets/pet_dataset.parquet"
-    )  # TODO: Move to different location
 
     input_template = actor_template
 
@@ -47,14 +47,13 @@ def annotate_document(document_number: int, model_name: str, entity_type: Entity
 
     # TODO: Generate input format via parser.get_format_instructions()
 
-    input_tokens = df["tokens"][document_number]
-    document_name = df["document name"][document_number]
-    reference_annotations = df["ner_tags"][document_number]
+    input_tokens = document.tokens
+    reference_annotations = document.ner_tags
 
     chain = prompt | model | parser
 
     logging.debug(
-        f"Evaluated document: {document_name} - Model used: {model.model_name}"
+        f"Evaluated document: {document.name} - Model used: {model.model_name}"
     )
 
     logging.debug(f"Input length: {len(input_tokens)} - Input tokens: {input_tokens}")
@@ -77,7 +76,7 @@ def annotate_document(document_number: int, model_name: str, entity_type: Entity
     reference_annotations = convert_tags(reference_annotations, entity_type.value)
 
     annotation_result = AnnotationResult(
-        document_name=document_name,
+        document_name=document.name,
         input_length=len(input_tokens),
         response_time=api_reponse_time,
     )
@@ -141,8 +140,9 @@ if __name__ == "__main__":
     long_options = ["document_number=", "model=", "entity_type="]
     options, values = getopt.getopt(arguments, short_options, long_options)
     document_number = 0
-    entity_type = "Actor"
+    entity_type = Entity.ACTOR
     model = "gpt-3.5-turbo"
+    pet_dataset = PetDataset()
     for o, v in options:
         if o == "--document_number":
             document_number = int(v)
@@ -153,7 +153,7 @@ if __name__ == "__main__":
     for i in range(1):
         try:
             print(f"Annotating document {i} ...")
-            r = annotate_document(i, model, entity_type)
+            r = annotate_document(pet_dataset.get_document(i), model, entity_type)
             # TODO: Collect results in a list and write them to a file all at once
             write_annotation_result_to_file(r)
             print(f"Annotating document {i} completed.")
