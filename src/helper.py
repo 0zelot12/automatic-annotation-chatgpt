@@ -117,6 +117,7 @@ def generate_html(title: str, tokens: list[str], ner_tags: list[str]) -> None:
             file.write(result_string)
 
 
+# TODO: Refactor this method
 def write_annotation_results_to_file(
     annotation_results: list[AnnotationResult],
 ) -> None:
