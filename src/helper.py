@@ -63,7 +63,8 @@ def generate_horizontal_bar_chart(values, categories, xLabel, yLabel, title):
     plt.show()
 
 
-def generate_html(title, tokens, ner_tags):
+def generate_html(title: str, tokens: list[str], ner_tags: list[str]) -> None:
+    # TODO: Maybe split this method and only generate the HTML string while make saving to file a generic method
     with open("../assets/template.html", "r") as file:
         html_template = file.read()
         content = ""
@@ -80,7 +81,7 @@ def generate_html(title, tokens, ner_tags):
             file.write(result_string)
 
 
-def write_annotation_result_to_file(annotation_result):
+def write_annotation_result_to_file(annotation_result: AnnotationResult) -> None:
     result_string = f"""====================================
 Document name: {annotation_result.document_name}
 
@@ -108,7 +109,7 @@ Entities identified incorretly: {annotation_result.incorrect_entities}
         file.write(result_string)
 
 
-def convert_tags(tags, entity):
+def convert_tags(tags: list[str], entity: str) -> list[str]:
     filtered_tags = []
     for tag in tags:
         if tag == f"B-{entity}" or tag == f"I-{entity}":
@@ -118,7 +119,7 @@ def convert_tags(tags, entity):
     return filtered_tags
 
 
-def convert_result(annotations, entity):
+def convert_result(annotations: list[str], entity: str) -> list[str]:
     converted_results = []
     for annotation in annotations:
         if annotation.startswith("<A>"):
@@ -128,7 +129,7 @@ def convert_result(annotations, entity):
     return converted_results
 
 
-def get_entity_type_count(tags, entity):
+def get_entity_type_count(tags: list[str], entity: str) -> int:
     count = 0
     for tag in tags:
         if tag == f"B-{entity}" or tag == f"I-{entity}":

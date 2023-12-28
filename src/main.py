@@ -25,7 +25,9 @@ from model_response import ModelResponse
 from helper import convert_result, convert_tags, write_annotation_result_to_file
 
 
-def annotate_document(document_number: int, model_name: str, entity_type: Entity):
+# TODO: Use list of entities to annotate instead of a single one
+
+def annotate_document(document_number: int, model_name: str, entity_type: Entity) -> AnnotationResult:
     load_dotenv()  # TODO: Move to different location
     df = pd.read_parquet(
         "./assets/pet_dataset.parquet"
@@ -152,6 +154,7 @@ if __name__ == "__main__":
         try:
             print(f"Annotating document {i} ...")
             r = annotate_document(i, model, entity_type)
+            # TODO: Collect results in a list and write them to a file all at once
             write_annotation_result_to_file(r)
             print(f"Annotating document {i} completed.")
         except Exception as e:

@@ -11,7 +11,7 @@ class Entity(Enum):
     NO_ENTITY = "O"
 
 
-def str_to_entity(string_value):
+def str_to_entity(string_value: str) -> Entity:
     for entity in Entity:
         if entity.value == string_value:
             return entity
