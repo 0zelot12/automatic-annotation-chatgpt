@@ -55,10 +55,9 @@ def annotate_document(
     chain = prompt | model | parser
 
     logging.debug(
-        f"Evaluated document: {document.name} - Model used: {model.model_name}"
+        f"Evaluated document: {document.name} - Model used: {model.model_name} | "
+        f"Input length: {len(input_tokens)} - Input tokens: {input_tokens}"
     )
-
-    logging.debug(f"Input length: {len(input_tokens)} - Input tokens: {input_tokens}")
 
     api_start_time = time.time()
     response = chain.invoke({"input": input_tokens})
@@ -73,6 +72,7 @@ def annotate_document(
     ), "Lengths of input_tokens and response.result do not match"
 
     converted_response = convert_result(response.result, entity_type.value)
+
     logging.debug(f"Converted response: {converted_response}")
 
     reference_annotations = convert_tags(reference_annotations, entity_type.value)
@@ -109,24 +109,13 @@ def annotate_document(
             annotation_result.incorrect_entities += 1
 
     logging.debug(
-        f"O recognized: {annotation_result.recognized_o} - Expected: {annotation_result.expected_o}"
+        f"O recognized: {annotation_result.recognized_o} - Expected: {annotation_result.expected_o} | "
+        f"Actor recognized: {annotation_result.recognized_actor} - Expected: {annotation_result.expected_actor} | "
+        f"Activity recognized: {annotation_result.recognized_activity} - Expected: {annotation_result.expected_activity} | "
+        f"Activity Data recognized: {annotation_result.recognized_activity_data} - Expected: {annotation_result.expected_activity_data} | "
+        f"Not recognized correctly: {annotation_result.incorrect_entities} | "
+        f"Input length: {annotation_result.input_length}"
     )
-
-    logging.debug(
-        f"Actor recognized: {annotation_result.recognized_actor} - Expected: {annotation_result.expected_actor}"
-    )
-
-    logging.debug(
-        f"Activity recognized: {annotation_result.recognized_activity} - Expected: {annotation_result.expected_activity}"
-    )
-
-    logging.debug(
-        f"Activity Data recognized: {annotation_result.recognized_activity_data} - Expected: {annotation_result.expected_activity_data}"
-    )
-
-    logging.debug(f"Not recognized correctly: {annotation_result.incorrect_entities}")
-
-    logging.debug(f"Input length: {annotation_result.input_length}")
 
     return annotation_result
 
