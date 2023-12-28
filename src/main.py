@@ -19,10 +19,12 @@ from templates import (
     activity_template,
     activity_data_template,
 )
+
 from annotation_result import AnnotationResult
 from model_response import ModelResponse
 from pet_dataset import PetDataset
-from helper import convert_result, convert_tags, write_annotation_result_to_file
+
+from helper import convert_result, convert_tags, write_annotation_results_to_file
 
 
 # TODO: Use list of entities to annotate instead of a single one
@@ -132,8 +134,9 @@ def annotate_document(
 if __name__ == "__main__":
     logging.basicConfig(
         level=logging.DEBUG,
-        filename=f"./logs/annotation-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.log",
+        filename=f"./logs/{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.log",
     )
+
     # TODO: Evaluate argparse module
     arguments = sys.argv[1:]
     short_options = ""
@@ -143,6 +146,8 @@ if __name__ == "__main__":
     entity_type = Entity.ACTOR
     model = "gpt-3.5-turbo"
     pet_dataset = PetDataset()
+    annotation_results = []
+
     for o, v in options:
         if o == "--document_number":
             document_number = int(v)
@@ -150,12 +155,15 @@ if __name__ == "__main__":
             model = v
         if o == "--entity_type":
             entity_type = str_to_entity(v)
-    for i in range(1):
+
+    for i in range(document_number):
         try:
             print(f"Annotating document {i} ...")
-            r = annotate_document(pet_dataset.get_document(i), model, entity_type)
-            # TODO: Collect results in a list and write them to a file all at once
-            write_annotation_result_to_file(r)
+            annotation_results.append(
+                annotate_document(pet_dataset.get_document(i), model, entity_type)
+            )
             print(f"Annotating document {i} completed.")
         except Exception as e:
             logging.fatal(e)
+
+    write_annotation_results_to_file(annotation_results)

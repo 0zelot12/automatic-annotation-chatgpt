@@ -81,8 +81,12 @@ def generate_html(title: str, tokens: list[str], ner_tags: list[str]) -> None:
             file.write(result_string)
 
 
-def write_annotation_result_to_file(annotation_result: AnnotationResult) -> None:
-    result_string = f"""====================================
+def write_annotation_results_to_file(
+    annotation_results: list[AnnotationResult],
+) -> None:
+    result_string = ""
+    for annotation_result in annotation_results:
+        result_string += f"""====================================
 Document name: {annotation_result.document_name}
 
 Input length: {annotation_result.input_length}
@@ -103,7 +107,7 @@ Entities identified incorretly: {annotation_result.incorrect_entities}
 ====================================
     """
     with open(
-        f"./out/annotation-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.txt",
+        f"./out/annotation-result-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.txt",
         "w",
     ) as file:
         file.write(result_string)
