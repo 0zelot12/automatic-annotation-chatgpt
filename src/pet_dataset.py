@@ -1,5 +1,7 @@
 import pandas as pd
 
+from pet_document import PetDocument
+
 
 class PetDataset:
     """
@@ -41,3 +43,10 @@ class PetDataset:
 
     def get_data(self):
         return self._data
+
+    def get_document(self, document_number: int) -> PetDocument:
+        return PetDocument(
+            name=self._data.iloc[document_number]["document name"],
+            tokens=self._data.iloc[document_number]["tokens"],
+            ner_tags=self._data.iloc[document_number]["ner_tags"],
+        )
