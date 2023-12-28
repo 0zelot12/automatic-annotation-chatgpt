@@ -3,7 +3,16 @@ from dataclasses import dataclass
 
 @dataclass
 class AnnotationResult:
-    """Class to hold the statistics of an annotated document."""
+    """
+    Data class to store statistics for an annotated document.
+
+    This class is designed to hold statistical information related to the annotation of a document. It provides
+    attributes for various metrics, offering insights into the annotation process.
+
+    Note:
+    This data class simplifies the organization and access of annotation statistics, making it easy to work with
+    and analyze the results of document annotation processes.
+    """
 
     document_name: str
     input_length: int = 0
