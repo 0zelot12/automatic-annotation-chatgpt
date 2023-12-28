@@ -6,6 +6,24 @@ from datetime import datetime
 
 
 def generate_simple_bar_chart(values, categories, xLabel, yLabel, title):
+    """
+    Generate a simple bar chart using matplotlib.
+
+    Parameters:
+    - values (list): A list of numerical values representing the heights of the bars.
+    - categories (list): A list of categories or labels corresponding to each bar.
+    - xLabel (str): The label for the x-axis.
+    - yLabel (str): The label for the y-axis.
+    - title (str): The title of the bar chart.
+
+    Returns:
+    None
+
+    This function creates a bar chart with the specified values, categories, and labels using matplotlib.
+    It automatically adjusts the figure width based on the number of categories to improve readability.
+    Each bar is labeled with its corresponding value, and the chart is displayed using plt.show().
+    """
+
     # Set the width of the bars
     bar_width = 0.35
 
@@ -35,6 +53,24 @@ def generate_simple_bar_chart(values, categories, xLabel, yLabel, title):
 
 
 def generate_horizontal_bar_chart(values, categories, xLabel, yLabel, title):
+    """
+    Generate a horizontal bar chart using matplotlib.
+
+    Parameters:
+    - values (list): A list of numerical values representing the lengths of the bars.
+    - categories (list): A list of categories or labels corresponding to each bar.
+    - xLabel (str): The label for the x-axis.
+    - yLabel (str): The label for the y-axis.
+    - title (str): The title of the horizontal bar chart.
+
+    Returns:
+    None
+
+    This function creates a horizontal bar chart with the specified values, categories, and labels using matplotlib.
+    It automatically adjusts the figure height based on the number of categories to improve readability.
+    Each bar is labeled with its corresponding value, and the chart is displayed using plt.show().
+    """
+
     # Set the height of the bars
     bar_height = 0.35
 
