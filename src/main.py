@@ -27,6 +27,7 @@ from pet_dataset import PetDataset
 from helper import convert_result, convert_tags, write_annotation_results_to_file
 
 
+# TODO: Move to different location
 def annotate_document(
     document: PetDocument, model_name: str, entity_type: Entity
 ) -> AnnotationResult:
@@ -116,7 +117,7 @@ def annotate_document(
     return annotation_result
 
 
-if __name__ == "__main__":
+def main():
     logging.basicConfig(
         level=logging.DEBUG,
         filename=f"./logs/{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.log",
@@ -135,9 +136,6 @@ if __name__ == "__main__":
     entity_type = Entity.ACTOR
     model = "gpt-3.5-turbo"
 
-    pet_dataset = PetDataset()
-    annotation_results = []
-
     for o, v in options:
         if o == "--document_number":
             document_number = int(v)
@@ -145,6 +143,9 @@ if __name__ == "__main__":
             model = v
         if o == "--entity_type":
             entity_type = str_to_entity(v)
+
+    pet_dataset = PetDataset()
+    annotation_results = []
 
     for i in range(document_number):
         try:
@@ -157,3 +158,7 @@ if __name__ == "__main__":
             logging.fatal(e)
 
     write_annotation_results_to_file(annotation_results)
+
+
+if __name__ == "__main__":
+    main()
