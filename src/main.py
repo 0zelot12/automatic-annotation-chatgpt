@@ -96,11 +96,11 @@ def annotate_document(
 
     # TODO: Implement method to extract all stats at once
     for tag in reference_annotations:
-        if tag == Entity.NO_ENTITY:
+        if tag == Entity.NO_ENTITY.value:
             annotation_result.expected_o += 1
-        elif tag == Entity.ACTOR:
+        elif tag == Entity.ACTOR.value:
             annotation_result.expected_actor += 1
-        elif tag == Entity.ACTIVITY:
+        elif tag == Entity.ACTIVITY.value:
             annotation_result.expected_activity += 1
         elif tag == Entity.ACTIVITY_DATA.value:
             annotation_result.expected_activity_data += 1
