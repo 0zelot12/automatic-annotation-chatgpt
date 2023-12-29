@@ -46,7 +46,7 @@ This is an example:
 ['The', 'MPON', 'reports', 'the', 'meter', 'operation', 'to', 'the', 'GO', '.'] 
 
 {{
-    result: ['The', 'MPON', '<A>reports<A>', 'the', 'meter', 'operation', 'to', 'the', 'GO', '.'] 
+    result: ['The', 'MPON', '<B>reports<B>', 'the', 'meter', 'operation', 'to', 'the', 'GO', '.'] 
 }}
 
 {input}
@@ -65,7 +65,7 @@ This is an example:
 ['The', 'manager', 'sends', 'the', 'data', 'by', 'email' '.'] 
 
 {{
-    ['The', 'manager', 'sends', '<A>the<A>', '<A>data<A>', 'by', 'email' '.'] 
+    ['The', 'manager', 'sends', '<C>the<C>', '<C>data<C>', 'by', 'email' '.'] 
 }}
 
 {input}

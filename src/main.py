@@ -167,7 +167,7 @@ def main() -> None:
             annotation_results.append(
                 annotate_document(pet_dataset.get_document(i), model, entity_type)
             )
-            print(f"Processing document {i} completed.")
+            print(f"Processing document {i} completed")
         except Exception as e:
             logging.fatal(e)
 
