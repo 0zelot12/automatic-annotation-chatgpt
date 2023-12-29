@@ -10,7 +10,7 @@ This is an example:
 ['The', 'MPON', 'sents', 'the', 'dismissal', 'to', 'the', 'MPOO', '.']
 
 {{
-    result: ['<A>The<A>', '<A>MPON<A>', 'sents', 'the', 'dismissal', 'to', '<A>the<A>', '<A>MPOO<A>', '.']
+    result: ['<actor>The<actor>', '<actor>MPON<actor>', 'sents', 'the', 'dismissal', 'to', '<actor>the<actor>', '<actor>MPOO<actor>', '.']
 }}
 
 {input}
@@ -32,7 +32,7 @@ This is an example:
 ['The', 'MPON', 'sents', 'the', 'dismissal', 'to', 'the', 'MPOO', '.']
 
 {{
-    result: ['<Actor>The<Actor>', '<Actor>MPON<Actor>', '<Activity>sents<Activity>', 'the', 'dismissal', 'to', '<Actor>the<Actor>', '<Actor>MPOO<Actor>', '.']
+    result: ['<actor>The<actor>', '<actor>MPON<actor>', '<activity>sents<activity>', 'the', 'dismissal', 'to', '<actor>the<actor>', '<actor>MPOO<actor>', '.']
 }}
 
 {input}
@@ -68,7 +68,7 @@ This is an example:
 ['The', 'MPON', 'reports', 'the', 'meter', 'operation', 'to', 'the', 'GO', '.'] 
 
 {{
-    result: ['The', 'MPON', '<B>reports<B>', 'the', 'meter', 'operation', 'to', 'the', 'GO', '.'] 
+    result: ['The', 'MPON', '<activity>reports<activity>', 'the', 'meter', 'operation', 'to', 'the', 'GO', '.'] 
 }}
 
 {input}
@@ -87,7 +87,7 @@ This is an example:
 ['The', 'manager', 'sends', 'the', 'data', 'by', 'email', '.', 'The', 'office', 'receives', 'an', 'order', 'sent', 'by', 'email', 'from', 'the', 'customer'] 
 
 {{
-    result: ['The', 'manager', 'sends', '<C>the<C>', '<C>data<C>', 'by', 'email', '.', 'The', 'office', 'receives', '<C>an<C>', '<C>order<C>', 'sent', 'by', 'email', 'from', 'the', 'customer'] 
+    result: ['The', 'manager', 'sends', '<activity_data>the<activity_data>', '<activity_data>data<activity_data>', 'by', 'email', '.', 'The', 'office', 'receives', '<activity_data>an<activity_data>', '<activity_data>order<activity_data>', 'sent', 'by', 'email', 'from', 'the', 'customer'] 
 }}
 
 {input}
