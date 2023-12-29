@@ -123,7 +123,7 @@ def write_annotation_results_to_file(
 ) -> None:
     result_string = ""
     for annotation_result in annotation_results:
-        result_string += f"""====================================
+        result_string += f"""
 Document name: {annotation_result.document_name}
 
 Input length: {annotation_result.input_length}
