@@ -7,6 +7,10 @@ Problem: Nur wenn Beispiele ähnlich zur Eingabe sind, können gut Ergebnisse er
 TODO: 
 
 Mehre Entitäten gleichzeitig annotieren
+    Actor x
+    Activity x
+    Activity Data
+Scores implementieren
 Few-Shot Beispiele implementieren
     -> Beispiele dynamisch generieren
 Längere Beispiele
