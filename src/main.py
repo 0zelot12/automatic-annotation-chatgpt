@@ -45,6 +45,7 @@ def annotate_document(
     input_tokens = document.tokens
     reference_annotations = document.ner_tags
 
+    # TODO: Add functionality to annotate multiple entities at once
     chat_template = ChatPromptTemplate.from_messages(
         [
             SystemMessage(
