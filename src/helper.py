@@ -152,31 +152,29 @@ Entities identified incorretly: {annotation_result.incorrect_entities}
         file.write(result_string)
 
 
-def convert_tags(tags: list[str], entity: str) -> list[str]:
+def convert_tags(tags: list[str]) -> list[str]:
     filtered_tags = []
     for tag in tags:
-        if tag == f"B-{entity}" or tag == f"I-{entity}":
-            filtered_tags.append(entity)
+        if tag == f"B-Actor" or tag == f"I-Actor":
+            filtered_tags.append("Actor")
+        elif tag == f"B-Activity" or tag == f"I-Activity":
+            filtered_tags.append("Activity")
+        elif tag == f"B-Activity Data" or tag == f"I-Activity Data":
+            filtered_tags.append("Actor")
         else:
             filtered_tags.append("O")
     return filtered_tags
 
 
-def get_entity_markup(entity: str):
-    if entity == Entity.ACTOR.value:
-        return "<actor>"
-    elif entity == Entity.ACTIVITY.value:
-        return "<activity>"
-    elif entity == Entity.ACTIVITY_DATA.value:
-        return "<activity_data>"
-
-
-def convert_result(annotations: list[str], entity: str) -> list[str]:
+def convert_result(annotations: list[str]) -> list[str]:
     converted_results = []
-    entity_markup = get_entity_markup(entity)
     for annotation in annotations:
-        if annotation.startswith(entity_markup):
-            converted_results.append(entity)
+        if annotation.startswith("<actor>"):
+            converted_results.append(Entity.ACTOR.value)
+        elif annotation.startswith("<activity>"):
+            converted_results.append(Entity.ACTIVITY.value)
+        elif annotation.startswith("<activity_data>"):
+            converted_results.append(Entity.ACTIVITY_DATA.value)
         else:
             converted_results.append("O")
     return converted_results

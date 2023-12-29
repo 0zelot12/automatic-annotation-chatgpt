@@ -18,6 +18,7 @@ from pet_document import PetDocument
 
 from templates import (
     actor_template,
+    actor_activity_template,
     activity_template,
     activity_data_template,
 )
@@ -33,7 +34,7 @@ from helper import convert_result, convert_tags, write_annotation_results_to_fil
 def annotate_document(
     document: PetDocument, model_name: str, entity_type: Entity
 ) -> AnnotationResult:
-    input_template = actor_template
+    input_template = actor_activity_template
 
     # TODO: Refactor
     if entity_type == Entity.ACTIVITY:
@@ -83,11 +84,11 @@ def annotate_document(
         response.result
     ), "Lengths of input_tokens and response.result do not match"
 
-    converted_response = convert_result(response.result, entity_type.value)
+    converted_response = convert_result(response.result)
 
     logging.debug(f"Converted response: {converted_response}")
 
-    reference_annotations = convert_tags(reference_annotations, entity_type.value)
+    reference_annotations = convert_tags(reference_annotations)
 
     annotation_result = AnnotationResult(
         document_name=document.name,
