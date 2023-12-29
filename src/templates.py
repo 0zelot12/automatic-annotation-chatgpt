@@ -62,10 +62,10 @@ The output must be valid JSON.
 
 This is an example:
 
-['The', 'manager', 'sends', 'the', 'data', 'by', 'email' '.'] 
+['The', 'manager', 'sends', 'the', 'data', 'by', 'email', '.', 'The', 'office', 'receives', 'an', 'order', 'sent', 'by', 'email', 'from', 'the', 'customer'] 
 
 {{
-    ['The', 'manager', 'sends', '<C>the<C>', '<C>data<C>', 'by', 'email' '.'] 
+    result: ['The', 'manager', 'sends', '<C>the<C>', '<C>data<C>', 'by', 'email', '.', 'The', 'office', 'receives', '<C>an<C>', '<C>order<C>', 'sent', 'by', 'email', 'from', 'the', 'customer'] 
 }}
 
 {input}

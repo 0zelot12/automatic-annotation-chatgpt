@@ -4,6 +4,8 @@ import numpy as np
 from annotation_result import AnnotationResult
 from datetime import datetime
 
+from entity import Entity
+
 
 def generate_simple_bar_chart(values, categories, xLabel, yLabel, title):
     """
@@ -137,8 +139,8 @@ Correctly Identified Actor: {annotation_result.recognized_actor}
 Expected Activity: {annotation_result.expected_activity}
 Correctly Identified Activity: {annotation_result.recognized_activity} 
 
-Expected Activity: {annotation_result.expected_activity_data}
-Correctly Identified Activity: {annotation_result.recognized_activity_data}
+Expected Activity Data: {annotation_result.expected_activity_data}
+Correctly Identified Activity Data: {annotation_result.recognized_activity_data}
 
 Entities identified incorretly: {annotation_result.incorrect_entities}
 ====================================
@@ -160,10 +162,20 @@ def convert_tags(tags: list[str], entity: str) -> list[str]:
     return filtered_tags
 
 
+def get_entity_markup(entity: str):
+    if entity == Entity.ACTOR.value:
+        return "<A>"
+    elif entity == Entity.ACTIVITY.value:
+        return "<B>"
+    elif entity == Entity.ACTIVITY_DATA.value:
+        return "<C>"
+
+
 def convert_result(annotations: list[str], entity: str) -> list[str]:
     converted_results = []
+    entity_markup = get_entity_markup(entity)
     for annotation in annotations:
-        if annotation.startswith("<A>"):
+        if annotation.startswith(entity_markup):
             converted_results.append(entity)
         else:
             converted_results.append("O")

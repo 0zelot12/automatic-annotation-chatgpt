@@ -171,7 +171,8 @@ def main() -> None:
         except Exception as e:
             logging.fatal(e)
 
-    write_annotation_results_to_file(annotation_results)
+    if len(annotation_results) > 0:
+        write_annotation_results_to_file(annotation_results)
 
 
 if __name__ == "__main__":

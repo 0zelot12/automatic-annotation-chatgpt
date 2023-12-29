@@ -8,5 +8,6 @@ TODO:
 
 Mehre Entitäten gleichzeitig annotieren
 Few-Shot Beispiele implementieren
+    -> Beispiele dynamisch generieren
 Längere Beispiele
 Visualisierung (Plot + HTML)
