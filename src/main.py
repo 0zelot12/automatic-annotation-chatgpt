@@ -117,7 +117,7 @@ def annotate_document(
     return annotation_result
 
 
-def main():
+def main() -> None:
     logging.basicConfig(
         level=logging.DEBUG,
         filename=f"./logs/{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.log",
