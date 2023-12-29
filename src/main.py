@@ -6,6 +6,8 @@ import time
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain.output_parsers import PydanticOutputParser
+from langchain.prompts import HumanMessagePromptTemplate
+from langchain_core.messages import SystemMessage
 
 from datetime import datetime
 
@@ -40,16 +42,27 @@ def annotate_document(
     if entity_type == Entity.ACTIVITY_DATA:
         input_template = activity_data_template
 
-    prompt = ChatPromptTemplate.from_template(input_template)
+    input_tokens = document.tokens
+    reference_annotations = document.ner_tags
+
+    chat_template = ChatPromptTemplate.from_messages(
+        [
+            SystemMessage(
+                content=(
+                    "You are an expert in the field of process management. You assist in annotating relevant entities and relations in natural language process descriptions."
+                )
+            ),
+            HumanMessagePromptTemplate.from_template(input_template).format(
+                input=input_tokens
+            ),
+        ]
+    )
     model = ChatOpenAI(model=model_name)
     parser = PydanticOutputParser(pydantic_object=ModelResponse)
 
     # TODO: Generate input format via parser.get_format_instructions()
 
-    input_tokens = document.tokens
-    reference_annotations = document.ner_tags
-
-    chain = prompt | model | parser
+    chain = chat_template | model | parser
 
     logging.debug(
         f"Evaluated document: {document.name} - Model used: {model.model_name} | "
