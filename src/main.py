@@ -33,6 +33,7 @@ def annotate_document(
 ) -> AnnotationResult:
     input_template = actor_template
 
+    # TODO: Refactor
     if entity_type == Entity.ACTIVITY:
         input_template = activity_template
 
