@@ -164,11 +164,11 @@ def convert_tags(tags: list[str], entity: str) -> list[str]:
 
 def get_entity_markup(entity: str):
     if entity == Entity.ACTOR.value:
-        return "<A>"
+        return "<actor>"
     elif entity == Entity.ACTIVITY.value:
-        return "<B>"
+        return "<activity>"
     elif entity == Entity.ACTIVITY_DATA.value:
-        return "<C>"
+        return "<activity_data>"
 
 
 def convert_result(annotations: list[str], entity: str) -> list[str]:
