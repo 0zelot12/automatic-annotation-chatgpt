@@ -142,7 +142,7 @@ Correctly Identified Activity: {annotation_result.recognized_activity}
 Expected Activity Data: {annotation_result.expected_activity_data}
 Correctly Identified Activity Data: {annotation_result.recognized_activity_data}
 
-Entities identified incorretly: {annotation_result.incorrect_entities}
+Entities identified incorrectly: {annotation_result.incorrect_entities}
 ====================================
     """
     with open(

@@ -17,7 +17,6 @@ from dotenv import load_dotenv
 from pet_document import PetDocument
 
 from templates import (
-    actor_template,
     actor_activity_template,
     activity_template,
     activity_data_template,
@@ -51,7 +50,8 @@ def annotate_document(
         [
             SystemMessage(
                 content=(
-                    "You are an expert in the field of process management. You assist in annotating relevant entities and relations in natural language process descriptions."
+                    "You are an expert in the field of process management. You assist in annotating relevant entities "
+                    "and relations in natural language process descriptions."
                 )
             ),
             HumanMessagePromptTemplate.from_template(input_template).format(
@@ -75,10 +75,10 @@ def annotate_document(
     response = chain.invoke({"input": input_tokens})
     api_end_time = time.time()
 
-    # TODO: Funktioniert nicht richtig
-    api_reponse_time = api_end_time - api_start_time
+    # TODO: Does not work properly
+    api_response_time = api_end_time - api_start_time
 
-    logging.debug(f"API response: {response} - Duration: {api_reponse_time}")
+    logging.debug(f"API response: {response} - Duration: {api_response_time}")
 
     assert len(input_tokens) == len(
         response.result
@@ -93,7 +93,7 @@ def annotate_document(
     annotation_result = AnnotationResult(
         document_name=document.name,
         input_length=len(input_tokens),
-        response_time=api_reponse_time,
+        response_time=api_response_time,
     )
 
     # TODO: Implement method to extract all stats at once
@@ -125,7 +125,7 @@ def annotate_document(
         f"O recognized: {annotation_result.recognized_o} - Expected: {annotation_result.expected_o} | "
         f"Actor recognized: {annotation_result.recognized_actor} - Expected: {annotation_result.expected_actor} | "
         f"Activity recognized: {annotation_result.recognized_activity} - Expected: {annotation_result.expected_activity} | "
-        f"Activity Data recognized: {annotation_result.recognized_activity_data} - Expected: {annotation_result.expected_activity_data} | "
+        f"Activity Data recognized: {annotation_result.recognized_activity_data} - Expected: {annotation_result.expected_activity_data} |"
         f"Not recognized correctly: {annotation_result.incorrect_entities} | "
         f"Input length: {annotation_result.input_length}"
     )
