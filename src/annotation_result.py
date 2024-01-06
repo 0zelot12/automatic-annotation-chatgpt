@@ -26,5 +26,51 @@ class AnnotationResult:
     expected_activity_data: int = 0
     recognized_activity_data: int = 0
     incorrect_entities: int = 0
+    total_number_of_entities: int = 0
 
-    # TODO: Output als Text bereitstellen
+    def get_precision(self) -> float:
+        """
+        Precision is the number of NEs a system correctly detects divided by the total number of NEs identified by the system.
+        """
+
+        entities_detected_correctly = sum(
+            [
+                self.recognized_o,
+                self.recognized_actor,
+                self.recognized_activity,
+                self.recognized_activity_data,
+            ]
+        )
+
+        entities_detected_total = sum(
+            [
+                self.recognized_o,
+                self.recognized_actor,
+                self.recognized_activity,
+                self.recognized_activity_data,
+                self.incorrect_entities,
+            ]
+        )
+
+        return entities_detected_correctly / entities_detected_total
+
+    def get_recall(self) -> float:
+        """
+        Recall is the number of NEs a system correctly detected divided by the total number of NEs contained in the input text.
+        """
+
+        entities_detected_correctly = sum(
+            [
+                self.recognized_o,
+                self.recognized_actor,
+                self.recognized_activity,
+                self.recognized_activity_data,
+            ]
+        )
+
+        return entities_detected_correctly / self.total_number_of_entities
+
+    def get_f1_score(self) -> float:
+        precision = self.get_precision()
+        recall = self.get_recall()
+        return 2 * precision * recall / (precision + recall)

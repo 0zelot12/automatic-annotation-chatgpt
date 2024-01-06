@@ -93,6 +93,7 @@ def annotate_document(
     annotation_result = AnnotationResult(
         document_name=document.name,
         input_length=len(input_tokens),
+        total_number_of_entities=len(reference_annotations),
         response_time=api_response_time,
     )
 

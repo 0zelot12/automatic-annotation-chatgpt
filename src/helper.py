@@ -143,6 +143,9 @@ Expected Activity Data: {annotation_result.expected_activity_data}
 Correctly Identified Activity Data: {annotation_result.recognized_activity_data}
 
 Entities identified incorrectly: {annotation_result.incorrect_entities}
+
+Precision: {annotation_result.get_precision()}
+Recall: {annotation_result.get_recall()}
 ====================================
     """
     with open(
