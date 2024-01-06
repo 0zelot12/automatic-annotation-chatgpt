@@ -1,17 +1,18 @@
 Idee: Man kann Dokumente als Wissensbasis in Langchain laden.
+
 Problem: Wenn man nacheinander annotiert, kann es passieren, dass ein Token als zwei verschiedene Entitäten erkannt wird.
 Länge kann variieren, wenn z.B. Satzzeichen entfernt werden
     -> Könnte durch längere Beispiele gelöst werden
-Problem: Nur wenn Beispiele ähnlich zur Eingabe sind, können gut Ergebnisse erwartet werden
+
+Problem: Ergebnisse scheinen deutlich besser zu werden, wenn die Beispiele den tatsächlichen Daten ähnlich sind
 
 TODO: 
 
-Mehre Entitäten gleichzeitig annotieren
-    Actor x
-    Activity x
-    Activity Data
 Scores implementieren
 Few-Shot Beispiele implementieren
     -> Beispiele dynamisch generieren
 Längere Beispiele
 Visualisierung (Plot + HTML)
+
+
+Nummern für Forschungsfragen vergeben

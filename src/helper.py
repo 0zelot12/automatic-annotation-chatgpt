@@ -160,7 +160,7 @@ def convert_tags(tags: list[str]) -> list[str]:
         elif tag == f"B-Activity" or tag == f"I-Activity":
             filtered_tags.append("Activity")
         elif tag == f"B-Activity Data" or tag == f"I-Activity Data":
-            filtered_tags.append("Actor")
+            filtered_tags.append("Activity Data")
         else:
             filtered_tags.append("O")
     return filtered_tags

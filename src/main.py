@@ -17,7 +17,7 @@ from dotenv import load_dotenv
 from pet_document import PetDocument
 
 from templates import (
-    actor_activity_template,
+    complete_template,
     activity_template,
     activity_data_template,
 )
@@ -33,7 +33,7 @@ from helper import convert_result, convert_tags, write_annotation_results_to_fil
 def annotate_document(
     document: PetDocument, model_name: str, entity_type: Entity
 ) -> AnnotationResult:
-    input_template = actor_activity_template
+    input_template = complete_template
 
     # TODO: Refactor
     if entity_type == Entity.ACTIVITY:

@@ -38,6 +38,31 @@ This is an example:
 {input}
 """
 
+complete_template = """
+Annotate the entire noun phrase mentioning the actor. 
+In this context, an actor is any organizational element responsible for the action. 
+If there are multiple actors, annotate each separately.
+
+Annotate the main activity in the sentence. Include only the verbal or nominal expression of 
+the activity, excluding any objects, prepositional phrases, articles, or conjunctions. If there are multiple 
+activities, annotate each separately.
+
+An Activity Data object represents the data or the object directly used by an activity. 
+Usually an Activity Data is expressed by a nominal expression (a noun phrase). 
+
+The output must be valid JSON.
+
+This is an example:
+
+['The', 'MPON', 'sents', 'the', 'dismissal', 'to', 'the', 'MPOO', '.']
+
+{{
+    "result": ['<actor>The<actor>', '<actor>MPON<actor>', '<activity>sents<activity>', '<activity_data>the<activity_data>', '<activity_data>dismissal<activity_data>', 'to', '<actor>the<actor>', '<actor>MPOO<actor>', '.']
+}}
+
+{input}
+"""
+
 actor_template_extended_example = """
 Annotate the entire noun phrase mentioning the actor. 
 In this context, an actor is any organizational element responsible for the action.
