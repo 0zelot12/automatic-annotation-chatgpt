@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from entity import Entity
 
 
 @dataclass
@@ -29,6 +30,9 @@ class AnnotationResult:
     total_number_of_entities: int = 0
     annotated_tokens: list[str] = field(default_factory=list)
     reference_annotated_tokens: list[str] = field(default_factory=list)
+    # TODO: Implement
+    ner_tags: list[Entity] = field(default_factory=list)
+    reference_ner_tags: list[Entity] = field(default_factory=list)
 
     def get_precision(self) -> float:
         """
