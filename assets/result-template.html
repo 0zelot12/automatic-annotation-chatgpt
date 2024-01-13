@@ -39,11 +39,13 @@
       <!-- F1_SCORE -->
     </div>
     <div class="wrapper">
-      <div class="reference">
-        <p><!-- RERERENCE --></p>
-      </div>
       <div class="result">
-        <p><!-- RESULT --></p>
+        <div>Result</div>
+        <div class="result-text"><!-- RESULT --></div>
+      </div>
+      <div class="reference">
+        <div>Reference</div>
+        <div class="reference-text"><!-- REFERENCE --></div>
       </div>
     </div>
   </body>
@@ -84,10 +86,10 @@
       gap: 20px;
     }
 
-    .reference,
-    .result {
-      border: 2px solid #ccc;
+    .result-text,
+    .reference-text {
       padding: 10px;
+      border: 2px solid #ccc;
     }
   </style>
 </html>

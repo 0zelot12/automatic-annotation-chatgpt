@@ -28,6 +28,7 @@ class AnnotationResult:
     incorrect_entities: int = 0
     total_number_of_entities: int = 0
     annotated_tokens: list[str] = field(default_factory=list)
+    reference_annotated_tokens: list[str] = field(default_factory=list)
 
     def get_precision(self) -> float:
         """

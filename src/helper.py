@@ -127,8 +127,37 @@ def save_annotation_results(
     for annotation_result in annotation_results:
         with open("./assets/result-template.html", "r", encoding="utf-8") as file:
             file_content = file.read()
-            file_content = file_content.replace(
-                "<!-- RESULT -->", convert_to_html(annotation_result.annotated_tokens)
+            file_content = (
+                file_content.replace(
+                    "<!-- RESULT -->",
+                    convert_to_html(annotation_result.annotated_tokens),
+                )
+                .replace(
+                    "<!-- REFERENCE -->",
+                    convert_to_html(annotation_result.reference_annotated_tokens),
+                )
+                .replace(
+                    "<!-- RECOGNIZED_ACTOR -->", str(annotation_result.recognized_actor)
+                )
+                .replace(
+                    "<!-- EXPECTED_ACTOR -->", str(annotation_result.expected_actor)
+                )
+                .replace(
+                    "<!-- RECOGNIZED_ACTVITIY -->",
+                    str(annotation_result.recognized_activity),
+                )   
+                .replace(
+                    "<!-- EXPECTED_ACTVITIY -->",
+                    str(annotation_result.expected_activity),
+                )
+                .replace(
+                    "<!-- RECOGNIZED_ACTIVITY_DATA -->",
+                    str(annotation_result.recognized_activity_data),
+                )
+                .replace(
+                    "<!-- EXPECTED_ACTIVITY_DATA -->",
+                    str(annotation_result.expected_activity_data),
+                )
             )
         with open(
             f"./out/annotation-result-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.html",
