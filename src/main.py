@@ -26,7 +26,7 @@ from annotation_result import AnnotationResult
 from model_response import ModelResponse
 from pet_dataset import PetDataset
 
-from helper import convert_result, convert_tags, save_annotation_results
+from helper import convert_result, convert_tags, save_annotation_result
 
 
 # TODO: Move to different location
@@ -180,15 +180,15 @@ def main() -> None:
     for i in range(document_number):
         try:
             print(f"Processing document {i}")
-            annotation_results.append(
-                annotate_document(pet_dataset.get_document(i), model, entity_type)
+            annotation_result = annotate_document(
+                pet_dataset.get_document(i), model, entity_type
             )
+            annotation_results.append(annotation_result)
+            save_annotation_result(annotation_result)
             print(f"Processing document {i} completed")
         except Exception as e:
+            print(f"Processing document {i} failed")
             logging.fatal(e)
-
-    if len(annotation_results) > 0:
-        save_annotation_results(annotation_results)
 
 
 if __name__ == "__main__":

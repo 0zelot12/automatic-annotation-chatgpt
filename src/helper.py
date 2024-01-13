@@ -121,54 +121,52 @@ def generate_html(title: str, tokens: list[str], ner_tags: list[str]) -> None:
 
 
 # TODO: Refactor this method
-def save_annotation_results(
-    annotation_results: list[AnnotationResult],
+def save_annotation_result(
+    annotation_result: AnnotationResult,
 ) -> None:
-    for annotation_result in annotation_results:
-        with open("./assets/result-template.html", "r", encoding="utf-8") as file:
-            file_content = file.read()
-            file_content = (
-                file_content.replace(
-                    "<!-- RESULT -->",
-                    convert_to_html(annotation_result.annotated_tokens),
-                )
-                .replace(
-                    "<!-- REFERENCE -->",
-                    convert_to_html(annotation_result.reference_annotated_tokens),
-                )
-                .replace(
-                    "<!-- RECOGNIZED_ACTOR -->", str(annotation_result.recognized_actor)
-                )
-                .replace(
-                    "<!-- EXPECTED_ACTOR -->", str(annotation_result.expected_actor)
-                )
-                .replace(
-                    "<!-- RECOGNIZED_ACTVITIY -->",
-                    str(annotation_result.recognized_activity),
-                )
-                .replace(
-                    "<!-- EXPECTED_ACTVITIY -->",
-                    str(annotation_result.expected_activity),
-                )
-                .replace(
-                    "<!-- RECOGNIZED_ACTIVITY_DATA -->",
-                    str(annotation_result.recognized_activity_data),
-                )
-                .replace(
-                    "<!-- EXPECTED_ACTIVITY_DATA -->",
-                    str(annotation_result.expected_activity_data),
-                )
-                .replace("<!-- PRECISION -->", str(annotation_result.get_precision()))
-                .replace("<!-- RECALL -->", str(annotation_result.get_recall()))
-                .replace("<!-- F1_SCORE -->", str(annotation_result.get_f1_score()))
-                .replace("<!-- DOCUMENT_NAME -->", annotation_result.document_name)
-                .replace("<!-- INPUT_LENGTH -->", str(annotation_result.input_length))
+    with open("./assets/result-template.html", "r", encoding="utf-8") as file:
+        file_content = file.read()
+        file_content = (
+            file_content.replace(
+                "<!-- RESULT -->",
+                convert_to_html(annotation_result.annotated_tokens),
             )
-        with open(
-            f"./out/annotation-result-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.html",
-            "w",
-        ) as file:
-            file.write(file_content)
+            .replace(
+                "<!-- REFERENCE -->",
+                convert_to_html(annotation_result.reference_annotated_tokens),
+            )
+            .replace(
+                "<!-- RECOGNIZED_ACTOR -->", str(annotation_result.recognized_actor)
+            )
+            .replace("<!-- EXPECTED_ACTOR -->", str(annotation_result.expected_actor))
+            .replace(
+                "<!-- RECOGNIZED_ACTVITIY -->",
+                str(annotation_result.recognized_activity),
+            )
+            .replace(
+                "<!-- EXPECTED_ACTVITIY -->",
+                str(annotation_result.expected_activity),
+            )
+            .replace(
+                "<!-- RECOGNIZED_ACTIVITY_DATA -->",
+                str(annotation_result.recognized_activity_data),
+            )
+            .replace(
+                "<!-- EXPECTED_ACTIVITY_DATA -->",
+                str(annotation_result.expected_activity_data),
+            )
+            .replace("<!-- PRECISION -->", str(annotation_result.get_precision()))
+            .replace("<!-- RECALL -->", str(annotation_result.get_recall()))
+            .replace("<!-- F1_SCORE -->", str(annotation_result.get_f1_score()))
+            .replace("<!-- DOCUMENT_NAME -->", annotation_result.document_name)
+            .replace("<!-- INPUT_LENGTH -->", str(annotation_result.input_length))
+            .replace("<!-- ERRORS -->", str(annotation_result.incorrect_entities))
+        )
+    with open(
+        f"./out/annotation-result-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.html",
+        "w",
+    ) as file:
+        file.write(file_content)
 
 
 def convert_tags(tags: list[str]) -> list[str]:
