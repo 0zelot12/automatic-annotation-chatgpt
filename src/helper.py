@@ -145,7 +145,7 @@ def save_annotation_results(
                 .replace(
                     "<!-- RECOGNIZED_ACTVITIY -->",
                     str(annotation_result.recognized_activity),
-                )   
+                )
                 .replace(
                     "<!-- EXPECTED_ACTVITIY -->",
                     str(annotation_result.expected_activity),
@@ -158,6 +158,11 @@ def save_annotation_results(
                     "<!-- EXPECTED_ACTIVITY_DATA -->",
                     str(annotation_result.expected_activity_data),
                 )
+                .replace("<!-- PRECISION -->", str(annotation_result.get_precision()))
+                .replace("<!-- RECALL -->", str(annotation_result.get_recall()))
+                .replace("<!-- F1_SCORE -->", str(annotation_result.get_f1_score()))
+                .replace("<!-- DOCUMENT_NAME -->", annotation_result.document_name)
+                .replace("<!-- INPUT_LENGTH -->", str(annotation_result.input_length))
             )
         with open(
             f"./out/annotation-result-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.html",
