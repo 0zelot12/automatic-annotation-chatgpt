@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass
@@ -27,6 +27,7 @@ class AnnotationResult:
     recognized_activity_data: int = 0
     incorrect_entities: int = 0
     total_number_of_entities: int = 0
+    annotated_tokens: list[str] = field(default_factory=list)
 
     def get_precision(self) -> float:
         """

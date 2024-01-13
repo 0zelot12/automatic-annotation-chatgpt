@@ -5,6 +5,7 @@ from annotation_result import AnnotationResult
 from datetime import datetime
 
 from entity import Entity
+from visualization import convert_to_html
 
 
 def generate_simple_bar_chart(values, categories, xLabel, yLabel, title):
@@ -120,39 +121,20 @@ def generate_html(title: str, tokens: list[str], ner_tags: list[str]) -> None:
 
 
 # TODO: Refactor this method
-def write_annotation_results_to_file(
+def save_annotation_results(
     annotation_results: list[AnnotationResult],
 ) -> None:
-    result_string = ""
     for annotation_result in annotation_results:
-        result_string += f"""
-Document name: {annotation_result.document_name}
-
-Input length: {annotation_result.input_length}
-
-Expected O: {annotation_result.expected_o}
-Correctly Identified O: {annotation_result.recognized_o} 
-
-Expected Actor: {annotation_result.expected_actor}
-Correctly Identified Actor: {annotation_result.recognized_actor} 
-
-Expected Activity: {annotation_result.expected_activity}
-Correctly Identified Activity: {annotation_result.recognized_activity} 
-
-Expected Activity Data: {annotation_result.expected_activity_data}
-Correctly Identified Activity Data: {annotation_result.recognized_activity_data}
-
-Entities identified incorrectly: {annotation_result.incorrect_entities}
-
-Precision: {annotation_result.get_precision()}
-Recall: {annotation_result.get_recall()}
-====================================
-    """
-    with open(
-        f"./out/annotation-result-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.txt",
-        "w",
-    ) as file:
-        file.write(result_string)
+        with open("./assets/result-template.html", "r", encoding="utf-8") as file:
+            file_content = file.read()
+            file_content = file_content.replace(
+                "<!-- RESULT -->", convert_to_html(annotation_result.annotated_tokens)
+            )
+        with open(
+            f"./out/annotation-result-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.html",
+            "w",
+        ) as file:
+            file.write(file_content)
 
 
 def convert_tags(tags: list[str]) -> list[str]:

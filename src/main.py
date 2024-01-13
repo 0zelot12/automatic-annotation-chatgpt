@@ -26,7 +26,7 @@ from annotation_result import AnnotationResult
 from model_response import ModelResponse
 from pet_dataset import PetDataset
 
-from helper import convert_result, convert_tags, write_annotation_results_to_file
+from helper import convert_result, convert_tags, save_annotation_results
 
 
 # TODO: Move to different location
@@ -95,6 +95,7 @@ def annotate_document(
         input_length=len(input_tokens),
         total_number_of_entities=len(reference_annotations),
         response_time=api_response_time,
+        annotated_tokens=response.result,
     )
 
     # TODO: Implement method to extract all stats at once
@@ -175,7 +176,7 @@ def main() -> None:
             logging.fatal(e)
 
     if len(annotation_results) > 0:
-        write_annotation_results_to_file(annotation_results)
+        save_annotation_results(annotation_results)
 
 
 if __name__ == "__main__":
