@@ -56,7 +56,7 @@ class AnnotationResult:
             ]
         )
 
-        return entities_detected_correctly / entities_detected_total
+        return round(entities_detected_correctly / entities_detected_total, 2)
 
     def get_recall(self) -> float:
         """
@@ -71,9 +71,9 @@ class AnnotationResult:
             ]
         )
 
-        return entities_detected_correctly / self.total_number_of_entities
+        return round(entities_detected_correctly / self.total_number_of_entities, 2)
 
     def get_f1_score(self) -> float:
         precision = self.get_precision()
         recall = self.get_recall()
-        return 2 * precision * recall / (precision + recall)
+        return round(2 * precision * recall / (precision + recall), 2)
