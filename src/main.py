@@ -18,6 +18,7 @@ from pet_document import PetDocument
 
 from templates import (
     complete_template,
+    complete_template_few_shot,
     activity_template,
     activity_data_template,
 )
@@ -33,7 +34,7 @@ from helper import convert_result, convert_tags, save_annotation_result
 def annotate_document(
     document: PetDocument, model_name: str, entity_type: Entity
 ) -> AnnotationResult:
-    input_template = complete_template
+    input_template = complete_template_few_shot
 
     # TODO: Refactor
     if entity_type == Entity.ACTIVITY:
