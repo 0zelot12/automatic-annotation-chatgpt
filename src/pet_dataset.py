@@ -3,6 +3,11 @@ import pandas as pd
 from pet_document import PetDocument
 
 
+# TODO: Rename
+def foo(x):
+    return float(x.replace("doc-", ""))
+
+
 class PetDataset:
     """
     Singleton class for accessing the PET dataset.
@@ -38,7 +43,9 @@ class PetDataset:
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super(PetDataset, cls).__new__(cls)
-            cls._data = pd.read_parquet("./assets/pet_dataset.parquet")
+            df = pd.read_parquet("./assets/pet_dataset.parquet")
+            df["index"] = df["document name"].apply(foo)
+            cls._data = df.sort_values(by="index")
         return cls._instance
 
     def get_data(self):
