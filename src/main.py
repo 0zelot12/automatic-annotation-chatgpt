@@ -159,17 +159,20 @@ def main() -> None:
     # TODO: Evaluate argparse module
     arguments = sys.argv[1:]
     short_options = ""
-    long_options = ["document_number=", "model=", "entity_type="]
+    long_options = ["document_number=", "document_name=", "model=", "entity_type="]
     options, values = getopt.getopt(arguments, short_options, long_options)
 
     # Set default values
     document_number = 45
+    document_name = None
     entity_type = Entity.ACTOR
     model = "gpt-3.5-turbo"
 
     for o, v in options:
         if o == "--document_number":
             document_number = int(v)
+        if o == "--document_name":
+            document_name = v
         if o == "--model":
             model = v
         if o == "--entity_type":
@@ -178,9 +181,22 @@ def main() -> None:
     pet_dataset = PetDataset()
     annotation_results = []
 
-    for i in range(document_number):
+    # Temporary solution to able to annotate single documents
+    if not document_name:
+        for i in range(document_number):
+            try:
+                document = pet_dataset.get_document(document_number=i)
+                print(f"Processing {document.name}")
+                annotation_result = annotate_document(document, model, entity_type)
+                annotation_results.append(annotation_result)
+                save_annotation_result(annotation_result)
+                print(f"Processing {document.name} completed")
+            except Exception as e:
+                print(f"Processing {document.name} failed")
+                logging.fatal(e)
+    else:
         try:
-            document = pet_dataset.get_document(i)
+            document = pet_dataset.get_document_by_name(document_name=document_name)
             print(f"Processing {document.name}")
             annotation_result = annotate_document(document, model, entity_type)
             annotation_results.append(annotation_result)

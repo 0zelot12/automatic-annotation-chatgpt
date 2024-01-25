@@ -57,3 +57,12 @@ class PetDataset:
             tokens=self._data.iloc[document_number]["tokens"],
             ner_tags=self._data.iloc[document_number]["ner_tags"],
         )
+
+    def get_document_by_name(self, document_name: str) -> PetDocument:
+        matching_rows = self._data[self._data["document name"] == document_name]
+        document = matching_rows.iloc[0]
+        return PetDocument(
+            name=document["document name"],
+            tokens=document["tokens"],
+            ner_tags=document["ner_tags"],
+        )
