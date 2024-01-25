@@ -65,7 +65,6 @@ class AnnotationResult:
 
         entities_detected_correctly = sum(
             [
-                self.recognized_o,
                 self.recognized_actor,
                 self.recognized_activity,
                 self.recognized_activity_data,

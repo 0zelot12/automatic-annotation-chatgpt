@@ -92,20 +92,24 @@ def annotate_document(
     reference_annotations = convert_tags(reference_annotations)
 
     reference_annotated_tokens = []
+    total_number_of_entities = 0
     for token, ner_tag in zip(document.tokens, reference_annotations):
         if ner_tag == Entity.NO_ENTITY.value:
             reference_annotated_tokens.append(f"{token}")
         elif ner_tag == Entity.ACTOR.value:
             reference_annotated_tokens.append(f"<actor>{token}<actor>")
+            total_number_of_entities += 1
         elif ner_tag == Entity.ACTIVITY.value:
             reference_annotated_tokens.append(f"<activity>{token}<activity>")
+            total_number_of_entities += 1
         elif ner_tag == Entity.ACTIVITY_DATA.value:
             reference_annotated_tokens.append(f"<activity_data>{token}<activity_data>")
+            total_number_of_entities += 1
 
     annotation_result = AnnotationResult(
         document_name=document.name,
         input_length=len(input_tokens),
-        total_number_of_entities=len(reference_annotations),
+        total_number_of_entities=total_number_of_entities,
         response_time=api_response_time,
         annotated_tokens=response.result,
         reference_annotated_tokens=reference_annotated_tokens,
