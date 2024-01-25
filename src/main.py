@@ -179,15 +179,14 @@ def main() -> None:
 
     for i in range(document_number):
         try:
-            print(f"Processing document {i}")
-            annotation_result = annotate_document(
-                pet_dataset.get_document(i), model, entity_type
-            )
+            document = pet_dataset.get_document(i)
+            print(f"Processing {document.name}")
+            annotation_result = annotate_document(document, model, entity_type)
             annotation_results.append(annotation_result)
             save_annotation_result(annotation_result)
-            print(f"Processing document {i} completed")
+            print(f"Processing {document.name} completed")
         except Exception as e:
-            print(f"Processing document {i} failed")
+            print(f"Processing {document.name} failed")
             logging.fatal(e)
 
 
