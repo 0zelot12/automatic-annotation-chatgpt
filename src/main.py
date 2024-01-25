@@ -162,7 +162,7 @@ def main() -> None:
     options, values = getopt.getopt(arguments, short_options, long_options)
 
     # Set default values
-    document_number = 0
+    document_number = 45
     entity_type = Entity.ACTOR
     model = "gpt-3.5-turbo"
 

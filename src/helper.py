@@ -163,7 +163,7 @@ def save_annotation_result(
             .replace("<!-- ERRORS -->", str(annotation_result.incorrect_entities))
         )
     with open(
-        f"./out/annotation-result-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.html",
+        f"./out/{annotation_result.document_name}-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.html",
         "w",
     ) as file:
         file.write(file_content)
