@@ -16,12 +16,7 @@ from entity import Entity, str_to_entity
 from dotenv import load_dotenv
 from pet_document import PetDocument
 
-from templates import (
-    complete_template,
-    complete_template_few_shot,
-    activity_template,
-    activity_data_template,
-)
+from templates import complete_template_few_shot
 
 from annotation_result import AnnotationResult
 from model_response import ModelResponse
@@ -31,22 +26,11 @@ from helper import convert_result, convert_tags, save_annotation_result
 
 
 # TODO: Move to different location
-def annotate_document(
-    document: PetDocument, model_name: str, entity_type: Entity
-) -> AnnotationResult:
+def annotate_document(document: PetDocument, model_name: str) -> AnnotationResult:
     input_template = complete_template_few_shot
-
-    # TODO: Refactor
-    if entity_type == Entity.ACTIVITY:
-        input_template = activity_template
-
-    if entity_type == Entity.ACTIVITY_DATA:
-        input_template = activity_data_template
-
     input_tokens = document.tokens
     reference_annotations = document.ner_tags
 
-    # TODO: Add functionality to annotate multiple entities at once
     chat_template = ChatPromptTemplate.from_messages(
         [
             SystemMessage(
@@ -72,14 +56,9 @@ def annotate_document(
         f"Input length: {len(input_tokens)} - Input tokens: {input_tokens}"
     )
 
-    api_start_time = time.time()
     response = chain.invoke({"input": input_tokens})
-    api_end_time = time.time()
 
-    # TODO: Does not work properly
-    api_response_time = api_end_time - api_start_time
-
-    logging.debug(f"API response: {response} - Duration: {api_response_time}")
+    logging.debug(f"API response: {response}")
 
     assert len(input_tokens) == len(
         response.result
@@ -110,7 +89,6 @@ def annotate_document(
         document_name=document.name,
         input_length=len(input_tokens),
         total_number_of_entities=total_number_of_entities,
-        response_time=api_response_time,
         annotated_tokens=response.result,
         reference_annotated_tokens=reference_annotated_tokens,
     )
@@ -163,13 +141,12 @@ def main() -> None:
     # TODO: Evaluate argparse module
     arguments = sys.argv[1:]
     short_options = ""
-    long_options = ["document_number=", "document_name=", "model=", "entity_type="]
+    long_options = ["document_number=", "document_name=", "model="]
     options, values = getopt.getopt(arguments, short_options, long_options)
 
     # Set default values
     document_number = 45
     document_name = None
-    entity_type = Entity.ACTOR
     model = "gpt-3.5-turbo"
 
     for o, v in options:
@@ -179,8 +156,6 @@ def main() -> None:
             document_name = v
         if o == "--model":
             model = v
-        if o == "--entity_type":
-            entity_type = str_to_entity(v)
 
     pet_dataset = PetDataset()
     annotation_results = []
@@ -191,7 +166,7 @@ def main() -> None:
             try:
                 document = pet_dataset.get_document(document_number=i)
                 print(f"Processing {document.name}")
-                annotation_result = annotate_document(document, model, entity_type)
+                annotation_result = annotate_document(document, model)
                 annotation_results.append(annotation_result)
                 save_annotation_result(annotation_result)
                 print(f"Processing {document.name} completed")
@@ -202,7 +177,7 @@ def main() -> None:
         try:
             document = pet_dataset.get_document_by_name(document_name=document_name)
             print(f"Processing {document.name}")
-            annotation_result = annotate_document(document, model, entity_type)
+            annotation_result = annotate_document(document, model)
             annotation_results.append(annotation_result)
             save_annotation_result(annotation_result)
             print(f"Processing {document.name} completed")
