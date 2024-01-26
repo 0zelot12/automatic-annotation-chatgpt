@@ -17,7 +17,7 @@ This is an example:
 ['A', 'customer', 'brings', 'in', 'a', 'defective', 'computer', 'and', 'the', 'CRS', 'checks', 'the', 'defect', 'and', 'hands', 'out', 'a', 'repair', 'cost', 'calculation', 'back', '.']
 
 {{
-    "result": ['<actor>A<actor>', '<actor>customer<actor>', '<activity>brings<activity>', '<activity>in<activity>', 'a', 'defective', 'computer', 'and', '<actor>the<actor>', '<actor>CRS<actor>', '<activity>checks<activity>', '<activity_data>the<activity_data>', '<activity_data>defect<activity_data>', 'and', '<activity>hands<activity>', '<activity>out<activity>', '<activity_data>a<activity_data>', '<activity_data>repair<activity_data>', '<activity_data>cost<activity_data>', '<activity_data>calculation<activity_data>', 'back', '.']
+    "result": ['<actor>A customer</actor>', '<activity>brings in</activity>', 'a', 'defective', 'computer', 'and', '<actor>the CRS</actor>', '<activity>checks</activity>', '<activity_data>the defect</activity_data>', 'and', '<activity>hands out</activity>', '<activity_data>a repair cost calculation</activity_data>', 'back', '.']
 }}
 
 {input}

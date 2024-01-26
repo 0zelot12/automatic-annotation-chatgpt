@@ -15,7 +15,7 @@ from entity import Entity
 from dotenv import load_dotenv
 from pet_document import PetDocument
 
-from templates import few_shot_template
+from templates import one_shot_template, few_shot_template
 
 from annotation_result import AnnotationResult
 from model_response import ModelResponse
@@ -26,7 +26,7 @@ from helper import convert_result, convert_tags, save_annotation_result
 
 # TODO: Move to different location
 def annotate_document(document: PetDocument, model_name: str) -> AnnotationResult:
-    input_template = few_shot_template
+    input_template = one_shot_template
     input_tokens = document.tokens
     reference_annotations = document.ner_tags
 
@@ -57,67 +57,69 @@ def annotate_document(document: PetDocument, model_name: str) -> AnnotationResul
 
     response = chain.invoke({"input": input_tokens})
 
-    logging.debug(f"API response: {response}")
+    print(response)
 
-    assert len(input_tokens) == len(
-        response.result
-    ), "Lengths of input_tokens and response.result do not match"
+    # logging.debug(f"API response: {response}")
 
-    converted_response = convert_result(response.result)
+    # assert len(input_tokens) == len(
+    #     response.result
+    # ), "Lengths of input_tokens and response.result do not match"
 
-    logging.debug(f"Converted response: {converted_response}")
+    # converted_response = convert_result(response.result)
 
-    reference_annotations = convert_tags(reference_annotations)
+    # logging.debug(f"Converted response: {converted_response}")
 
-    reference_annotated_tokens = []
-    total_number_of_entities = 0
-    for token, ner_tag in zip(document.tokens, reference_annotations):
-        if ner_tag == Entity.NO_ENTITY.value:
-            reference_annotated_tokens.append(f"{token}")
-        elif ner_tag == Entity.ACTOR.value:
-            reference_annotated_tokens.append(f"<actor>{token}<actor>")
-            total_number_of_entities += 1
-        elif ner_tag == Entity.ACTIVITY.value:
-            reference_annotated_tokens.append(f"<activity>{token}<activity>")
-            total_number_of_entities += 1
-        elif ner_tag == Entity.ACTIVITY_DATA.value:
-            reference_annotated_tokens.append(f"<activity_data>{token}<activity_data>")
-            total_number_of_entities += 1
+    # reference_annotations = convert_tags(reference_annotations)
 
-    annotation_result = AnnotationResult(
-        document_name=document.name,
-        input_length=len(input_tokens),
-        total_number_of_entities=total_number_of_entities,
-        annotated_tokens=response.result,
-        reference_annotated_tokens=reference_annotated_tokens,
-    )
+    # reference_annotated_tokens = []
+    # total_number_of_entities = 0
+    # for token, ner_tag in zip(document.tokens, reference_annotations):
+    #     if ner_tag == Entity.NO_ENTITY.value:
+    #         reference_annotated_tokens.append(f"{token}")
+    #     elif ner_tag == Entity.ACTOR.value:
+    #         reference_annotated_tokens.append(f"<actor>{token}<actor>")
+    #         total_number_of_entities += 1
+    #     elif ner_tag == Entity.ACTIVITY.value:
+    #         reference_annotated_tokens.append(f"<activity>{token}<activity>")
+    #         total_number_of_entities += 1
+    #     elif ner_tag == Entity.ACTIVITY_DATA.value:
+    #         reference_annotated_tokens.append(f"<activity_data>{token}<activity_data>")
+    #         total_number_of_entities += 1
 
-    # TODO: Implement method to extract all stats at once
-    for tag in reference_annotations:
-        if tag == Entity.NO_ENTITY.value:
-            annotation_result.expected_o += 1
-        elif tag == Entity.ACTOR.value:
-            annotation_result.expected_actor += 1
-        elif tag == Entity.ACTIVITY.value:
-            annotation_result.expected_activity += 1
-        elif tag == Entity.ACTIVITY_DATA.value:
-            annotation_result.expected_activity_data += 1
+    # annotation_result = AnnotationResult(
+    #     document_name=document.name,
+    #     input_length=len(input_tokens),
+    #     total_number_of_entities=total_number_of_entities,
+    #     annotated_tokens=response.result,
+    #     reference_annotated_tokens=reference_annotated_tokens,
+    # )
 
-    for reference, result in zip(reference_annotations, converted_response):
-        logging.debug(f"Expected tag: {reference} - Result: {result}")
-        if result == reference:
-            if result == Entity.ACTOR.value:
-                annotation_result.recognized_actor += 1
-            elif result == Entity.ACTIVITY.value:
-                annotation_result.recognized_activity += 1
-            elif result == Entity.ACTIVITY_DATA.value:
-                annotation_result.recognized_activity_data += 1
-            elif result == Entity.NO_ENTITY.value:
-                annotation_result.recognized_o += 1
-        else:
-            annotation_result.incorrect_entities += 1
+    # # TODO: Implement method to extract all stats at once
+    # for tag in reference_annotations:
+    #     if tag == Entity.NO_ENTITY.value:
+    #         annotation_result.expected_o += 1
+    #     elif tag == Entity.ACTOR.value:
+    #         annotation_result.expected_actor += 1
+    #     elif tag == Entity.ACTIVITY.value:
+    #         annotation_result.expected_activity += 1
+    #     elif tag == Entity.ACTIVITY_DATA.value:
+    #         annotation_result.expected_activity_data += 1
 
-    return annotation_result
+    # for reference, result in zip(reference_annotations, converted_response):
+    #     logging.debug(f"Expected tag: {reference} - Result: {result}")
+    #     if result == reference:
+    #         if result == Entity.ACTOR.value:
+    #             annotation_result.recognized_actor += 1
+    #         elif result == Entity.ACTIVITY.value:
+    #             annotation_result.recognized_activity += 1
+    #         elif result == Entity.ACTIVITY_DATA.value:
+    #             annotation_result.recognized_activity_data += 1
+    #         elif result == Entity.NO_ENTITY.value:
+    #             annotation_result.recognized_o += 1
+    #     else:
+    #         annotation_result.incorrect_entities += 1
+
+    return None
 
 
 def main() -> None:
