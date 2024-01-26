@@ -120,7 +120,7 @@ def generate_html(title: str, tokens: list[str], ner_tags: list[str]) -> None:
             file.write(result_string)
 
 
-# TODO: Refactor this method
+# TODO: Refactor
 def save_annotation_result(
     annotation_result: AnnotationResult,
 ) -> None:

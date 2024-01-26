@@ -1,7 +1,6 @@
 import sys
 import getopt
 import logging
-import time
 
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
@@ -117,15 +116,6 @@ def annotate_document(document: PetDocument, model_name: str) -> AnnotationResul
                 annotation_result.recognized_o += 1
         else:
             annotation_result.incorrect_entities += 1
-
-    logging.debug(
-        f"O recognized: {annotation_result.recognized_o} - Expected: {annotation_result.expected_o} | "
-        f"Actor recognized: {annotation_result.recognized_actor} - Expected: {annotation_result.expected_actor} | "
-        f"Activity recognized: {annotation_result.recognized_activity} - Expected: {annotation_result.expected_activity} | "
-        f"Activity Data recognized: {annotation_result.recognized_activity_data} - Expected: {annotation_result.expected_activity_data} |"
-        f"Not recognized correctly: {annotation_result.incorrect_entities} | "
-        f"Input length: {annotation_result.input_length}"
-    )
 
     return annotation_result
 
