@@ -16,7 +16,7 @@ from entity import Entity
 from dotenv import load_dotenv
 from pet_document import PetDocument
 
-from templates import complete_template_few_shot
+from templates import few_shot_template
 
 from annotation_result import AnnotationResult
 from model_response import ModelResponse
@@ -27,7 +27,7 @@ from helper import convert_result, convert_tags, save_annotation_result
 
 # TODO: Move to different location
 def annotate_document(document: PetDocument, model_name: str) -> AnnotationResult:
-    input_template = complete_template_few_shot
+    input_template = few_shot_template
     input_tokens = document.tokens
     reference_annotations = document.ner_tags
 
