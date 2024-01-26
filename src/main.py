@@ -11,7 +11,7 @@ from langchain_core.messages import SystemMessage
 
 from datetime import datetime
 
-from entity import Entity, str_to_entity
+from entity import Entity
 
 from dotenv import load_dotenv
 from pet_document import PetDocument
