@@ -161,6 +161,7 @@ def main() -> None:
                 annotation_result = annotate_document(document, model)
                 annotation_results.append(annotation_result)
                 save_annotation_result(annotation_result)
+                # TODO: Evaluate tqdm
                 print(f"Processing {document.name} completed")
             except Exception as e:
                 print(f"Processing {document.name} failed")
