@@ -2,6 +2,8 @@ import pandas as pd
 
 from pet_document import PetDocument
 
+from entity import str_to_entity
+
 
 # TODO: Rename
 def foo(x):
@@ -53,17 +55,23 @@ class PetDataset:
         return self._data
 
     def get_document(self, document_number: int) -> PetDocument:
+        converted_ner_tags = []
+        for ner_tag in self._data.iloc[document_number]["ner_tags"]:
+            converted_ner_tags.append(str_to_entity(ner_tag))
         return PetDocument(
             name=self._data.iloc[document_number]["document name"],
             tokens=self._data.iloc[document_number]["tokens"],
-            ner_tags=self._data.iloc[document_number]["ner_tags"],
+            ner_tags=converted_ner_tags,
         )
 
     def get_document_by_name(self, document_name: str) -> PetDocument:
         matching_rows = self._data[self._data["document name"] == document_name]
         document = matching_rows.iloc[0]
+        converted_ner_tags = []
+        for ner_tag in document["ner_tags"]:
+            converted_ner_tags.append(str_to_entity(ner_tag))
         return PetDocument(
             name=document["document name"],
             tokens=document["tokens"],
-            ner_tags=document["ner_tags"],
+            ner_tags=converted_ner_tags,
         )

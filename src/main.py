@@ -66,7 +66,9 @@ def annotate_document(document: PetDocument, model_name: str) -> AnnotationResul
 
     processed_response = process_model_reponse(response.data)
 
-    print(processed_response)
+    for result, reference in zip(processed_response, document.ner_tags):
+        # TODO: Calculate result
+        print(f"{result} - {reference}")
 
     # converted_response = convert_result(response.result)
 
@@ -122,7 +124,7 @@ def annotate_document(document: PetDocument, model_name: str) -> AnnotationResul
     #     else:
     #         annotation_result.incorrect_entities += 1
 
-    return None
+    # return annotation_result
 
 
 def main() -> None:
@@ -160,8 +162,9 @@ def main() -> None:
         for i in range(document_number):
             try:
                 document = pet_dataset.get_document(document_number=i)
-                print(f"Processing {document.name}")
-                annotation_result = annotate_document(document, model)
+                print(document.ner_tags)
+                # print(f"Processing {document.name}")
+                # annotation_result = annotate_document(document, model)
                 # annotation_results.append(annotation_result)
                 # save_annotation_result(annotation_result)
                 # TODO: Evaluate tqdm

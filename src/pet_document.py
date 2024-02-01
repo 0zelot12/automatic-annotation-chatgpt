@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+from entity import Entity
+
 
 @dataclass
 class PetDocument:
@@ -14,4 +16,4 @@ class PetDocument:
 
     name: str
     tokens: list[str]
-    ner_tags: list[str]
+    ner_tags: list[Entity]

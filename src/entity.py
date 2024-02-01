@@ -50,11 +50,8 @@ def str_to_entity(string_value: str) -> Entity:
 
     Returns:
         Entity: The corresponding Entity Enum value.
-
-    Raises:
-        ValueError: If the string_value does not match any of the known entity labels.
     """
     for entity in Entity:
         if entity.value == string_value:
             return entity
-    raise ValueError("Unknown entity label: {}".format(string_value))
+    return Entity.NO_ENTITY
