@@ -9,32 +9,52 @@ class Entity(Enum):
     the possible entities with their corresponding labels.
 
     Enum Values:
-        - ACTOR: Represents an entity labeled as "Actor" in the PET dataset.
-        - ACTIVITY: Represents an entity labeled as "Activity" in the PET dataset.
-        - ACTIVITY_DATA: Represents an entity labeled as "Activity Data" in the PET dataset.
-        - FURTHER_SPECIFICATION: Represents an entity labeled as "Further Specification" in the PET dataset.
+        - B_ACTOR: Represents the beginning of an entity labeled as "Actor" in the PET dataset.
+        - I_ACTOR: Represents an intermediate part of an entity labeled as "Actor" in the PET dataset.
+        - B_ACTIVITY: Represents the beginning of an entity labeled as "Activity" in the PET dataset.
+        - I_ACTIVITY: Represents an intermediate part of an entity labeled as "Activity" in the PET dataset.
+        - B_ACTIVITY_DATA: Represents the beginning of an entity labeled as "Activity Data" in the PET dataset.
+        - I_ACTIVITY_DATA: Represents an intermediate part of an entity labeled as "Activity Data" in the PET dataset.
+        - B_FURTHER_SPECIFICATION: Represents the beginning of an entity labeled as "Further Specification" in the PET dataset.
+        - I_FURTHER_SPECIFICATION: Represents an intermediate part of an entity labeled as "Further Specification" in the PET dataset.
         - NO_ENTITY: Represents the absence of a specific entity, labeled as "O" in the PET dataset.
 
     Example:
         ```
         # Usage of Entity Enum
-        entity_type = Entity.ACTOR
-        print(entity_type.value)  # Output: "Actor"
+        entity_type = Entity.B_ACTOR
+        print(entity_type.value)  # Output: "B-Actor"
         ```
 
     Note:
         This Enum class provides a convenient and readable way to work with entity labels in the PET dataset.
     """
 
-    ACTOR = "Actor"
-    ACTIVITY = "Activity"
-    ACTIVITY_DATA = "Activity Data"
-    FURTHER_SPECIFICATION = "Further Specification"
+    B_ACTOR = "B-Actor"
+    I_ACTOR = "I-Actor"
+    B_ACTIVITY = "B-Activity"
+    I_ACTIVITY = "I-Activity"
+    B_ACTIVITY_DATA = "B-Activity Data"
+    I_ACTIVITY_DATA = "I-Activity Data"
+    B_FURTHER_SPECIFICATION = "B-Further Specification"
+    I_FURTHER_SPECIFICATION = "I-Further Specification"
     NO_ENTITY = "O"
 
 
 def str_to_entity(string_value: str) -> Entity:
+    """
+    Converts a string representation of an entity label to the corresponding Entity Enum value.
+
+    Args:
+        string_value (str): The string representation of the entity label.
+
+    Returns:
+        Entity: The corresponding Entity Enum value.
+
+    Raises:
+        ValueError: If the string_value does not match any of the known entity labels.
+    """
     for entity in Entity:
         if entity.value == string_value:
             return entity
-    raise ValueError
+    raise ValueError("Unknown entity label: {}".format(string_value))

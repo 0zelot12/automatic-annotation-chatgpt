@@ -230,20 +230,29 @@ def process_model_reponse(response: list[str]) -> list[Entity]:
     for r in response:
         if re.search(actor_annotation_pattern, r):
             tokens = word_tokenize(re.sub(annotation_replacement_pattern, "", r))
-            for token in tokens:
-                ner_tags.append(Entity.ACTOR)
+            for i in range(len(tokens)):
+                if i == 0:
+                    ner_tags.append(Entity.B_ACTOR)
+                else:
+                    ner_tags.append(Entity.I_ACTOR)
         elif re.search(activity_annotation_pattern, r):
             tokens = word_tokenize(re.sub(annotation_replacement_pattern, "", r))
-            for token in tokens:
-                ner_tags.append(Entity.ACTIVITY)
+            for i in range(len(tokens)):
+                if i == 0:
+                    ner_tags.append(Entity.B_ACTIVITY)
+                else:
+                    ner_tags.append(Entity.I_ACTIVITY)
         elif re.search(activity_data_annotation_pattern, r):
             tokens = word_tokenize(re.sub(annotation_replacement_pattern, "", r))
-            for token in tokens:
-                ner_tags.append(Entity.ACTIVITY_DATA)
+            for i in range(len(tokens)):
+                if i == 0:
+                    ner_tags.append(Entity.B_ACTIVITY_DATA)
+                else:
+                    ner_tags.append(Entity.I_ACTIVITY_DATA)
         else:
             # Improve prompt so this in not necessary anymore
             tokens = word_tokenize(re.sub(annotation_replacement_pattern, "", r))
-            for token in tokens:
+            for i in range(len(tokens)):
                 ner_tags.append(Entity.NO_ENTITY)
 
     return ner_tags
