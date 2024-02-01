@@ -21,7 +21,12 @@ from annotation_result import AnnotationResult
 from model_response import ModelResponse
 from pet_dataset import PetDataset
 
-from helper import convert_result, convert_tags, save_annotation_result
+from helper import (
+    convert_result,
+    convert_tags,
+    process_model_reponse,
+    save_annotation_result,
+)
 
 
 # TODO: Move to different location
@@ -51,19 +56,17 @@ def annotate_document(document: PetDocument, model_name: str) -> AnnotationResul
     chain = chat_template | model | parser
 
     logging.debug(
-        f"Evaluated document: {document.name} - Model used: {model.model_name} | "
+        f"Evaluated document: {document.name} - Model used: {model.model_name}"
         f"Input length: {len(input_tokens)} - Input tokens: {input_tokens}"
     )
 
     response = chain.invoke({"input": input_tokens})
 
-    print(response)
+    logging.debug(f"API response: {response}")
 
-    # logging.debug(f"API response: {response}")
+    processed_response = process_model_reponse(response.data)
 
-    # assert len(input_tokens) == len(
-    #     response.result
-    # ), "Lengths of input_tokens and response.result do not match"
+    print(processed_response)
 
     # converted_response = convert_result(response.result)
 
@@ -159,8 +162,8 @@ def main() -> None:
                 document = pet_dataset.get_document(document_number=i)
                 print(f"Processing {document.name}")
                 annotation_result = annotate_document(document, model)
-                annotation_results.append(annotation_result)
-                save_annotation_result(annotation_result)
+                # annotation_results.append(annotation_result)
+                # save_annotation_result(annotation_result)
                 # TODO: Evaluate tqdm
                 print(f"Processing {document.name} completed")
             except Exception as e:
@@ -171,8 +174,8 @@ def main() -> None:
             document = pet_dataset.get_document_by_name(document_name=document_name)
             print(f"Processing {document.name}")
             annotation_result = annotate_document(document, model)
-            annotation_results.append(annotation_result)
-            save_annotation_result(annotation_result)
+            # annotation_results.append(annotation_result)
+            # save_annotation_result(annotation_result)
             print(f"Processing {document.name} completed")
         except Exception as e:
             print(f"Processing {document.name} failed")
