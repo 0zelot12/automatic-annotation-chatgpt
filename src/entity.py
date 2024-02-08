@@ -41,6 +41,18 @@ class Entity(Enum):
     NO_ENTITY = "O"
 
 
+def isActor(entity: Entity):
+    return entity == Entity.B_ACTOR or entity == Entity.I_ACTOR
+
+
+def isActivity(entity: Entity):
+    return entity == Entity.B_ACTIVITY or entity == Entity.I_ACTIVITY
+
+
+def isActivityData(entity: Entity):
+    return entity == Entity.B_ACTIVITY_DATA or entity == Entity.I_ACTIVITY_DATA
+
+
 def str_to_entity(string_value: str) -> Entity:
     """
     Converts a string representation of an entity label to the corresponding Entity Enum value.
