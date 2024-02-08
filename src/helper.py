@@ -215,48 +215,9 @@ def get_entity_type_count(tags: list[str], entity: str) -> int:
 
 
 def process_model_reponse(response: list[str]) -> list[Entity]:
-    actor_annotation_pattern = r"<actor>.*?</actor>"
-    activity_annotation_pattern = r"<activity>.*?</activity>"
-    activity_data_annotation_pattern = r"<activity_data>.*?</activity_data>"
-
-    annotation_replacement_pattern = (
-        r"<actor>|</actor>|<activity>|</activity>|<activity_data>|</activity_data>"
-    )
-
     ner_tags = []
-
-    # i.e. problem!
-
-    # TODO: Add assertion in case something goes wrong here
-
     for r in response:
-        if re.search(actor_annotation_pattern, r):
-            tokens = word_tokenize(re.sub(annotation_replacement_pattern, "", r))
-            for i in range(len(tokens)):
-                if i == 0:
-                    ner_tags.append(Entity.B_ACTOR)
-                else:
-                    ner_tags.append(Entity.I_ACTOR)
-        elif re.search(activity_annotation_pattern, r):
-            tokens = word_tokenize(re.sub(annotation_replacement_pattern, "", r))
-            for i in range(len(tokens)):
-                if i == 0:
-                    ner_tags.append(Entity.B_ACTIVITY)
-                else:
-                    ner_tags.append(Entity.I_ACTIVITY)
-        elif re.search(activity_data_annotation_pattern, r):
-            tokens = word_tokenize(re.sub(annotation_replacement_pattern, "", r))
-            for i in range(len(tokens)):
-                if i == 0:
-                    ner_tags.append(Entity.B_ACTIVITY_DATA)
-                else:
-                    ner_tags.append(Entity.I_ACTIVITY_DATA)
-        else:
-            # Improve prompt so this in not necessary anymore
-            tokens = word_tokenize(re.sub(annotation_replacement_pattern, "", r))
-            for i in range(len(tokens)):
-                ner_tags.append(Entity.NO_ENTITY)
-
+        print(r)
     return ner_tags
 
 
