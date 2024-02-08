@@ -260,179 +260,67 @@ def process_model_reponse(response: list[str]) -> list[Entity]:
     return ner_tags
 
 
-pet_dataset = PetDataset()
-test_document = pet_dataset.get_document_by_name("doc-10.14")
-
-
-def kekw(tokens: list[str], ner_tags: list[Entity]) -> list[str]:
+def convert_to_template_example(tokens: list[str], ner_tags: list[Entity]) -> list[str]:
     result = []
-    current_result = []
-    searching = False
     for token, ner_tag, index in zip(tokens, ner_tags, range(len(tokens))):
-        if ner_tag == Entity.B_ACTOR and not searching:
-            searching = True
-            current_result.append("<ACTOR>")
-            current_result.append(token)
+
+        # ACTOR
+        if ner_tag == Entity.B_ACTOR and ner_tags[index + 1] == Entity.I_ACTOR:
+            result.append(f"<actor>{token}")
             continue
-        if ner_tag == Entity.B_ACTOR and searching:
-            result.append(current_result)
-            current_result = []
-            current_result.append("<ACTOR>")
-            current_result.append(token)
+        if ner_tag == Entity.B_ACTOR and ner_tags[index + 1] != Entity.I_ACTOR:
+            result.append(f"<actor>{token}</actor>")
             continue
-        if ner_tag == Entity.I_ACTOR and searching:
-            current_result.append(token)
+        if ner_tag == Entity.I_ACTOR and ner_tags[index + 1] == Entity.I_ACTOR:
+            result.append(f"{token}")
             continue
-        if ner_tag == Entity.B_ACTIVITY and not searching:
-            searching = True
-            current_result.append("<ACTIVITY>")
-            current_result.append(token)
+        if ner_tag == Entity.I_ACTOR and ner_tags[index + 1] != Entity.I_ACTOR:
+            result.append(f"{token}</actor>")
             continue
-        if ner_tag == Entity.B_ACTIVITY and searching:
-            result.append(current_result)
-            current_result = []
-            current_result.append("<ACTIVITY>")
-            current_result.append(token)
+
+        # ACTIVITY
+        if ner_tag == Entity.B_ACTIVITY and ner_tags[index + 1] == Entity.I_ACTIVITY:
+            result.append(f"<activity>{token}")
             continue
-        if ner_tag == Entity.I_ACTIVITY and searching:
-            current_result.append(token)
+        if ner_tag == Entity.B_ACTIVITY and ner_tags[index + 1] != Entity.I_ACTIVITY:
+            result.append(f"<activity>{token}</activity>")
             continue
-        if ner_tag == Entity.B_ACTIVITY_DATA and not searching:
-            searching = True
-            current_result.append("<ACTIVITY_DATA>")
-            current_result.append(token)
+        if ner_tag == Entity.I_ACTIVITY and ner_tags[index + 1] == Entity.I_ACTIVITY:
+            result.append(f"{token}")
             continue
-        if ner_tag == Entity.B_ACTIVITY_DATA and searching:
-            result.append(current_result)
-            current_result = []
-            current_result.append("<ACTIVITY_DATA>")
-            current_result.append(token)
+        if ner_tag == Entity.I_ACTIVITY and ner_tags[index + 1] != Entity.I_ACTIVITY:
+            result.append(f"{token}</activity>")
             continue
-        if ner_tag == Entity.I_ACTIVITY_DATA and searching:
-            current_result.append(token)
+
+        # ACTIVITY_DATA
+        if (
+            ner_tag == Entity.B_ACTIVITY_DATA
+            and ner_tags[index + 1] == Entity.I_ACTIVITY_DATA
+        ):
+            result.append(f"<activity_data>{token}")
             continue
-        if ner_tag == Entity.NO_ENTITY and not searching:
-            result.append(["<O>", token])
-            searching = False
-        if ner_tag == Entity.NO_ENTITY and searching:
-            result.append(current_result)
-            current_result = []
-            result.append(["<O>", token])
-            searching = False
-    # In case a sentence ends with an entity
-    if len(current_result) > 0:
-        result.append(current_result)
+        if (
+            ner_tag == Entity.B_ACTIVITY_DATA
+            and ner_tags[index + 1] != Entity.I_ACTIVITY_DATA
+        ):
+            result.append(f"<activity_data>{token}</activity_data>")
+            continue
+        if (
+            ner_tag == Entity.I_ACTIVITY_DATA
+            and ner_tags[index + 1] == Entity.I_ACTIVITY_DATA
+        ):
+            result.append(f"{token}")
+            continue
+        if (
+            ner_tag == Entity.I_ACTIVITY_DATA
+            and ner_tags[index + 1] != Entity.I_ACTIVITY_DATA
+        ):
+            result.append(f"{token}</activity_data>")
+            continue
+
+        # NO_ENTITY
+        if ner_tag == Entity.NO_ENTITY:
+            result.append(f"{token}")
+            continue
 
     return result
-
-
-# def extract_actor(tokens: list[str], ner_tags: list[Entity]) -> list[str]:
-#     result = []
-#     current_result = []
-#     searching = False
-#     for token, ner_tag, index in zip(tokens, ner_tags, range(len(tokens))):
-#         # Found B
-#         if ner_tag == Entity.B_ACTOR and not searching:
-#             searching = True
-#             current_result.append(token)
-#             continue
-#         # Found beginning but still looking for I's
-#         if ner_tag == Entity.B_ACTOR and searching:
-#             result.append(current_result)
-#             current_result = []
-#             current_result.append(token)
-#             continue
-#         # Found I
-#         if ner_tag == Entity.I_ACTOR and searching:
-#             current_result.append(token)
-#             continue
-#         # Found O
-#         if searching:
-#             result.append(current_result)
-#             current_result = []
-#             searching = False
-#     # In case a sentence ends with an entity
-#     if len(current_result) > 0:
-#         result.append(current_result)
-#     return result
-
-
-# def extract_activity(tokens: list[str], ner_tags: list[Entity]) -> list[str]:
-#     result = []
-#     current_result = []
-#     searching = False
-#     for token, ner_tag, index in zip(tokens, ner_tags, range(len(tokens))):
-#         if ner_tag == Entity.B_ACTIVITY and not searching:
-#             searching = True
-#             current_result.append(token)
-#             continue
-#         if ner_tag == Entity.B_ACTIVITY and searching:
-#             result.append(current_result)
-#             current_result = []
-#             current_result.append(token)
-#             continue
-#         if ner_tag == Entity.I_ACTIVITY and searching:
-#             current_result.append(token)
-#             continue
-#         if searching:
-#             result.append(current_result)
-#             current_result = []
-#             searching = False
-#     return result
-
-
-# def extract_activity_data(tokens: list[str], ner_tags: list[Entity]) -> list[str]:
-#     result = []
-#     current_result = []
-#     searching = False
-#     for token, ner_tag, index in zip(tokens, ner_tags, range(len(tokens))):
-#         if ner_tag == Entity.B_ACTIVITY_DATA and not searching:
-#             searching = True
-#             current_result.append(token)
-#             continue
-#         if ner_tag == Entity.B_ACTIVITY_DATA and searching:
-#             result.append(current_result)
-#             current_result = []
-#             current_result.append(token)
-#             continue
-#         if ner_tag == Entity.I_ACTIVITY_DATA and searching:
-#             current_result.append(token)
-#             continue
-#         if searching:
-#             result.append(current_result)
-#             current_result = []
-#             searching = False
-#     return result
-
-t = kekw(test_document.tokens, test_document.ner_tags)
-
-# res_str = ""
-# for i in t:
-#     if i[0] == "<O>":
-#         res_str +=
-
-a = []
-for token, ner_tag, idx in zip(
-    test_document.tokens, test_document.ner_tags, range(len(test_document.tokens))
-):
-    if ner_tag == Entity.B_ACTOR:
-        a.append(f"<Actor>{token}")
-    if ner_tag == Entity.I_ACTOR and test_document.ner_tags[idx + 1] != Entity.I_ACTOR:
-        a.append(f"{token}</Actor>")
-    if ner_tag == Entity.B_ACTIVITY:
-        a.append(f"<Activity>{token}")
-    if (
-        ner_tag == Entity.I_ACTIVITY
-        and test_document.ner_tags[idx + 1] != Entity.I_ACTIVITY
-    ):
-        a.append(f"{token}</Activity>")
-    if ner_tag == Entity.B_ACTIVITY_DATA:
-        a.append(f"<Activity_Data>{token}")
-    if (
-        ner_tag == Entity.I_ACTIVITY_DATA
-        and test_document.ner_tags[idx + 1] != Entity.I_ACTIVITY_DATA
-    ):
-        a.append(f"{token}</Activity_Data>")
-
-k = TreebankWordDetokenizer()
-print(k.detokenize(tokens=a))
