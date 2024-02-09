@@ -66,9 +66,9 @@ def annotate_document(document: PetDocument, model_name: str) -> AnnotationResul
 
     processed_response = process_model_reponse(response.data)
 
-    for result, reference in zip(processed_response, document.ner_tags):
-        # TODO: Calculate result
-        print(f"{result} - {reference}")
+    # for result, reference in zip(processed_response, document.ner_tags):
+    #     # TODO: Calculate result
+    #     print(f"{result} - {reference}")
 
     # converted_response = convert_result(response.result)
 
@@ -173,16 +173,22 @@ def main() -> None:
                 print(f"Processing {document.name} failed")
                 logging.fatal(e)
     else:
-        try:
-            document = pet_dataset.get_document_by_name(document_name=document_name)
-            print(f"Processing {document.name}")
-            annotation_result = annotate_document(document, model)
-            # annotation_results.append(annotation_result)
-            # save_annotation_result(annotation_result)
-            print(f"Processing {document.name} completed")
-        except Exception as e:
-            print(f"Processing {document.name} failed")
-            logging.fatal(e)
+        document = pet_dataset.get_document_by_name(document_name=document_name)
+        print(f"Processing {document.name}")
+        annotation_result = annotate_document(document, model)
+        # annotation_results.append(annotation_result)
+        # save_annotation_result(annotation_result)
+        print(f"Processing {document.name} completed")
+        # try:
+        #     document = pet_dataset.get_document_by_name(document_name=document_name)
+        #     print(f"Processing {document.name}")
+        #     annotation_result = annotate_document(document, model)
+        #     # annotation_results.append(annotation_result)
+        #     # save_annotation_result(annotation_result)
+        #     print(f"Processing {document.name} completed")
+        # except Exception as e:
+        #     print(f"Processing {document.name} failed")
+        #     logging.fatal(e)
 
 
 if __name__ == "__main__":

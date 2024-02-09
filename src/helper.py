@@ -8,14 +8,6 @@ from entity import Entity
 from pet_dataset import PetDataset
 from visualization import convert_to_html
 
-import re
-import nltk
-
-from nltk.tokenize import word_tokenize
-from nltk.tokenize import TreebankWordDetokenizer
-
-nltk.download("punkt")
-
 
 def generate_simple_bar_chart(values, categories, xLabel, yLabel, title):
     """
