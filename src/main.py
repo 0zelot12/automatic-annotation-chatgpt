@@ -15,7 +15,7 @@ from entity import Entity
 from dotenv import load_dotenv
 from pet_document import PetDocument
 
-from templates import one_shot_template, few_shot_template
+from templates import one_shot_template, few_shot_template, zero_shot_template
 
 from annotation_result import AnnotationResult
 from model_response import ModelResponse
@@ -31,7 +31,7 @@ from helper import (
 
 # TODO: Move to different location
 def annotate_document(document: PetDocument, model_name: str) -> AnnotationResult:
-    input_template = one_shot_template
+    input_template = zero_shot_template
     input_tokens = document.tokens
     reference_annotations = document.ner_tags
 
@@ -64,7 +64,13 @@ def annotate_document(document: PetDocument, model_name: str) -> AnnotationResul
 
     logging.debug(f"API response: {response}")
 
-    processed_response = process_model_reponse(response.data)
+    # print(f"Input length: {len(input_tokens)}")
+    # processed_response = process_model_reponse(response.data)
+
+    for result, input in zip(response.data, input_tokens):
+        print(f"{input} - {result}")
+
+    print(f"{len(response.data)} - {len(input_tokens)}")
 
     # for result, reference in zip(processed_response, document.ner_tags):
     #     # TODO: Calculate result

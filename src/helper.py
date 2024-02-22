@@ -207,10 +207,8 @@ def get_entity_type_count(tags: list[str], entity: str) -> int:
 
 
 def process_model_reponse(response: list[str]) -> list[Entity]:
-    ner_tags = []
     for r in response:
         print(r)
-    return ner_tags
 
 
 def convert_to_template_example(tokens: list[str], ner_tags: list[Entity]) -> list[str]:
