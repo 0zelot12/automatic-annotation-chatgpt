@@ -22,8 +22,6 @@ from model_response import ModelResponse
 from pet_dataset import PetDataset
 
 from helper import (
-    convert_result,
-    convert_tags,
     process_model_reponse,
     save_annotation_result,
 )
@@ -33,7 +31,6 @@ from helper import (
 def annotate_document(document: PetDocument, model_name: str) -> AnnotationResult:
     input_template = zero_shot_template
     input_tokens = document.tokens
-    reference_annotations = document.ner_tags
 
     chat_template = ChatPromptTemplate.from_messages(
         [
@@ -64,9 +61,9 @@ def annotate_document(document: PetDocument, model_name: str) -> AnnotationResul
 
     logging.debug(f"API response: {response}")
 
-    # processed_response = process_model_reponse(response.data)
+    processed_response = process_model_reponse(response.data)
 
-    print(response.data)
+    print(processed_response)
 
     # for result, reference in zip(processed_response, document.ner_tags):
     #     # TODO: Calculate result

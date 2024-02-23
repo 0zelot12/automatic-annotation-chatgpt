@@ -171,8 +171,33 @@ def save_annotation_result(
 
 
 def process_model_reponse(response: list[str]) -> list[Entity]:
+    entities = []
+    current_entity = None
     for r in response:
-        print(r)
+        if r == "<ACTOR>":
+            current_entity = {"type": "ACTOR", "tokens": []}
+            continue
+        if r == "</ACTOR>":
+            entities.append(current_entity)
+            current_entity = None
+            continue
+        if r == "<ACTIVITY>":
+            current_entity = {"type": "ACTIVITY", "tokens": []}
+            continue
+        if r == "</ACTIVITY>":
+            entities.append(current_entity)
+            current_entity = None
+            continue
+        if r == "<ACTIVITY_DATA>":
+            current_entity = {"type": "ACTIVITY_DATA", "tokens": []}
+            continue
+        if r == "</ACTIVITY_DATA>":
+            entities.append(current_entity)
+            current_entity = None
+            continue
+        if current_entity:
+            current_entity["tokens"].append(r)
+    return entities
 
 
 def convert_to_template_example(tokens: list[str], ner_tags: list[Entity]) -> list[str]:
