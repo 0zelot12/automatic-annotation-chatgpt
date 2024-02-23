@@ -63,65 +63,8 @@ def annotate_document(document: PetDocument, model_name: str) -> AnnotationResul
 
     processed_response = process_model_reponse(response.data)
 
-    print(processed_response)
-
-    # for result, reference in zip(processed_response, document.ner_tags):
-    #     # TODO: Calculate result
-    #     print(f"{result} - {reference}")
-
-    # converted_response = convert_result(response.result)
-
-    # logging.debug(f"Converted response: {converted_response}")
-
-    # reference_annotations = convert_tags(reference_annotations)
-
-    # reference_annotated_tokens = []
-    # total_number_of_entities = 0
-    # for token, ner_tag in zip(document.tokens, reference_annotations):
-    #     if ner_tag == Entity.NO_ENTITY.value:
-    #         reference_annotated_tokens.append(f"{token}")
-    #     elif ner_tag == Entity.ACTOR.value:
-    #         reference_annotated_tokens.append(f"<actor>{token}<actor>")
-    #         total_number_of_entities += 1
-    #     elif ner_tag == Entity.ACTIVITY.value:
-    #         reference_annotated_tokens.append(f"<activity>{token}<activity>")
-    #         total_number_of_entities += 1
-    #     elif ner_tag == Entity.ACTIVITY_DATA.value:
-    #         reference_annotated_tokens.append(f"<activity_data>{token}<activity_data>")
-    #         total_number_of_entities += 1
-
-    # annotation_result = AnnotationResult(
-    #     document_name=document.name,
-    #     input_length=len(input_tokens),
-    #     total_number_of_entities=total_number_of_entities,
-    #     annotated_tokens=response.result,
-    #     reference_annotated_tokens=reference_annotated_tokens,
-    # )
-
-    # # TODO: Implement method to extract all stats at once
-    # for tag in reference_annotations:
-    #     if tag == Entity.NO_ENTITY.value:
-    #         annotation_result.expected_o += 1
-    #     elif tag == Entity.ACTOR.value:
-    #         annotation_result.expected_actor += 1
-    #     elif tag == Entity.ACTIVITY.value:
-    #         annotation_result.expected_activity += 1
-    #     elif tag == Entity.ACTIVITY_DATA.value:
-    #         annotation_result.expected_activity_data += 1
-
-    # for reference, result in zip(reference_annotations, converted_response):
-    #     logging.debug(f"Expected tag: {reference} - Result: {result}")
-    #     if result == reference:
-    #         if result == Entity.ACTOR.value:
-    #             annotation_result.recognized_actor += 1
-    #         elif result == Entity.ACTIVITY.value:
-    #             annotation_result.recognized_activity += 1
-    #         elif result == Entity.ACTIVITY_DATA.value:
-    #             annotation_result.recognized_activity_data += 1
-    #         elif result == Entity.NO_ENTITY.value:
-    #             annotation_result.recognized_o += 1
-    #     else:
-    #         annotation_result.incorrect_entities += 1
+    for entity in processed_response:
+        print(entity)
 
     # return annotation_result
 
