@@ -8,13 +8,18 @@ Entity definition:
 2. ACTIVITY: The main activity in the text. Include only the verbal or nominal expression of the activity, excluding any objects, prepositional phrases, articles, or conjunctions.
 3. ACTIVITY_DATA: Object representing the data or the object directly used by an activity.
 
-If a sequence of tokens matches one of the entities above add a string '<Entity type>' before the first token and add a string </Entity type> after the last token.
+If a sequence of tokens matches one of the entities above add a string "<Entity type>" before the first token and add a string "</Entity type>" after the last token.
 
-Output Format:
+The output must contain every token that the input contains.
+
+This is an example
+
+["The", "MPON", "sents", "the", "dismissal", "to", "the", "MPOO", "."]
 
 {{
-    "data": ["<Entity type>", "Token 1", "Token 2", "Token 3", "</Entity type>", "Token 4", "<Entity type>", "Token 5", "</Entity type>", "Token 6"]
+    "data": ["<ACTOR>", "The", "MPON", "</ACTOR>", "<ACTIVITY>", "sents", "</ACTIVITY>", "<ACTIVITY_DATA>", "the", "dismissal", "</ACTIVITY_DATA>", "to", "<ACTOR>", "the", "MPOO", "</ACTOR>", "."]
 }}
+
 
 {input}
 """

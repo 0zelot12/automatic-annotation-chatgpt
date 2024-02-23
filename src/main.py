@@ -64,12 +64,9 @@ def annotate_document(document: PetDocument, model_name: str) -> AnnotationResul
 
     logging.debug(f"API response: {response}")
 
-    # print(f"Input length: {len(input_tokens)}")
     # processed_response = process_model_reponse(response.data)
 
     print(response.data)
-
-    print(f"{len(response.data)} - {len(input_tokens)}")
 
     # for result, reference in zip(processed_response, document.ner_tags):
     #     # TODO: Calculate result
