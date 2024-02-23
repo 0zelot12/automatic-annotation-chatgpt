@@ -2,7 +2,7 @@ import sys
 import getopt
 import logging
 
-from langchain.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain.output_parsers import PydanticOutputParser
 from langchain.prompts import HumanMessagePromptTemplate
