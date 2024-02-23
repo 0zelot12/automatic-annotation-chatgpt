@@ -170,42 +170,6 @@ def save_annotation_result(
         file.write(file_content)
 
 
-def convert_tags(tags: list[str]) -> list[str]:
-    filtered_tags = []
-    for tag in tags:
-        if tag == f"B-Actor" or tag == f"I-Actor":
-            filtered_tags.append("Actor")
-        elif tag == f"B-Activity" or tag == f"I-Activity":
-            filtered_tags.append("Activity")
-        elif tag == f"B-Activity Data" or tag == f"I-Activity Data":
-            filtered_tags.append("Activity Data")
-        else:
-            filtered_tags.append("O")
-    return filtered_tags
-
-
-def convert_result(annotations: list[str]) -> list[str]:
-    converted_results = []
-    for annotation in annotations:
-        if annotation.startswith("<actor>"):
-            converted_results.append(Entity.ACTOR.value)
-        elif annotation.startswith("<activity>"):
-            converted_results.append(Entity.ACTIVITY.value)
-        elif annotation.startswith("<activity_data>"):
-            converted_results.append(Entity.ACTIVITY_DATA.value)
-        else:
-            converted_results.append("O")
-    return converted_results
-
-
-def get_entity_type_count(tags: list[str], entity: str) -> int:
-    count = 0
-    for tag in tags:
-        if tag == f"B-{entity}" or tag == f"I-{entity}":
-            count += 1
-    return count
-
-
 def process_model_reponse(response: list[str]) -> list[Entity]:
     for r in response:
         print(r)
