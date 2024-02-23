@@ -217,30 +217,38 @@ def convert_to_template_example(tokens: list[str], ner_tags: list[Entity]) -> li
 
         # ACTOR
         if ner_tag == Entity.B_ACTOR and ner_tags[index + 1] == Entity.I_ACTOR:
-            result.append(f"<actor>{token}")
+            result.append(f"<ACTOR>")
+            result.append(f"{token}")
             continue
         if ner_tag == Entity.B_ACTOR and ner_tags[index + 1] != Entity.I_ACTOR:
-            result.append(f"<actor>{token}</actor>")
+            result.append(f"<ACTOR>")
+            result.append(f"{token}")
+            result.append(f"</ACTOR>")
             continue
         if ner_tag == Entity.I_ACTOR and ner_tags[index + 1] == Entity.I_ACTOR:
             result.append(f"{token}")
             continue
         if ner_tag == Entity.I_ACTOR and ner_tags[index + 1] != Entity.I_ACTOR:
-            result.append(f"{token}</actor>")
+            result.append(f"{token}")
+            result.append(f"</ACTOR>")
             continue
 
         # ACTIVITY
         if ner_tag == Entity.B_ACTIVITY and ner_tags[index + 1] == Entity.I_ACTIVITY:
-            result.append(f"<activity>{token}")
+            result.append(f"<ACTIVITY>")
+            result.append(f"{token}")
             continue
         if ner_tag == Entity.B_ACTIVITY and ner_tags[index + 1] != Entity.I_ACTIVITY:
-            result.append(f"<activity>{token}</activity>")
+            result.append(f"<ACTIVITY>")
+            result.append(f"{token}")
+            result.append(f"</ACTIVITY>")
             continue
         if ner_tag == Entity.I_ACTIVITY and ner_tags[index + 1] == Entity.I_ACTIVITY:
             result.append(f"{token}")
             continue
         if ner_tag == Entity.I_ACTIVITY and ner_tags[index + 1] != Entity.I_ACTIVITY:
-            result.append(f"{token}</activity>")
+            result.append(f"{token}")
+            result.append(f"</ACTIVITY>")
             continue
 
         # ACTIVITY_DATA
@@ -248,13 +256,16 @@ def convert_to_template_example(tokens: list[str], ner_tags: list[Entity]) -> li
             ner_tag == Entity.B_ACTIVITY_DATA
             and ner_tags[index + 1] == Entity.I_ACTIVITY_DATA
         ):
-            result.append(f"<activity_data>{token}")
+            result.append(f"<ACTIVITY_DATA>")
+            result.append(f"{token}")
             continue
         if (
             ner_tag == Entity.B_ACTIVITY_DATA
             and ner_tags[index + 1] != Entity.I_ACTIVITY_DATA
         ):
-            result.append(f"<activity_data>{token}</activity_data>")
+            result.append(f"<ACTIVITY_DATA>")
+            result.append(f"{token}")
+            result.append(f"</ACTIVITY_DATA>")
             continue
         if (
             ner_tag == Entity.I_ACTIVITY_DATA
@@ -266,7 +277,8 @@ def convert_to_template_example(tokens: list[str], ner_tags: list[Entity]) -> li
             ner_tag == Entity.I_ACTIVITY_DATA
             and ner_tags[index + 1] != Entity.I_ACTIVITY_DATA
         ):
-            result.append(f"{token}</activity_data>")
+            result.append(f"{token}")
+            result.append(f"</ACTIVITY_DATA>")
             continue
 
         # NO_ENTITY
