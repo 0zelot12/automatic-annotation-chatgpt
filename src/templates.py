@@ -8,14 +8,12 @@ Entity definition:
 2. ACTIVITY: The main activity in the text. Include only the verbal or nominal expression of the activity, excluding any objects, prepositional phrases, articles, or conjunctions.
 3. ACTIVITY_DATA: Object representing the data or the object directly used by an activity.
 
-If a token doesn't match any definition annotate it with O. Each token must be annotated, so the length of the input array and the output array match.
-
-Annotate the first token of the entity with B-<Entity type> and all following tokens with I-<Entity type>
+If a sequence of tokens matches one of the entities above add a string '<Entity type>' before the first token and add a string </Entity type> after the last token.
 
 Output Format:
 
 {{
-    "data": [List for annotations for every token present in the input]
+    "data": ["<Entity type>", "Token 1", "Token 2", "Token 3", "</Entity type>", "Token 4", "<Entity type>", "Token 5", "</Entity type>", "Token 6"]
 }}
 
 {input}

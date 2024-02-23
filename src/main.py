@@ -67,8 +67,7 @@ def annotate_document(document: PetDocument, model_name: str) -> AnnotationResul
     # print(f"Input length: {len(input_tokens)}")
     # processed_response = process_model_reponse(response.data)
 
-    for result, input in zip(response.data, input_tokens):
-        print(f"{input} - {result}")
+    print(response.data)
 
     print(f"{len(response.data)} - {len(input_tokens)}")
 
