@@ -173,25 +173,44 @@ def save_annotation_result(
 def process_model_reponse(response: list[str]) -> list[Entity]:
     entities = []
     current_entity = None
-    for r in response:
+    offset = 0
+    for r, i in zip(response, range(0, len(response))):
         if r == "<ACTOR>":
-            current_entity = {"type": "ACTOR", "tokens": []}
+            offset += 1
+            current_entity = {
+                "type": "ACTOR",
+                "tokens": [],
+                "start_index": (i - offset) + 1,
+            }
             continue
         if r == "</ACTOR>":
+            offset += 1
             entities.append(current_entity)
             current_entity = None
             continue
         if r == "<ACTIVITY>":
-            current_entity = {"type": "ACTIVITY", "tokens": []}
+            offset += 1
+            current_entity = {
+                "type": "ACTIVITY",
+                "tokens": [],
+                "start_index": (i - offset) + 1,
+            }
             continue
         if r == "</ACTIVITY>":
+            offset += 1
             entities.append(current_entity)
             current_entity = None
             continue
         if r == "<ACTIVITY_DATA>":
-            current_entity = {"type": "ACTIVITY_DATA", "tokens": []}
+            offset += 1
+            current_entity = {
+                "type": "ACTIVITY_DATA",
+                "tokens": [],
+                "start_index": (i - offset) + 1,
+            }
             continue
         if r == "</ACTIVITY_DATA>":
+            offset += 1
             entities.append(current_entity)
             current_entity = None
             continue

@@ -118,6 +118,16 @@ def main() -> None:
         document = pet_dataset.get_document_by_name(document_name=document_name)
         print(f"Processing {document.name}")
         annotation_result = annotate_document(document, model)
+        actors = document.get_actors()
+        activities = document.get_activites()
+        activity_data = document.get_activity_data()
+        print("================================================================")
+        for actor in actors:
+            print(actor)
+        for activity in activities:
+            print(activity)
+        for data in activity_data:
+            print(data)
         # annotation_results.append(annotation_result)
         # save_annotation_result(annotation_result)
         print(f"Processing {document.name} completed")
