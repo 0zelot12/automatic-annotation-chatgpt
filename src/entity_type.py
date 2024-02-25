@@ -1,0 +1,8 @@
+from enum import Enum
+
+
+class EntityType(Enum):
+    ACTOR = "ACTOR  "
+    ACITIVITY = "ACITIVITY"
+    ACITIVITY_DATA = "ACITIVITY_DATA"
+    FURTHER_SPECIFICATION = "FURTHER_SPECIFICATION"
