@@ -10,8 +10,6 @@ from langchain_core.messages import SystemMessage
 
 from datetime import datetime
 
-from entity_tag import EntityTag
-
 from dotenv import load_dotenv
 from pet_document import PetDocument
 
@@ -21,11 +19,7 @@ from annotation_result import AnnotationResult
 from model_response import ModelResponse
 from pet_dataset import PetDataset
 
-from helper import (
-    evaluate_model_response,
-    process_model_reponse,
-    save_annotation_result,
-)
+from helper import evaluate_model_response, parse_model_response
 
 
 # TODO: Move to different location
@@ -62,9 +56,15 @@ def annotate_document(document: PetDocument, model_name: str) -> AnnotationResul
 
     logging.debug(f"API response: {response}")
 
-    processed_response = process_model_reponse(response.data)
+    parsed_response = parse_model_response(response.data)
 
-    return processed_response
+    annotation_result = AnnotationResult(
+        document_name=document.name,
+        present_entities=document.get_entities(),
+        recognized_entities=parsed_response,
+    )
+
+    return annotation_result
 
 
 def main() -> None:
@@ -117,9 +117,6 @@ def main() -> None:
         print(f"Processing {document.name}")
 
         annotation_result = annotate_document(document, model)
-        reference = document.get_entities()
-
-        evaluate_model_response(annotation_result, reference)
 
         # annotation_results.append(annotation_result)
         # save_annotation_result(annotation_result)

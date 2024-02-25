@@ -170,7 +170,7 @@ def save_annotation_result(
         file.write(file_content)
 
 
-def process_model_reponse(response: list[str]) -> list[EntityTag]:
+def parse_model_response(response: list[str]) -> list[EntityTag]:
     entities = []
     current_entity = None
     offset = 0
