@@ -310,6 +310,9 @@ def evaluate_model_response(model_annotations, reference_annotations):
             ),
             None,
         )
-        if found_element:
+        if found_element and reference_annotation["tokens"] == found_element["tokens"]:
+            true_positives += 1
             print(reference_annotation)
             print(found_element)
+        else:
+            false_negatives += 1
