@@ -295,3 +295,21 @@ def convert_to_template_example(tokens: list[str], ner_tags: list[Entity]) -> li
             continue
 
     return result
+
+
+def evaluate_model_response(model_annotations, reference_annotations):
+    true_positives = 0
+    false_positives = 0
+    false_negatives = 0
+    for reference_annotation in reference_annotations:
+        found_element = next(
+            (
+                o
+                for o in model_annotations
+                if o["start_index"] == reference_annotation["start_index"]
+            ),
+            None,
+        )
+        if found_element:
+            print(reference_annotation)
+            print(found_element)

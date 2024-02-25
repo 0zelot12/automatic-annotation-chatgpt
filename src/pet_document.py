@@ -18,6 +18,8 @@ class PetDocument:
     tokens: list[str]
     ner_tags: list[Entity]
 
+    # TODO: Refactor entity methods
+
     def get_actors(self) -> list[str]:
         actors = []
         current_actor = None
@@ -128,3 +130,7 @@ class PetDocument:
                 current_activity_data = None
 
         return activity_data
+
+    def get_entities(self):
+        entities = self.get_actors() + self.get_activites() + self.get_activity_data()
+        return sorted(entities, key=lambda x: x["start_index"])
