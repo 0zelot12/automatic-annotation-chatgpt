@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class Entity(Enum):
+class EntityTag(Enum):
     """
     Enum representing entities in the PET dataset.
 
@@ -41,19 +41,19 @@ class Entity(Enum):
     NO_ENTITY = "O"
 
 
-def isActor(entity: Entity):
-    return entity == Entity.B_ACTOR or entity == Entity.I_ACTOR
+def isActor(entity: EntityTag):
+    return entity == EntityTag.B_ACTOR or entity == EntityTag.I_ACTOR
 
 
-def isActivity(entity: Entity):
-    return entity == Entity.B_ACTIVITY or entity == Entity.I_ACTIVITY
+def isActivity(entity: EntityTag):
+    return entity == EntityTag.B_ACTIVITY or entity == EntityTag.I_ACTIVITY
 
 
-def isActivityData(entity: Entity):
-    return entity == Entity.B_ACTIVITY_DATA or entity == Entity.I_ACTIVITY_DATA
+def isActivityData(entity: EntityTag):
+    return entity == EntityTag.B_ACTIVITY_DATA or entity == EntityTag.I_ACTIVITY_DATA
 
 
-def str_to_entity(string_value: str) -> Entity:
+def str_to_entity(string_value: str) -> EntityTag:
     """
     Converts a string representation of an entity label to the corresponding Entity Enum value.
 
@@ -63,7 +63,7 @@ def str_to_entity(string_value: str) -> Entity:
     Returns:
         Entity: The corresponding Entity Enum value.
     """
-    for entity in Entity:
+    for entity in EntityTag:
         if entity.value == string_value:
             return entity
-    return Entity.NO_ENTITY
+    return EntityTag.NO_ENTITY

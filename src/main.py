@@ -10,7 +10,7 @@ from langchain_core.messages import SystemMessage
 
 from datetime import datetime
 
-from entity import Entity
+from entity_tag import EntityTag
 
 from dotenv import load_dotenv
 from pet_document import PetDocument

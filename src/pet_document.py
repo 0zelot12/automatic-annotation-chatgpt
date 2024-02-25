@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from entity import Entity
+from entity_tag import EntityTag
 
 
 @dataclass
@@ -16,7 +16,7 @@ class PetDocument:
 
     name: str
     tokens: list[str]
-    ner_tags: list[Entity]
+    ner_tags: list[EntityTag]
 
     # TODO: Refactor entity methods
 
@@ -26,23 +26,35 @@ class PetDocument:
         for ner_tag, token, index in zip(
             self.ner_tags, self.tokens, range(len(self.ner_tags))
         ):
-            if ner_tag == Entity.B_ACTOR and self.ner_tags[index + 1] != Entity.I_ACTOR:
+            if (
+                ner_tag == EntityTag.B_ACTOR
+                and self.ner_tags[index + 1] != EntityTag.I_ACTOR
+            ):
                 actors.append(
                     {"type": "ACTOR", "tokens": [token], "start_index": index}
                 )
                 current_actor = None
                 continue
-            if ner_tag == Entity.B_ACTOR and self.ner_tags[index + 1] == Entity.I_ACTOR:
+            if (
+                ner_tag == EntityTag.B_ACTOR
+                and self.ner_tags[index + 1] == EntityTag.I_ACTOR
+            ):
                 current_actor = {
                     "type": "ACTOR",
                     "tokens": [token],
                     "start_index": index,
                 }
                 continue
-            if ner_tag == Entity.I_ACTOR and self.ner_tags[index + 1] == Entity.I_ACTOR:
+            if (
+                ner_tag == EntityTag.I_ACTOR
+                and self.ner_tags[index + 1] == EntityTag.I_ACTOR
+            ):
                 current_actor["tokens"].append(token)
                 continue
-            if ner_tag == Entity.I_ACTOR and self.ner_tags[index + 1] != Entity.I_ACTOR:
+            if (
+                ner_tag == EntityTag.I_ACTOR
+                and self.ner_tags[index + 1] != EntityTag.I_ACTOR
+            ):
                 current_actor["tokens"].append(token)
                 actors.append(current_actor)
                 current_actor = None
@@ -56,8 +68,8 @@ class PetDocument:
             self.ner_tags, self.tokens, range(len(self.ner_tags))
         ):
             if (
-                ner_tag == Entity.B_ACTIVITY
-                and self.ner_tags[index + 1] != Entity.I_ACTIVITY
+                ner_tag == EntityTag.B_ACTIVITY
+                and self.ner_tags[index + 1] != EntityTag.I_ACTIVITY
             ):
                 activities.append(
                     {"type": "ACTIVITY", "tokens": [token], "start_index": index}
@@ -65,8 +77,8 @@ class PetDocument:
                 current_activity = None
                 continue
             if (
-                ner_tag == Entity.B_ACTIVITY
-                and self.ner_tags[index + 1] == Entity.I_ACTIVITY
+                ner_tag == EntityTag.B_ACTIVITY
+                and self.ner_tags[index + 1] == EntityTag.I_ACTIVITY
             ):
                 current_activity = {
                     "type": "ACTIVITY",
@@ -75,14 +87,14 @@ class PetDocument:
                 }
                 continue
             if (
-                ner_tag == Entity.I_ACTIVITY
-                and self.ner_tags[index + 1] == Entity.I_ACTIVITY
+                ner_tag == EntityTag.I_ACTIVITY
+                and self.ner_tags[index + 1] == EntityTag.I_ACTIVITY
             ):
                 current_activity["tokens"].append(token)
                 continue
             if (
-                ner_tag == Entity.I_ACTIVITY
-                and self.ner_tags[index + 1] != Entity.I_ACTIVITY
+                ner_tag == EntityTag.I_ACTIVITY
+                and self.ner_tags[index + 1] != EntityTag.I_ACTIVITY
             ):
                 current_activity["tokens"].append(token)
                 activities.append(current_activity)
@@ -97,8 +109,8 @@ class PetDocument:
             self.ner_tags, self.tokens, range(len(self.ner_tags))
         ):
             if (
-                ner_tag == Entity.B_ACTIVITY_DATA
-                and self.ner_tags[index + 1] != Entity.I_ACTIVITY_DATA
+                ner_tag == EntityTag.B_ACTIVITY_DATA
+                and self.ner_tags[index + 1] != EntityTag.I_ACTIVITY_DATA
             ):
                 activity_data.append(
                     {"type": "ACTIVITY_DATA", "tokens": [token], "start_index": index}
@@ -106,8 +118,8 @@ class PetDocument:
                 current_activity_data = None
                 continue
             if (
-                ner_tag == Entity.B_ACTIVITY_DATA
-                and self.ner_tags[index + 1] == Entity.I_ACTIVITY_DATA
+                ner_tag == EntityTag.B_ACTIVITY_DATA
+                and self.ner_tags[index + 1] == EntityTag.I_ACTIVITY_DATA
             ):
                 current_activity_data = {
                     "type": "ACTIVITY_DATA",
@@ -116,14 +128,14 @@ class PetDocument:
                 }
                 continue
             if (
-                ner_tag == Entity.I_ACTIVITY_DATA
-                and self.ner_tags[index + 1] == Entity.I_ACTIVITY_DATA
+                ner_tag == EntityTag.I_ACTIVITY_DATA
+                and self.ner_tags[index + 1] == EntityTag.I_ACTIVITY_DATA
             ):
                 current_activity_data["tokens"].append(token)
                 continue
             if (
-                ner_tag == Entity.I_ACTIVITY_DATA
-                and self.ner_tags[index + 1] != Entity.I_ACTIVITY_DATA
+                ner_tag == EntityTag.I_ACTIVITY_DATA
+                and self.ner_tags[index + 1] != EntityTag.I_ACTIVITY_DATA
             ):
                 current_activity_data["tokens"].append(token)
                 activity_data.append(current_activity_data)

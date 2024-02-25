@@ -2,7 +2,7 @@ import pandas as pd
 
 from pet_document import PetDocument
 
-from entity import str_to_entity
+from entity_tag import str_to_entity
 
 
 # TODO: Rename

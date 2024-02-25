@@ -4,7 +4,7 @@ import numpy as np
 from annotation_result import AnnotationResult
 from datetime import datetime
 
-from entity import Entity
+from entity_tag import EntityTag
 from pet_dataset import PetDataset
 from visualization import convert_to_html
 
@@ -170,7 +170,7 @@ def save_annotation_result(
         file.write(file_content)
 
 
-def process_model_reponse(response: list[str]) -> list[Entity]:
+def process_model_reponse(response: list[str]) -> list[EntityTag]:
     entities = []
     current_entity = None
     offset = 0
@@ -219,78 +219,92 @@ def process_model_reponse(response: list[str]) -> list[Entity]:
     return entities
 
 
-def convert_to_template_example(tokens: list[str], ner_tags: list[Entity]) -> list[str]:
+def convert_to_template_example(
+    tokens: list[str], ner_tags: list[EntityTag]
+) -> list[str]:
     result = []
     for token, ner_tag, index in zip(tokens, ner_tags, range(len(tokens))):
 
         # ACTOR
-        if ner_tag == Entity.B_ACTOR and ner_tags[index + 1] == Entity.I_ACTOR:
+        if ner_tag == EntityTag.B_ACTOR and ner_tags[index + 1] == EntityTag.I_ACTOR:
             result.append(f"<ACTOR>")
             result.append(f"{token}")
             continue
-        if ner_tag == Entity.B_ACTOR and ner_tags[index + 1] != Entity.I_ACTOR:
+        if ner_tag == EntityTag.B_ACTOR and ner_tags[index + 1] != EntityTag.I_ACTOR:
             result.append(f"<ACTOR>")
             result.append(f"{token}")
             result.append(f"</ACTOR>")
             continue
-        if ner_tag == Entity.I_ACTOR and ner_tags[index + 1] == Entity.I_ACTOR:
+        if ner_tag == EntityTag.I_ACTOR and ner_tags[index + 1] == EntityTag.I_ACTOR:
             result.append(f"{token}")
             continue
-        if ner_tag == Entity.I_ACTOR and ner_tags[index + 1] != Entity.I_ACTOR:
+        if ner_tag == EntityTag.I_ACTOR and ner_tags[index + 1] != EntityTag.I_ACTOR:
             result.append(f"{token}")
             result.append(f"</ACTOR>")
             continue
 
         # ACTIVITY
-        if ner_tag == Entity.B_ACTIVITY and ner_tags[index + 1] == Entity.I_ACTIVITY:
+        if (
+            ner_tag == EntityTag.B_ACTIVITY
+            and ner_tags[index + 1] == EntityTag.I_ACTIVITY
+        ):
             result.append(f"<ACTIVITY>")
             result.append(f"{token}")
             continue
-        if ner_tag == Entity.B_ACTIVITY and ner_tags[index + 1] != Entity.I_ACTIVITY:
+        if (
+            ner_tag == EntityTag.B_ACTIVITY
+            and ner_tags[index + 1] != EntityTag.I_ACTIVITY
+        ):
             result.append(f"<ACTIVITY>")
             result.append(f"{token}")
             result.append(f"</ACTIVITY>")
             continue
-        if ner_tag == Entity.I_ACTIVITY and ner_tags[index + 1] == Entity.I_ACTIVITY:
+        if (
+            ner_tag == EntityTag.I_ACTIVITY
+            and ner_tags[index + 1] == EntityTag.I_ACTIVITY
+        ):
             result.append(f"{token}")
             continue
-        if ner_tag == Entity.I_ACTIVITY and ner_tags[index + 1] != Entity.I_ACTIVITY:
+        if (
+            ner_tag == EntityTag.I_ACTIVITY
+            and ner_tags[index + 1] != EntityTag.I_ACTIVITY
+        ):
             result.append(f"{token}")
             result.append(f"</ACTIVITY>")
             continue
 
         # ACTIVITY_DATA
         if (
-            ner_tag == Entity.B_ACTIVITY_DATA
-            and ner_tags[index + 1] == Entity.I_ACTIVITY_DATA
+            ner_tag == EntityTag.B_ACTIVITY_DATA
+            and ner_tags[index + 1] == EntityTag.I_ACTIVITY_DATA
         ):
             result.append(f"<ACTIVITY_DATA>")
             result.append(f"{token}")
             continue
         if (
-            ner_tag == Entity.B_ACTIVITY_DATA
-            and ner_tags[index + 1] != Entity.I_ACTIVITY_DATA
+            ner_tag == EntityTag.B_ACTIVITY_DATA
+            and ner_tags[index + 1] != EntityTag.I_ACTIVITY_DATA
         ):
             result.append(f"<ACTIVITY_DATA>")
             result.append(f"{token}")
             result.append(f"</ACTIVITY_DATA>")
             continue
         if (
-            ner_tag == Entity.I_ACTIVITY_DATA
-            and ner_tags[index + 1] == Entity.I_ACTIVITY_DATA
+            ner_tag == EntityTag.I_ACTIVITY_DATA
+            and ner_tags[index + 1] == EntityTag.I_ACTIVITY_DATA
         ):
             result.append(f"{token}")
             continue
         if (
-            ner_tag == Entity.I_ACTIVITY_DATA
-            and ner_tags[index + 1] != Entity.I_ACTIVITY_DATA
+            ner_tag == EntityTag.I_ACTIVITY_DATA
+            and ner_tags[index + 1] != EntityTag.I_ACTIVITY_DATA
         ):
             result.append(f"{token}")
             result.append(f"</ACTIVITY_DATA>")
             continue
 
         # NO_ENTITY
-        if ner_tag == Entity.NO_ENTITY:
+        if ner_tag == EntityTag.NO_ENTITY:
             result.append(f"{token}")
             continue
 
