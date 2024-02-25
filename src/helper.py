@@ -330,3 +330,11 @@ def evaluate_model_response(model_annotations, reference_annotations):
             print(found_element)
         else:
             false_negatives += 1
+    print(
+        f"Entities correctly recognized: {true_positives} of {len(reference_annotations)}"
+    )
+    precision = true_positives / len(model_annotations)
+    recall = true_positives / len(reference_annotations)
+    f1_score = round(2 * precision * recall / (precision + recall), 2)
+
+    print(f"F1-score: {f1_score}")
