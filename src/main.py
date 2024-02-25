@@ -115,9 +115,7 @@ def main() -> None:
     else:
         document = pet_dataset.get_document_by_name(document_name=document_name)
         print(f"Processing {document.name}")
-
         annotation_result = annotate_document(document, model)
-
         # annotation_results.append(annotation_result)
         # save_annotation_result(annotation_result)
         print(f"Processing {document.name} completed")
