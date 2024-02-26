@@ -19,7 +19,7 @@ from annotation_result import AnnotationResult
 from model_response import ModelResponse
 from pet_dataset import PetDataset
 
-from helper import evaluate_model_response, parse_model_response
+from helper import parse_entities, calculate_metrics
 
 
 # TODO: Move to different location
@@ -56,15 +56,18 @@ def annotate_document(document: PetDocument, model_name: str) -> AnnotationResul
 
     logging.debug(f"API response: {response}")
 
-    parsed_response = parse_model_response(response.data)
+    recognized_entities = parse_entities(response.data)
+    present_entities = document.get_entities()
 
-    annotation_result = AnnotationResult(
-        document_name=document.name,
-        present_entities=document.get_entities(),
-        recognized_entities=parsed_response,
-    )
+    metrics = calculate_metrics(recognized_entities, present_entities)
 
-    return annotation_result
+    # annotation_result = AnnotationResult(
+    #     document_name=document.name,
+    #     present_entities=document.get_entities(),
+    #     recognized_entities=parsed_response,
+    # )
+
+    # return annotation_result
 
 
 def main() -> None:

@@ -3,6 +3,8 @@ import numpy as np
 
 from annotation_result import AnnotationResult
 from datetime import datetime
+from entity import Entity
+from entity_type import EntityType
 
 from entity_tag import EntityTag
 from pet_dataset import PetDataset
@@ -170,18 +172,16 @@ def save_annotation_result(
         file.write(file_content)
 
 
-def parse_model_response(response: list[str]) -> list[EntityTag]:
+def parse_entities(response: list[str]) -> list[Entity]:
     entities = []
     current_entity = None
     offset = 0
     for r, i in zip(response, range(0, len(response))):
         if r == "<ACTOR>":
             offset += 1
-            current_entity = {
-                "type": "ACTOR",
-                "tokens": [],
-                "start_index": (i - offset) + 1,
-            }
+            current_entity = Entity(
+                type=EntityType.ACTOR, start_index=(i - offset) + 1, tokens=[]
+            )
             continue
         if r == "</ACTOR>":
             offset += 1
@@ -190,11 +190,9 @@ def parse_model_response(response: list[str]) -> list[EntityTag]:
             continue
         if r == "<ACTIVITY>":
             offset += 1
-            current_entity = {
-                "type": "ACTIVITY",
-                "tokens": [],
-                "start_index": (i - offset) + 1,
-            }
+            current_entity = Entity(
+                type=EntityType.ACTIVITY, start_index=(i - offset) + 1, tokens=[]
+            )
             continue
         if r == "</ACTIVITY>":
             offset += 1
@@ -203,11 +201,9 @@ def parse_model_response(response: list[str]) -> list[EntityTag]:
             continue
         if r == "<ACTIVITY_DATA>":
             offset += 1
-            current_entity = {
-                "type": "ACTIVITY_DATA",
-                "tokens": [],
-                "start_index": (i - offset) + 1,
-            }
+            current_entity = Entity(
+                type=EntityType.ACTIVITY_DATA, start_index=(i - offset) + 1, tokens=[]
+            )
             continue
         if r == "</ACTIVITY_DATA>":
             offset += 1
@@ -215,7 +211,7 @@ def parse_model_response(response: list[str]) -> list[EntityTag]:
             current_entity = None
             continue
         if current_entity:
-            current_entity["tokens"].append(r)
+            current_entity.tokens.append(r)
     return entities
 
 
@@ -311,30 +307,27 @@ def convert_to_template_example(
     return result
 
 
-def evaluate_model_response(model_annotations, reference_annotations):
+def calculate_metrics(
+    model_annotations: list[Entity], reference_annotations: list[Entity]
+):
     true_positives = 0
-    false_positives = 0
     false_negatives = 0
     for reference_annotation in reference_annotations:
         found_element = next(
             (
                 o
                 for o in model_annotations
-                if o["start_index"] == reference_annotation["start_index"]
+                if o.start_index == reference_annotation.start_index
             ),
             None,
         )
-        if found_element and reference_annotation["tokens"] == found_element["tokens"]:
+        if found_element and reference_annotation.tokens == found_element.tokens:
             true_positives += 1
-            print(reference_annotation)
-            print(found_element)
         else:
             false_negatives += 1
-    print(
-        f"Entities correctly recognized: {true_positives} of {len(reference_annotations)}"
-    )
+
     precision = true_positives / len(model_annotations)
     recall = true_positives / len(reference_annotations)
     f1_score = round(2 * precision * recall / (precision + recall), 2)
 
-    print(f"F1-score: {f1_score}")
+    return [precision, recall, f1_score]
