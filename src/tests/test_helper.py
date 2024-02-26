@@ -1,60 +1,34 @@
 import unittest
 
-from helper import convert_result, convert_tags
+from ..entity import Entity
+from ..entity_type import EntityType
 
 
 class TestHelperMethods(unittest.TestCase):
-    def test_convert_results(self):
-        test_annotations = [
-            "<A>The<A>",
-            "<A>company<A>",
+    def test_parse_entities(self):
+        test_input = [
+            "<ACTOR>",
+            "The",
+            "MPON",
+            "</ACTOR>",
+            "<ACTIVITY>",
             "sents",
+            "</ACTIVITY>",
+            "<ACTIVITY_DATA>",
             "the",
-            "confirmation",
+            "dismissal",
+            "</ACTIVITY_DATA>",
             "to",
-            "<A>the<A>",
-            "<A>client<A>",
+            "<ACTOR>",
+            "the",
+            "MPOO",
+            "</ACTOR>",
             ".",
         ]
-
-        expected_result = [
-            "Actor",
-            "Actor",
-            "O",
-            "O",
-            "O",
-            "O",
-            "Actor",
-            "Actor",
-            "O",
-        ]
-
-        test_result = convert_result(test_annotations, "Actor")
+        expected_result = [Entity(EntityType.ACTOR, 0, ["The", "MPON"])]
+        # test_result = parse_
 
         self.assertEqual(expected_result, test_result)
-
-    def test_convert_tags(self):
-        test_tags = [
-            "B-Actor",
-            "I-Actor",
-            "O",
-            "O",
-            "O",
-            "B-Actor",
-        ]
-
-        expected_result = [
-            "Actor",
-            "Actor",
-            "O",
-            "O",
-            "O",
-            "Actor",
-        ]
-
-        test_result = convert_tags(test_tags, "Actor")
-
-        self.assertEqual(test_result, expected_result)
 
 
 if __name__ == "__main__":
