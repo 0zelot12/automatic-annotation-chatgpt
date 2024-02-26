@@ -61,13 +61,17 @@ def annotate_document(document: PetDocument, model_name: str) -> AnnotationResul
 
     metrics = calculate_metrics(recognized_entities, present_entities)
 
-    # annotation_result = AnnotationResult(
-    #     document_name=document.name,
-    #     present_entities=document.get_entities(),
-    #     recognized_entities=parsed_response,
-    # )
+    annotation_result = AnnotationResult(
+        document_name=document.name,
+        tokens=document.tokens,
+        present_entities=present_entities,
+        recognized_entities=recognized_entities,
+        precision=metrics[0],
+        recall=metrics[1],
+        f1_score=metrics[2],
+    )
 
-    # return annotation_result
+    return annotation_result
 
 
 def main() -> None:
@@ -98,40 +102,26 @@ def main() -> None:
             model = v
 
     pet_dataset = PetDataset()
-    annotation_results = []
 
-    # Temporary solution to able to annotate single documents
-    if not document_name:
+    if document_name:
+        try:
+            document = pet_dataset.get_document_by_name(document_name=document_name)
+            print(f"Processing {document.name}")
+            annotation_result = annotate_document(document, model)
+            print(f"Processing {document.name} completed")
+        except Exception as e:
+            print(f"Processing {document.name} failed")
+            logging.fatal(e)
+    else:
         for i in range(document_number):
             try:
                 document = pet_dataset.get_document(document_number=i)
-                print(document.ner_tags)
-                # print(f"Processing {document.name}")
-                # annotation_result = annotate_document(document, model)
-                # annotation_results.append(annotation_result)
-                # save_annotation_result(annotation_result)
-                # TODO: Evaluate tqdm
+                print(f"Processing {document.name}")
+                annotation_result = annotate_document(document, model)
                 print(f"Processing {document.name} completed")
             except Exception as e:
                 print(f"Processing {document.name} failed")
                 logging.fatal(e)
-    else:
-        document = pet_dataset.get_document_by_name(document_name=document_name)
-        print(f"Processing {document.name}")
-        annotation_result = annotate_document(document, model)
-        # annotation_results.append(annotation_result)
-        # save_annotation_result(annotation_result)
-        print(f"Processing {document.name} completed")
-        # try:
-        #     document = pet_dataset.get_document_by_name(document_name=document_name)
-        #     print(f"Processing {document.name}")
-        #     annotation_result = annotate_document(document, model)
-        #     # annotation_results.append(annotation_result)
-        #     # save_annotation_result(annotation_result)
-        #     print(f"Processing {document.name} completed")
-        # except Exception as e:
-        #     print(f"Processing {document.name} failed")
-        #     logging.fatal(e)
 
 
 if __name__ == "__main__":
