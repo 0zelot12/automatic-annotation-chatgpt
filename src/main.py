@@ -109,6 +109,7 @@ def main() -> None:
             document = pet_dataset.get_document_by_name(document_name=document_name)
             print(f"Processing {document.name}")
             annotation_result = annotate_document(document, model)
+            annotation_result.save_to_file("./out")
             print(f"Processing {document.name} completed")
         except Exception as e:
             print(f"Processing {document.name} failed")

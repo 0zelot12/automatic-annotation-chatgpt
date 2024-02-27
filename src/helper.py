@@ -328,6 +328,14 @@ def calculate_metrics(
 
     precision = true_positives / len(model_annotations)
     recall = true_positives / len(reference_annotations)
+
+    if precision + recall == 0:
+        return [
+            precision,
+            recall,
+            -1,
+        ]  # TODO: Clarify what to return when precision + recall = 0
+
     f1_score = round(2 * precision * recall / (precision + recall), 2)
 
     return [precision, recall, f1_score]
