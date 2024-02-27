@@ -13,7 +13,7 @@ from datetime import datetime
 from dotenv import load_dotenv
 from pet_document import PetDocument
 
-from templates import one_shot_template, few_shot_template, zero_shot_template
+from templates import one_shot_template
 
 from annotation_result import AnnotationResult
 from model_response import ModelResponse
@@ -24,7 +24,7 @@ from helper import parse_entities, calculate_metrics
 
 # TODO: Move to different location
 def annotate_document(document: PetDocument, model_name: str) -> AnnotationResult:
-    input_template = zero_shot_template
+    input_template = one_shot_template
     input_tokens = document.tokens
 
     chat_template = ChatPromptTemplate.from_messages(
@@ -61,6 +61,7 @@ def annotate_document(document: PetDocument, model_name: str) -> AnnotationResul
 
     metrics = calculate_metrics(recognized_entities, present_entities)
 
+    # TODO: Remove magic numbers
     annotation_result = AnnotationResult(
         document_name=document.name,
         tokens=document.tokens,
