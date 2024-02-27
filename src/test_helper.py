@@ -10,12 +10,6 @@ class TestHelperMethods(unittest.TestCase):
     # TODO: Empty case, Invalid Case
     def test_parse_entities(self):
         self.assertEqual(
-            [
-                Entity(EntityType.ACTOR, 0, ["The", "MPON"]),
-                Entity(EntityType.ACTIVITY, 2, ["sents"]),
-                Entity(EntityType.ACTIVITY_DATA, 3, ["the", "dismissal"]),
-                Entity(EntityType.ACTOR, 6, ["the", "MPOO"]),
-            ],
             parse_entities(
                 [
                     "<ACTOR>",
@@ -37,6 +31,12 @@ class TestHelperMethods(unittest.TestCase):
                     ".",
                 ]
             ),
+            [
+                Entity(EntityType.ACTOR, 0, ["The", "MPON"]),
+                Entity(EntityType.ACTIVITY, 2, ["sents"]),
+                Entity(EntityType.ACTIVITY_DATA, 3, ["the", "dismissal"]),
+                Entity(EntityType.ACTOR, 6, ["the", "MPOO"]),
+            ],
         )
 
 
