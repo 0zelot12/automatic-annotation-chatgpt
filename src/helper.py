@@ -48,6 +48,38 @@ def parse_entities(response: list[str]) -> list[Entity]:
     return entities
 
 
+def calculate_metrics(
+    model_annotations: list[Entity], reference_annotations: list[Entity]
+) -> AnnotationMetrics:
+    true_positives = 0
+    false_negatives = 0
+    for reference_annotation in reference_annotations:
+        found_element = next(
+            (
+                o
+                for o in model_annotations
+                if o.start_index == reference_annotation.start_index
+            ),
+            None,
+        )
+        if found_element and reference_annotation.tokens == found_element.tokens:
+            true_positives += 1
+        else:
+            false_negatives += 1
+
+    precision = true_positives / len(model_annotations)
+    recall = true_positives / len(reference_annotations)
+
+    if precision + recall == 0:
+        return AnnotationMetrics(
+            precision=precision, recall=recall, f1_score=-1
+        )  # TODO: Clarify what to return when precision + recall = 0
+
+    f1_score = round(2 * precision * recall / (precision + recall), 2)
+
+    return AnnotationMetrics(precision=precision, recall=recall, f1_score=f1_score)
+
+
 def convert_to_template_example(
     tokens: list[str], ner_tags: list[EntityTag]
 ) -> list[str]:
@@ -138,35 +170,3 @@ def convert_to_template_example(
             continue
 
     return result
-
-
-def calculate_metrics(
-    model_annotations: list[Entity], reference_annotations: list[Entity]
-) -> AnnotationMetrics:
-    true_positives = 0
-    false_negatives = 0
-    for reference_annotation in reference_annotations:
-        found_element = next(
-            (
-                o
-                for o in model_annotations
-                if o.start_index == reference_annotation.start_index
-            ),
-            None,
-        )
-        if found_element and reference_annotation.tokens == found_element.tokens:
-            true_positives += 1
-        else:
-            false_negatives += 1
-
-    precision = true_positives / len(model_annotations)
-    recall = true_positives / len(reference_annotations)
-
-    if precision + recall == 0:
-        return AnnotationMetrics(
-            precision=precision, recall=recall, f1_score=-1
-        )  # TODO: Clarify what to return when precision + recall = 0
-
-    f1_score = round(2 * precision * recall / (precision + recall), 2)
-
-    return AnnotationMetrics(precision=precision, recall=recall, f1_score=f1_score)
