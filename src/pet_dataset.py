@@ -45,7 +45,7 @@ class PetDataset:
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super(PetDataset, cls).__new__(cls)
-            df = pd.read_parquet("./assets/pet_dataset.parquet")
+            df = pd.read_parquet("./data/pet_dataset.parquet")
             # This doesn't work corretly!
             df["index"] = df["document name"].apply(foo)
             cls._data = df.sort_values(by="index")
