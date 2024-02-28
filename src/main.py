@@ -27,9 +27,10 @@ def annotate_document(
     document: PetDocument, model_name: str, prompt_type: str
 ) -> AnnotationResult:
 
-    input_template = one_shot_template
     if prompt_type == "zero-shot":
         input_template = zero_shot_template
+    elif prompt_type == "one-shot":
+        input_template = one_shot_template
     elif prompt_type == "few-shot":
         input_template = few_shot_template
 
@@ -98,6 +99,7 @@ def main() -> None:
     document_number = 45
     document_name = None
     model = "gpt-3.5-turbo"
+    prompt_type = "one-shot"
 
     for o, v in options:
         if o == "--document_number":
@@ -105,7 +107,7 @@ def main() -> None:
         if o == "--document_name":
             document_name = v
         if o == "--prompt_type":
-            model = v
+            prompt_type = v
         if o == "--model":
             model = v
 
