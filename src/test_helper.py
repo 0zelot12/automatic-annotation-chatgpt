@@ -1,4 +1,5 @@
 import unittest
+
 from annotation_metrics import AnnotationMetrics
 
 from entity import Entity
