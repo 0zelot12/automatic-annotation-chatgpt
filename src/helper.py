@@ -7,7 +7,6 @@ from entity import Entity
 from entity_type import EntityType
 
 from entity_tag import EntityTag
-from pet_dataset import PetDataset
 from visualization import convert_to_html
 
 
@@ -223,20 +222,20 @@ def convert_to_template_example(
 
         # ACTOR
         if ner_tag == EntityTag.B_ACTOR and ner_tags[index + 1] == EntityTag.I_ACTOR:
-            result.append(f"<ACTOR>")
+            result.append("<ACTOR>")
             result.append(f"{token}")
             continue
         if ner_tag == EntityTag.B_ACTOR and ner_tags[index + 1] != EntityTag.I_ACTOR:
-            result.append(f"<ACTOR>")
+            result.append("<ACTOR>")
             result.append(f"{token}")
-            result.append(f"</ACTOR>")
+            result.append("</ACTOR>")
             continue
         if ner_tag == EntityTag.I_ACTOR and ner_tags[index + 1] == EntityTag.I_ACTOR:
             result.append(f"{token}")
             continue
         if ner_tag == EntityTag.I_ACTOR and ner_tags[index + 1] != EntityTag.I_ACTOR:
             result.append(f"{token}")
-            result.append(f"</ACTOR>")
+            result.append("</ACTOR>")
             continue
 
         # ACTIVITY
@@ -244,16 +243,16 @@ def convert_to_template_example(
             ner_tag == EntityTag.B_ACTIVITY
             and ner_tags[index + 1] == EntityTag.I_ACTIVITY
         ):
-            result.append(f"<ACTIVITY>")
+            result.append("<ACTIVITY>")
             result.append(f"{token}")
             continue
         if (
             ner_tag == EntityTag.B_ACTIVITY
             and ner_tags[index + 1] != EntityTag.I_ACTIVITY
         ):
-            result.append(f"<ACTIVITY>")
+            result.append("<ACTIVITY>")
             result.append(f"{token}")
-            result.append(f"</ACTIVITY>")
+            result.append("</ACTIVITY>")
             continue
         if (
             ner_tag == EntityTag.I_ACTIVITY
@@ -266,7 +265,7 @@ def convert_to_template_example(
             and ner_tags[index + 1] != EntityTag.I_ACTIVITY
         ):
             result.append(f"{token}")
-            result.append(f"</ACTIVITY>")
+            result.append("</ACTIVITY>")
             continue
 
         # ACTIVITY_DATA
@@ -274,16 +273,16 @@ def convert_to_template_example(
             ner_tag == EntityTag.B_ACTIVITY_DATA
             and ner_tags[index + 1] == EntityTag.I_ACTIVITY_DATA
         ):
-            result.append(f"<ACTIVITY_DATA>")
+            result.append("<ACTIVITY_DATA>")
             result.append(f"{token}")
             continue
         if (
             ner_tag == EntityTag.B_ACTIVITY_DATA
             and ner_tags[index + 1] != EntityTag.I_ACTIVITY_DATA
         ):
-            result.append(f"<ACTIVITY_DATA>")
+            result.append("<ACTIVITY_DATA>")
             result.append(f"{token}")
-            result.append(f"</ACTIVITY_DATA>")
+            result.append("</ACTIVITY_DATA>")
             continue
         if (
             ner_tag == EntityTag.I_ACTIVITY_DATA
@@ -296,7 +295,7 @@ def convert_to_template_example(
             and ner_tags[index + 1] != EntityTag.I_ACTIVITY_DATA
         ):
             result.append(f"{token}")
-            result.append(f"</ACTIVITY_DATA>")
+            result.append("</ACTIVITY_DATA>")
             continue
 
         # NO_ENTITY

@@ -6,7 +6,7 @@
 .env
 
 # Ignore logs
-*.log
+logs/*.log
 
 out/*.html
 out/*.txt
