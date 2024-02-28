@@ -52,7 +52,6 @@ def calculate_metrics(
     model_annotations: list[Entity], reference_annotations: list[Entity]
 ) -> AnnotationMetrics:
     true_positives = 0
-    false_negatives = 0
     for reference_annotation in reference_annotations:
         found_element = next(
             (
@@ -64,11 +63,9 @@ def calculate_metrics(
         )
         if found_element and reference_annotation.tokens == found_element.tokens:
             true_positives += 1
-        else:
-            false_negatives += 1
 
-    precision = true_positives / len(model_annotations)
-    recall = true_positives / len(reference_annotations)
+    precision = round(true_positives / len(model_annotations), 2)
+    recall = round(true_positives / len(reference_annotations), 2)
 
     if precision + recall == 0:
         return AnnotationMetrics(
