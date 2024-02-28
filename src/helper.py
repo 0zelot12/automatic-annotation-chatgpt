@@ -1,3 +1,4 @@
+from annotation_metrics import AnnotationMetrics
 from entity import Entity
 from entity_type import EntityType
 
@@ -141,7 +142,7 @@ def convert_to_template_example(
 
 def calculate_metrics(
     model_annotations: list[Entity], reference_annotations: list[Entity]
-):
+) -> AnnotationMetrics:
     true_positives = 0
     false_negatives = 0
     for reference_annotation in reference_annotations:
@@ -162,12 +163,10 @@ def calculate_metrics(
     recall = true_positives / len(reference_annotations)
 
     if precision + recall == 0:
-        return [
-            precision,
-            recall,
-            -1,
-        ]  # TODO: Clarify what to return when precision + recall = 0
+        return AnnotationMetrics(
+            precision=precision, recall=recall, f1_score=-1
+        )  # TODO: Clarify what to return when precision + recall = 0
 
     f1_score = round(2 * precision * recall / (precision + recall), 2)
 
-    return [precision, recall, f1_score]
+    return AnnotationMetrics(precision=precision, recall=recall, f1_score=f1_score)

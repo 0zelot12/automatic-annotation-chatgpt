@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from datetime import datetime
+from annotation_metrics import AnnotationMetrics
 
 from entity import Entity
 
@@ -7,9 +8,7 @@ from entity import Entity
 @dataclass
 class AnnotationResult:
     document_name: str
-    precision: float
-    recall: float
-    f1_score: float
+    metrics: AnnotationMetrics
     tokens: list[str] = field(default_factory=list)
     recognized_entities: list[Entity] = field(default_factory=list)
     present_entities: list[Entity] = field(default_factory=list)
@@ -25,9 +24,9 @@ class AnnotationResult:
 
         return (
             f"Document Name: {self.document_name}\n"
-            f"Precision: {self.precision}\n"
-            f"Recall: {self.recall}\n"
-            f"F1 Score: {self.f1_score}\n"
+            f"Precision: {self.metrics.precision}\n"
+            f"Recall: {self.metrics.recall}\n"
+            f"F1 Score: {self.metrics.f1_score}\n"
             f"Tokens: {tokens_str}\n"
             f"Recognized Entities:\n{recognized_entities_str}\n"
             f"Present Entities:\n{present_entities_str}\n"

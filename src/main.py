@@ -59,17 +59,13 @@ def annotate_document(document: PetDocument, model_name: str) -> AnnotationResul
     recognized_entities = parse_entities(response.data)
     present_entities = document.get_entities()
 
-    metrics = calculate_metrics(recognized_entities, present_entities)
-
     # TODO: Remove magic numbers
     annotation_result = AnnotationResult(
         document_name=document.name,
         tokens=document.tokens,
         present_entities=present_entities,
         recognized_entities=recognized_entities,
-        precision=metrics[0],
-        recall=metrics[1],
-        f1_score=metrics[2],
+        metrics=calculate_metrics(recognized_entities, present_entities),
     )
 
     return annotation_result
