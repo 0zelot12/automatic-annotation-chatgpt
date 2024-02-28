@@ -13,7 +13,7 @@ from datetime import datetime
 from dotenv import load_dotenv
 from pet_document import PetDocument
 
-from templates import one_shot_template
+from templates import zero_shot_template, one_shot_template, few_shot_template
 
 from annotation_result import AnnotationResult
 from model_response import ModelResponse
@@ -23,7 +23,16 @@ from helper import parse_entities, calculate_metrics
 
 
 # TODO: Move to different location
-def annotate_document(document: PetDocument, model_name: str) -> AnnotationResult:
+def annotate_document(
+    document: PetDocument, model_name: str, prompt_type: str
+) -> AnnotationResult:
+
+    input_template = one_shot_template
+    if prompt_type == "zero-shot":
+        input_template = zero_shot_template
+    elif prompt_type == "few-shot":
+        input_template = few_shot_template
+
     input_template = one_shot_template
     input_tokens = document.tokens
 
@@ -95,6 +104,8 @@ def main() -> None:
             document_number = int(v)
         if o == "--document_name":
             document_name = v
+        if o == "--prompt_type":
+            model = v
         if o == "--model":
             model = v
 
@@ -104,7 +115,7 @@ def main() -> None:
         try:
             document = pet_dataset.get_document_by_name(document_name=document_name)
             print(f"Processing {document.name}")
-            annotation_result = annotate_document(document, model)
+            annotation_result = annotate_document(document, model, prompt_type)
             annotation_result.save_to_file("./out")
             print(f"Processing {document.name} completed")
         except Exception as e:
