@@ -10,6 +10,7 @@ logs/*.log
 
 out/*.html
 out/*.txt
+out/*.json
 
 .DS_Store
 **/__pycache__/
