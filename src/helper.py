@@ -1,7 +1,7 @@
 from annotation_metrics import AnnotationMetrics
+
 from entity import Entity
 from entity_type import EntityType
-
 from entity_tag import EntityTag
 
 

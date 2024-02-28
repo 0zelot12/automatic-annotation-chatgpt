@@ -3,7 +3,6 @@ import json
 from dataclasses import dataclass, field
 from datetime import datetime
 
-
 from annotation_metrics import AnnotationMetrics
 from entity import Entity
 
