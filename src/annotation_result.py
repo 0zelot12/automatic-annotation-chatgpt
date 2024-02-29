@@ -25,6 +25,7 @@ class AnnotationResult:
                 entity.to_json() for entity in self.recognized_entities
             ],
             "present_entities": [entity.to_json() for entity in self.present_entities],
+            "api_response": self.api_response,
         }
 
     # Refactor to a generic method that saves JSON objects
