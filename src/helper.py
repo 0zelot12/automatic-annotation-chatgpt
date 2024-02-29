@@ -169,10 +169,3 @@ def convert_to_template_example(
             continue
 
     return result
-
-
-dataset = PetDataset()
-document = dataset.get_document_by_name("doc-1.1")
-example = convert_to_template_example(document.tokens, document.ner_tags)
-
-print(parse_entities(example))
