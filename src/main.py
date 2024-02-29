@@ -2,6 +2,7 @@ import sys
 import getopt
 import os
 import logging
+import traceback
 
 from langchain.prompts import ChatPromptTemplate
 from langchain.output_parsers import PydanticOutputParser
@@ -130,7 +131,8 @@ def main() -> None:
             print(f"Processing {document.name} completed")
         except Exception as e:
             print(f"Processing {document.name} failed")
-            logging.fatal(e)
+            logging.error("An exception occurred: %s", str(e))
+            logging.error(traceback.format_exc())
     else:
         for i in range(document_number):
             try:
@@ -140,7 +142,8 @@ def main() -> None:
                 print(f"Processing {document.name} completed")
             except Exception as e:
                 print(f"Processing {document.name} failed")
-                logging.fatal(e)
+                logging.error("An exception occurred: %s", str(e))
+                logging.error(traceback.format_exc())
 
 
 if __name__ == "__main__":
