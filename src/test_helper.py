@@ -42,6 +42,43 @@ class TestHelperMethods(unittest.TestCase):
             ],
         )
 
+    def test_parse_entities_offset(self):
+        tokens = [
+            "The",
+            "MPON",
+            "sents",
+            "the",
+            "dismissal",
+            "to",
+            "the",
+            "MPOO",
+            ".",
+        ]
+
+        annotated_tokens = [
+            "<ACTOR>",
+            "The",
+            "MPON",
+            "</ACTOR>",
+            "<ACTIVITY>",
+            "sents",
+            "</ACTIVITY>",
+            "<ACTIVITY_DATA>",
+            "the",
+            "dismissal",
+            "</ACTIVITY_DATA>",
+            "to",
+            "<ACTOR>",
+            "the",
+            "MPOO",
+            "</ACTOR>",
+            ".",
+        ]
+
+        entities = parse_entities(annotated_tokens)
+
+        self.assertEqual(len(tokens), len(annotated_tokens) - len(entities) * 2)
+
     def test_calculate_metrics(self):
         expected_metrics = AnnotationMetrics(precision=0.67, recall=0.5, f1_score=0.57)
         metrics = calculate_metrics(
