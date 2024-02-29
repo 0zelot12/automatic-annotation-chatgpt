@@ -77,6 +77,7 @@ def calculate_metrics(
     return AnnotationMetrics(precision=precision, recall=recall, f1_score=f1_score)
 
 
+# TODO: Move to PetDocument class
 def convert_to_template_example(
     tokens: list[str], ner_tags: list[EntityTag]
 ) -> list[str]:
