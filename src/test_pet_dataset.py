@@ -1,7 +1,8 @@
 import unittest
 import pandas as pd
 
-from pet_dataset import PetDataset
+from src.pet_dataset import PetDataset
+
 
 class TestPetDataset(unittest.TestCase):
     def setUp(self):
@@ -22,18 +23,18 @@ class TestPetDataset(unittest.TestCase):
         # Test if get_document() returns a PetDocument object
         document_number = 0
         document = self.pet_data_instance.get_document(document_number)
-        self.assertTrue(hasattr(document, 'name'))
-        self.assertTrue(hasattr(document, 'tokens'))
-        self.assertTrue(hasattr(document, 'ner_tags'))
+        self.assertTrue(hasattr(document, "name"))
+        self.assertTrue(hasattr(document, "tokens"))
+        self.assertTrue(hasattr(document, "ner_tags"))
 
     def test_get_document_by_name(self):
         # Test if get_document_by_name() returns a PetDocument object
-        document_name = 'doc-10.1'
+        document_name = "doc-10.1"
         document = self.pet_data_instance.get_document_by_name(document_name)
-        self.assertTrue(hasattr(document, 'name'))
-        self.assertTrue(hasattr(document, 'tokens'))
-        self.assertTrue(hasattr(document, 'ner_tags'))
+        self.assertTrue(hasattr(document, "name"))
+        self.assertTrue(hasattr(document, "tokens"))
+        self.assertTrue(hasattr(document, "ner_tags"))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

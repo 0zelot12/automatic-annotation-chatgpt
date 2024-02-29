@@ -3,6 +3,7 @@ from annotation_metrics import AnnotationMetrics
 from entity import Entity
 from entity_type import EntityType
 from entity_tag import EntityTag
+from pet_dataset import PetDataset
 
 
 def parse_entities(response: list[str]) -> list[Entity]:
@@ -168,3 +169,10 @@ def convert_to_template_example(
             continue
 
     return result
+
+
+dataset = PetDataset()
+document = dataset.get_document_by_name("doc-1.1")
+example = convert_to_template_example(document.tokens, document.ner_tags)
+
+print(parse_entities(example))
