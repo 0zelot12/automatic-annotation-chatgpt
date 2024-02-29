@@ -1,5 +1,6 @@
 import sys
 import getopt
+import os
 import logging
 
 from langchain.prompts import ChatPromptTemplate
@@ -88,6 +89,10 @@ def main() -> None:
     )
 
     load_dotenv()
+
+    if "OPENAI_API_KEY" not in os.environ:
+        print("OPENAI_API_KEY was not detected. Please create a .env file and add the key.")
+        return
 
     # TODO: Evaluate argparse module
     arguments = sys.argv[1:]
