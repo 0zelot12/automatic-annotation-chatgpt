@@ -14,16 +14,22 @@
         <div class="container p-4">
             <h1>PET Annotation Visualizer</h1>
             <button type="button" class="btn btn-primary mb-4" onclick="openFileDialog()">Select file</button>
+            <h2 id="document-name"></h2>
+            <div class="mb-4">
+                <div id="precision"></div>
+                <div id="recall"></div>
+                <div id="f1-score"></div>
+            </div>
             <div class="row">
                 <div class="col">
-                    <p class="border border-primary p-2">
+                    <p id="model-text" class="border border-primary p-3">
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo dolorum minima, et perferendis
                         doloremque incidunt soluta voluptatem dolore a ea consequatur libero veritatis cumque sit omnis
                         architecto temporibus maiores laudantium.
                     </p>
                 </div>
                 <div class="col">
-                    <p class="border border-primary p-2">
+                    <p id="reference-text" class="border border-primary p-3">
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo dolorum minima, et perferendis
                         doloremque incidunt soluta voluptatem dolore a ea consequatur libero veritatis cumque sit omnis
                         architecto temporibus maiores laudantium.
@@ -44,7 +50,12 @@
                         const jsonData = event.target.result;
                         try {
                             const parsedData = JSON.parse(jsonData);
-                            console.log(parsedData);
+                            document.getElementById("document-name").innerHTML = `${parsedData.document_name}`;
+                            document.getElementById("precision").innerHTML = `Precision: ${parsedData.metrics.precision}`;
+                            document.getElementById("recall").innerHTML = `Recall: ${parsedData.metrics.recall}`;
+                            document.getElementById("f1-score").innerHTML = `F1-Score: ${parsedData.metrics.f1_score}`;
+                            document.getElementById("reference-text").innerHTML = parsedData.tokens.join(" ");
+                            document.getElementById("model-text").innerHTML = parsedData.tokens.join(" ");
                         } catch (error) {
                             console.error('Error parsing JSON:', error);
                         }
