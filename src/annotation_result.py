@@ -11,6 +11,7 @@ from entity import Entity
 class AnnotationResult:
     document_name: str
     metrics: AnnotationMetrics
+    api_response: list[str]
     tokens: list[str] = field(default_factory=list)
     recognized_entities: list[Entity] = field(default_factory=list)
     present_entities: list[Entity] = field(default_factory=list)

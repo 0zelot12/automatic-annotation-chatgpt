@@ -63,17 +63,18 @@ def annotate_document(
         f"Input length: {len(input_tokens)} - Input tokens: {input_tokens}"
     )
 
-    response = chain.invoke({"input": input_tokens})
+    api_response = chain.invoke({"input": input_tokens})
 
-    logging.debug(f"API response: {response}")
+    logging.debug(f"API response: {api_response}")
 
-    recognized_entities = parse_entities(response.data)
+    recognized_entities = parse_entities(api_response.data)
     present_entities = document.get_entities()
 
     # TODO: Remove magic numbers
     annotation_result = AnnotationResult(
         document_name=document.name,
         tokens=document.tokens,
+        api_response=api_response.data,
         present_entities=present_entities,
         recognized_entities=recognized_entities,
         metrics=calculate_metrics(recognized_entities, present_entities),
