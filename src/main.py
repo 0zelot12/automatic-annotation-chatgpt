@@ -105,14 +105,11 @@ def main() -> None:
     options, values = getopt.getopt(arguments, short_options, long_options)
 
     # Set default values
-    document_number = 45
     document_name = None
     model = "gpt-3.5-turbo"
     prompt_type = "one-shot"
 
     for o, v in options:
-        if o == "--document_number":
-            document_number = int(v)
         if o == "--document_name":
             document_name = v
         if o == "--prompt_type":
@@ -134,7 +131,8 @@ def main() -> None:
             logging.error("An exception occurred: %s", str(e))
             logging.error(traceback.format_exc())
     else:
-        for i in range(document_number):
+        number_of_documents = len(pet_dataset.get_data())
+        for i in range(number_of_documents):
             try:
                 document = pet_dataset.get_document(document_number=i)
                 print(f"Processing {document.name}")
