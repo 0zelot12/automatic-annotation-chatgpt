@@ -117,6 +117,7 @@ def main() -> None:
     document_name = None
     model = "gpt-3.5-turbo"
     prompt_type = "one-shot"
+    example_document = "doc-1.1"
 
     for o, v in options:
         if o == "--document_name":
@@ -127,11 +128,11 @@ def main() -> None:
             model = v
 
     pet_dataset = PetDataset()
+    example_document = pet_dataset.get_document_by_name(document_name=example_document)
 
     if document_name:
         try:
             document = pet_dataset.get_document_by_name(document_name=document_name)
-            example_document = pet_dataset.get_document_by_name(document_name="doc-1.1")
             print(f"Processing {document.name}")
             annotation_result = annotate_document(
                 document=document,
@@ -151,7 +152,13 @@ def main() -> None:
             try:
                 document = pet_dataset.get_document(document_number=i)
                 print(f"Processing {document.name}")
-                annotation_result = annotate_document(document, model)
+                annotation_result = annotate_document(
+                    document=document,
+                    model_name=model,
+                    example_document=example_document,
+                    prompt_type=prompt_type,
+                )
+                annotation_result.save_to_file("./out")
                 print(f"Processing {document.name} completed")
             except Exception as e:
                 print(f"Processing {document.name} failed")
