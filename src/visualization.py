@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import os
+import json
 
 
 def generate_simple_bar_chart(values, categories, xLabel, yLabel, title):
@@ -93,4 +95,36 @@ def generate_horizontal_bar_chart(values, categories, xLabel, yLabel, title):
         plt.text(value + 0.1, bar_positions[i], str(value), ha="left", va="center")
 
     # Display the plot
+    plt.show()
+
+
+def generate_scatterplot(path: str):
+    data = []
+    for filename in os.listdir(path):
+        if filename.endswith(".json"):
+            filepath = os.path.join(path, filename)
+            with open(filepath, "r") as file:
+                json_data = json.load(file)
+                data.append(json_data)
+
+    plot_data = []
+
+    for d in data:
+        plot_data.append(
+            {"recall": d["metrics"]["recall"], "precision": d["metrics"]["precision"]}
+        )
+
+    # Extract recall and precision values from the data
+    recalls = [d["recall"] for d in plot_data]
+    precisions = [d["precision"] for d in plot_data]
+
+    # Create scatter plot
+    plt.figure(figsize=(8, 6))
+    plt.scatter(recalls, precisions, color="blue", alpha=0.5)
+    plt.title("Precision and Recall")
+    plt.xlabel("Recall")
+    plt.ylabel("Precision")
+    plt.xlim(0.0, 1.0)
+    plt.ylim(0.0, 1.0)
+    plt.grid(True)
     plt.show()
