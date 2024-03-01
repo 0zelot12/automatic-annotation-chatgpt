@@ -96,6 +96,23 @@ class TestHelperMethods(unittest.TestCase):
         )
         self.assertEqual(metrics, expected_metrics)
 
+    def test_calculate_metrics_wrong_type(self):
+        expected_metrics = AnnotationMetrics(precision=0.33, recall=0.25, f1_score=0.28)
+        metrics = calculate_metrics(
+            [
+                Entity(EntityType.ACTOR, 1, ["MPON"]),
+                Entity(EntityType.ACTIVITY, 2, ["sents"]),
+                Entity(EntityType.FURTHER_SPECIFICATION, 3, ["the", "dismissal"]),
+            ],
+            [
+                Entity(EntityType.ACTOR, 0, ["The", "MPON"]),
+                Entity(EntityType.ACTIVITY, 2, ["sents"]),
+                Entity(EntityType.ACTIVITY_DATA, 3, ["the", "dismissal"]),
+                Entity(EntityType.ACTOR, 6, ["the", "MPOO"]),
+            ],
+        )
+        self.assertEqual(metrics, expected_metrics)
+
     def test_calculate_metrics_total_match(self):
         expected_metrics = AnnotationMetrics(precision=1.0, recall=1.0, f1_score=1.0)
         metrics = calculate_metrics(

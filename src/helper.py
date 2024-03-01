@@ -62,7 +62,11 @@ def calculate_metrics(
             ),
             None,
         )
-        if found_element and reference_annotation.tokens == found_element.tokens:
+        if (
+            found_element
+            and reference_annotation.tokens == found_element.tokens
+            and reference_annotation.type == found_element.type
+        ):
             true_positives += 1
 
     precision = round(true_positives / len(model_annotations), 2)
