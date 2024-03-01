@@ -21,12 +21,15 @@ from annotation_result import AnnotationResult
 from model_response import ModelResponse
 from pet_dataset import PetDataset
 
-from helper import parse_entities, calculate_metrics
+from helper import parse_entities, calculate_metrics, convert_to_template_example
 
 
 # TODO: Move to different location
 def annotate_document(
-    document: PetDocument, model_name: str, prompt_type: str
+    document: PetDocument,
+    example_document: PetDocument,
+    model_name: str,
+    prompt_type: str,
 ) -> AnnotationResult:
 
     if prompt_type == "zero-shot":
@@ -39,16 +42,22 @@ def annotate_document(
     input_template = one_shot_template
     input_tokens = document.tokens
 
+    example = convert_to_template_example(
+        tokens=example_document.tokens, ner_tags=example_document.ner_tags
+    )
+
     chat_template = ChatPromptTemplate.from_messages(
         [
             SystemMessage(
                 content=(
                     "You are an expert in the field of process management. You assist in annotating relevant entities "
-                    "and relations in natural language process descriptions. You will be provided with definitions of the entities you nee to extract"
+                    "and relations in natural language process descriptions. You will be provided with definitions of the entities you need to extract."
                 )
             ),
             HumanMessagePromptTemplate.from_template(input_template).format(
-                input=input_tokens
+                input=str(input_tokens).replace("'", '"'),
+                example_tokens=str(example_document.tokens).replace("'", '"'),
+                example_annotation=str(example).replace("'", '"'),
             ),
         ]
     )
@@ -122,8 +131,14 @@ def main() -> None:
     if document_name:
         try:
             document = pet_dataset.get_document_by_name(document_name=document_name)
+            example_document = pet_dataset.get_document_by_name(document_name="doc-1.1")
             print(f"Processing {document.name}")
-            annotation_result = annotate_document(document, model, prompt_type)
+            annotation_result = annotate_document(
+                document=document,
+                model_name=model,
+                example_document=example_document,
+                prompt_type=prompt_type,
+            )
             annotation_result.save_to_file("./out")
             print(f"Processing {document.name} completed")
         except Exception as e:

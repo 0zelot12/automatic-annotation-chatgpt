@@ -27,10 +27,10 @@ The output must contain every token that the input contains.
 
 This is an example
 
-["The", "MPON", "sents", "the", "dismissal", "to", "the", "MPOO", "."]
+{example_tokens}
 
 {{
-    "data": ["<ACTOR>", "The", "MPON", "</ACTOR>", "<ACTIVITY>", "sents", "</ACTIVITY>", "<ACTIVITY_DATA>", "the", "dismissal", "</ACTIVITY_DATA>", "to", "<ACTOR>", "the", "MPOO", "</ACTOR>", "."]
+    "data": {example_annotation}
 }}
 
 {input}
