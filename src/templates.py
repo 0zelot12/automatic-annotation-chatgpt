@@ -1,6 +1,4 @@
 zero_shot_template = """
-You are a smart and intelligent Named Entity Recognition (NER) system. I will provide you the definition of the entities you need to extract, the sentence from where your extract the entities and the output format with examples.
-
 The input is a list of tokens.
 
 Entity definition:
@@ -16,8 +14,6 @@ The output must contain every token that the input contains.
 """
 
 one_shot_template = """
-You are a smart and intelligent Named Entity Recognition (NER) system. I will provide you the definition of the entities you need to extract, the sentence from where your extract the entities and the output format with examples.
-
 The input is a list of tokens.
 
 Entity definition:

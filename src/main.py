@@ -44,7 +44,7 @@ def annotate_document(
             SystemMessage(
                 content=(
                     "You are an expert in the field of process management. You assist in annotating relevant entities "
-                    "and relations in natural language process descriptions."
+                    "and relations in natural language process descriptions. You will be provided with definitions of the entities you nee to extract"
                 )
             ),
             HumanMessagePromptTemplate.from_template(input_template).format(
