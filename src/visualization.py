@@ -3,6 +3,8 @@ import numpy as np
 import os
 import json
 
+from helper import avg
+
 
 def generate_simple_bar_chart(values, categories, xLabel, yLabel, title):
     """
@@ -118,6 +120,9 @@ def generate_scatterplot(path: str):
     recalls = [d["recall"] for d in plot_data]
     precisions = [d["precision"] for d in plot_data]
 
+    print(f"Average recall: {avg(recalls)}")
+    print(f"Average precision: {avg(precisions)}")
+
     # Create scatter plot
     plt.figure(figsize=(8, 6))
     plt.scatter(recalls, precisions, color="blue", alpha=0.5)
@@ -128,3 +133,6 @@ def generate_scatterplot(path: str):
     plt.ylim(0.0, 1.0)
     plt.grid(True)
     plt.show()
+
+
+generate_scatterplot(path="/Users/andreaslauritz/Desktop/Annotationen_29_02_24")

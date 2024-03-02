@@ -3,7 +3,9 @@ from annotation_metrics import AnnotationMetrics
 from entity import Entity
 from entity_type import EntityType
 from entity_tag import EntityTag
-from pet_dataset import PetDataset
+
+import json
+import os
 
 
 def parse_entities(response: list[str]) -> list[Entity]:
@@ -74,7 +76,7 @@ def calculate_metrics(
 
     if precision + recall == 0:
         return AnnotationMetrics(
-            precision=precision, recall=recall, f1_score=-1
+            precision=precision, recall=recall, f1_score=0.0
         )  # TODO: Clarify what to return when precision + recall = 0
 
     f1_score = round(2 * precision * recall / (precision + recall), 2)
@@ -173,3 +175,41 @@ def convert_to_template_example(
             continue
 
     return result
+
+
+def avg(values: list[float]) -> float:
+    return round(sum(values) / len(values), 2)
+
+
+def evaluate_results(path: str):
+    # TODO: Add test
+    data = []
+    for filename in os.listdir(path):
+        if filename.endswith(".json"):
+            filepath = os.path.join(path, filename)
+            with open(filepath, "r") as file:
+                json_data = json.load(file)
+                data.append(json_data)
+
+    plot_data = []
+
+    for d in data:
+        plot_data.append(
+            {
+                "recall": d["metrics"]["recall"],
+                "precision": d["metrics"]["precision"],
+                "f1_score": d["metrics"]["f1_score"],
+            }
+        )
+
+    # Extract recall and precision values from the data
+    recalls = [d["recall"] for d in plot_data]
+    precisions = [d["precision"] for d in plot_data]
+    f1_scores = [d["f1_score"] for d in plot_data]
+
+    print(f"Average recall: {avg(recalls)}")
+    print(f"Average precision: {avg(precisions)}")
+    print(f"Average f1-score: {avg(f1_scores)}")
+
+
+evaluate_results("./out")
