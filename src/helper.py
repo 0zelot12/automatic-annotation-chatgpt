@@ -207,9 +207,19 @@ def evaluate_results(path: str):
     precisions = [d["precision"] for d in plot_data]
     f1_scores = [d["f1_score"] for d in plot_data]
 
-    print(f"Average recall: {avg(recalls)}")
-    print(f"Average precision: {avg(precisions)}")
-    print(f"Average f1-score: {avg(f1_scores)}")
+    print(f"Average Recall: {avg(recalls)}")
+    print(f"Maximum Recall: {max(recalls)}")
+    print(f"Minimum Recall: {min(recalls)}")
+    print("--------------------------")
+    print(f"Average Precision: {avg(precisions)}")
+    print(f"Maximum Precision: {max(precisions)}")
+    print(f"Minimum Precision: {min(precisions)}")
+    print("--------------------------")
+    print(f"Average F1-score: {avg(f1_scores)}")
+    print(f"Maximum F1-score: {max(f1_scores)}")
+    print(f"Minimum F1-score: {min(f1_scores)}")
 
 
+evaluate_results("/Users/andreaslauritz/Desktop/Annotationen_29_02_24")
+print("==========================")
 evaluate_results("./out")
