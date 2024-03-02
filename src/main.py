@@ -1,5 +1,5 @@
 import sys
-import getopt
+import argparse
 import os
 import logging
 import traceback
@@ -21,7 +21,101 @@ from annotation_result import AnnotationResult
 from model_response import ModelResponse
 from pet_dataset import PetDataset
 
-from helper import parse_entities, calculate_metrics, convert_to_template_example
+from helper import (
+    parse_entities,
+    calculate_metrics,
+    convert_to_template_example,
+    evaluate_results,
+)
+
+
+def main() -> None:
+    logging.basicConfig(
+        level=logging.DEBUG,
+        filename=f"./logs/{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.log",
+    )
+
+    load_dotenv()
+
+    if "OPENAI_API_KEY" not in os.environ:
+        print(
+            "OPENAI_API_KEY was not detected. Please create a .env file and add the key."
+        )
+        return
+
+    parser = argparse.ArgumentParser(description="Automatic Annotation ChatGPT")
+    subparsers = parser.add_subparsers(title="subcommands", dest="subcommand")
+
+    # Annotate
+    annotate_parser = subparsers.add_parser("annotate", help="annotate command")
+    annotate_parser.add_argument(
+        "--document_name", required=True, help="Name of the document to annotate"
+    )
+    annotate_parser.add_argument(
+        "--model", required=False, default="gpt-3.5-turbo", help="OpenAI model to use"
+    )
+    annotate_parser.add_argument(
+        "--prompt_type", required=False, default="one-shot", help="Prompt type"
+    )
+    annotate_parser.add_argument(
+        "--example_document",
+        required=False,
+        default="doc-1.1",
+        help="Document to use as example",
+    )
+
+    # Evaluate
+    evaluate_parser = subparsers.add_parser("evaluate", help="evaluate command")
+    evaluate_parser.add_argument(
+        "--path", required=False, default="./out", help="Path to some directory"
+    )
+
+    args = parser.parse_args()
+
+    if args.subcommand == "evaluate":
+        evaluate_results(args.path)
+    elif args.subcommand == "annotate":
+        print("annotate")
+    else:
+        parser.print_help()
+
+    # pet_dataset = PetDataset()
+    # example_document = pet_dataset.get_document_by_name(document_name=example_document)
+
+    # if document_name:
+    #     try:
+    #         document = pet_dataset.get_document_by_name(document_name=document_name)
+    #         print(f"Processing {document.name}")
+    #         annotation_result = annotate_document(
+    #             document=document,
+    #             model_name=model,
+    #             example_document=example_document,
+    #             prompt_type=prompt_type,
+    #         )
+    #         annotation_result.save_to_file("./out")
+    #         print(f"Processing {document.name} completed")
+    #     except Exception as e:
+    #         print(f"Processing {document.name} failed")
+    #         logging.error("An exception occurred: %s", str(e))
+    #         logging.error(traceback.format_exc())
+    # else:
+    #     number_of_documents = len(pet_dataset.get_data())
+    #     for i in range(number_of_documents):
+    #         try:
+    #             document = pet_dataset.get_document(document_number=i)
+    #             print(f"Processing {document.name}")
+    #             annotation_result = annotate_document(
+    #                 document=document,
+    #                 model_name=model,
+    #                 example_document=example_document,
+    #                 prompt_type=prompt_type,
+    #             )
+    #             annotation_result.save_to_file("./out")
+    #             print(f"Processing {document.name} completed")
+    #         except Exception as e:
+    #             print(f"Processing {document.name} failed")
+    #             logging.error("An exception occurred: %s", str(e))
+    #             logging.error(traceback.format_exc())
 
 
 # TODO: Move to different location
@@ -91,79 +185,6 @@ def annotate_document(
     )
 
     return annotation_result
-
-
-def main() -> None:
-    logging.basicConfig(
-        level=logging.DEBUG,
-        filename=f"./logs/{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.log",
-    )
-
-    load_dotenv()
-
-    if "OPENAI_API_KEY" not in os.environ:
-        print(
-            "OPENAI_API_KEY was not detected. Please create a .env file and add the key."
-        )
-        return
-
-    # TODO: Evaluate argparse module
-    arguments = sys.argv[1:]
-    short_options = ""
-    long_options = ["document_number=", "document_name=", "model="]
-    options, values = getopt.getopt(arguments, short_options, long_options)
-
-    # Set default values
-    document_name = None
-    model = "gpt-3.5-turbo"
-    prompt_type = "one-shot"
-    example_document = "doc-1.1"
-
-    for o, v in options:
-        if o == "--document_name":
-            document_name = v
-        if o == "--prompt_type":
-            prompt_type = v
-        if o == "--model":
-            model = v
-
-    pet_dataset = PetDataset()
-    example_document = pet_dataset.get_document_by_name(document_name=example_document)
-
-    if document_name:
-        try:
-            document = pet_dataset.get_document_by_name(document_name=document_name)
-            print(f"Processing {document.name}")
-            annotation_result = annotate_document(
-                document=document,
-                model_name=model,
-                example_document=example_document,
-                prompt_type=prompt_type,
-            )
-            annotation_result.save_to_file("./out")
-            print(f"Processing {document.name} completed")
-        except Exception as e:
-            print(f"Processing {document.name} failed")
-            logging.error("An exception occurred: %s", str(e))
-            logging.error(traceback.format_exc())
-    else:
-        number_of_documents = len(pet_dataset.get_data())
-        for i in range(number_of_documents):
-            try:
-                document = pet_dataset.get_document(document_number=i)
-                print(f"Processing {document.name}")
-                annotation_result = annotate_document(
-                    document=document,
-                    model_name=model,
-                    example_document=example_document,
-                    prompt_type=prompt_type,
-                )
-                annotation_result.save_to_file("./out")
-                print(f"Processing {document.name} completed")
-            except Exception as e:
-                print(f"Processing {document.name} failed")
-                logging.error("An exception occurred: %s", str(e))
-                logging.error(traceback.format_exc())
 
 
 if __name__ == "__main__":

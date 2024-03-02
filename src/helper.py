@@ -220,6 +220,6 @@ def evaluate_results(path: str):
     print(f"Minimum F1-score: {min(f1_scores)}")
 
 
-evaluate_results("/Users/andreaslauritz/Desktop/Annotationen_29_02_24")
-print("==========================")
-evaluate_results("./out")
+# evaluate_results("/Users/andreaslauritz/Desktop/Annotationen_29_02_24")
+# print("==========================")
+# evaluate_results("./out")
