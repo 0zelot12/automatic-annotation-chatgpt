@@ -232,8 +232,3 @@ def evaluate_results(path: str):
     print(f"Average F1-score: {avg(f1_scores)}")
     print(f"Maximum F1-score: {max(f1_scores)}")
     print(f"Minimum F1-score: {min(f1_scores)}")
-
-
-# evaluate_results("/Users/andreaslauritz/Desktop/Annotationen_29_02_24")
-# print("==========================")
-# evaluate_results("./out")

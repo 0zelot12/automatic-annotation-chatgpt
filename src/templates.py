@@ -10,6 +10,8 @@ If a sequence of tokens matches one of the entities above add a string "<Entity 
 
 The output must contain every token that the input contains.
 
+Now annotate the following text:
+
 {input}
 """
 
@@ -25,13 +27,15 @@ If a sequence of tokens matches one of the entities above add a string "<Entity 
 
 The output must contain every token that the input contains.
 
-Here is an example:
+Here is the example:
 
 {example_tokens_1}
 
 {{
     "data": {example_annotations_1}
 }}
+
+Now annotate the following text:
 
 {input}
 """
@@ -48,7 +52,7 @@ If a sequence of tokens matches one of the entities above add a string "<Entity 
 
 The output must contain every token that the input contains.
 
-Here are two examples:
+Here is the first example:
 
 {example_tokens_1}
 
@@ -56,11 +60,15 @@ Here are two examples:
     "data": {example_annotations_1}
 }}
 
+Here is the second example:
+
 {example_tokens_2}
 
 {{
     "data": {example_annotations_2}
 }}
+
+Now annotate the following text:
 
 {input}
 """

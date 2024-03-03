@@ -107,44 +107,6 @@ def main() -> None:
     else:
         parser.print_help()
 
-    # pet_dataset = PetDataset()
-    # example_document = pet_dataset.get_document_by_name(document_name=example_document)
-
-    # if document_name:
-    #     try:
-    #         document = pet_dataset.get_document_by_name(document_name=document_name)
-    #         print(f"Processing {document.name}")
-    #         annotation_result = annotate_document(
-    #             document=document,
-    #             model_name=model,
-    #             example_document=example_document,
-    #             prompt_type=prompt_type,
-    #         )
-    #         annotation_result.save_to_file("./out")
-    #         print(f"Processing {document.name} completed")
-    #     except Exception as e:
-    #         print(f"Processing {document.name} failed")
-    #         logging.error("An exception occurred: %s", str(e))
-    #         logging.error(traceback.format_exc())
-    # else:
-    #     number_of_documents = len(pet_dataset.get_data())
-    #     for i in range(number_of_documents):
-    #         try:
-    #             document = pet_dataset.get_document(document_number=i)
-    #             print(f"Processing {document.name}")
-    #             annotation_result = annotate_document(
-    #                 document=document,
-    #                 model_name=model,
-    #                 example_document=example_document,
-    #                 prompt_type=prompt_type,
-    #             )
-    #             annotation_result.save_to_file("./out")
-    #             print(f"Processing {document.name} completed")
-    #         except Exception as e:
-    #             print(f"Processing {document.name} failed")
-    #             logging.error("An exception occurred: %s", str(e))
-    #             logging.error(traceback.format_exc())
-
 
 # TODO: Move to different location
 def annotate_document(
@@ -161,9 +123,6 @@ def annotate_document(
         example_1=example_document_1,
         example_2=example_document_2,
     )
-
-    print(chat_template)
-    return
 
     model = ChatOpenAI(model=model_name)
     parser = PydanticOutputParser(pydantic_object=ModelResponse)
