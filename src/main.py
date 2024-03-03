@@ -58,10 +58,16 @@ def main() -> None:
         "--prompt_type", required=False, default="one-shot", help="Prompt type"
     )
     annotate_parser.add_argument(
-        "--example_document",
+        "--example_document_1",
         required=False,
         default="doc-1.1",
-        help="Document to use as example",
+        help="First document to use as example",
+    )
+    annotate_parser.add_argument(
+        "--example_document_2",
+        required=False,
+        default="doc-10.1",
+        help="Second document to use as example",
     )
 
     # Evaluate
@@ -75,7 +81,29 @@ def main() -> None:
     if args.subcommand == "evaluate":
         evaluate_results(args.path)
     elif args.subcommand == "annotate":
-        print("annotate")
+        pet_dataset = PetDataset()
+        example_document_1 = pet_dataset.get_document_by_name(
+            document_name=args.example_document_1
+        )
+        example_document_2 = pet_dataset.get_document_by_name(
+            document_name=args.example_document_2
+        )
+        document = pet_dataset.get_document_by_name(document_name=args.document_name)
+        try:
+            print(f"Processing {document.name}")
+            annotation_result = annotate_document(
+                document=document,
+                model_name=args.model,
+                example_document_1=example_document_1,
+                example_document_2=example_document_2,
+                prompt_type=args.prompt_type,
+            )
+            annotation_result.save_to_file("./out")
+            print(f"Processing {document.name} completed")
+        except Exception as e:
+            print(f"Processing {document.name} failed")
+            logging.error("An exception occurred: %s", str(e))
+            logging.error(traceback.format_exc())
     else:
         parser.print_help()
 
@@ -121,40 +149,22 @@ def main() -> None:
 # TODO: Move to different location
 def annotate_document(
     document: PetDocument,
-    example_document: PetDocument,
+    example_document_1: PetDocument,
+    example_document_2: PetDocument,
     model_name: str,
     prompt_type: str,
 ) -> AnnotationResult:
 
-    if prompt_type == "zero-shot":
-        input_template = zero_shot_template
-    elif prompt_type == "one-shot":
-        input_template = one_shot_template
-    elif prompt_type == "few-shot":
-        input_template = few_shot_template
-
-    input_template = one_shot_template
-    input_tokens = document.tokens
-
-    example = convert_to_template_example(
-        tokens=example_document.tokens, ner_tags=example_document.ner_tags
+    chat_template = generate_prompt(
+        prompt_type=prompt_type,
+        input_tokens=document.tokens,
+        example_1=example_document_1,
+        example_2=example_document_2,
     )
 
-    chat_template = ChatPromptTemplate.from_messages(
-        [
-            SystemMessage(
-                content=(
-                    "You are an expert in the field of process management. You assist in annotating relevant entities "
-                    "and relations in natural language process descriptions. You will be provided with definitions of the entities you need to extract."
-                )
-            ),
-            HumanMessagePromptTemplate.from_template(input_template).format(
-                input=str(input_tokens).replace("'", '"'),
-                example_tokens=str(example_document.tokens).replace("'", '"'),
-                example_annotation=str(example).replace("'", '"'),
-            ),
-        ]
-    )
+    print(chat_template)
+    return
+
     model = ChatOpenAI(model=model_name)
     parser = PydanticOutputParser(pydantic_object=ModelResponse)
 
@@ -163,11 +173,11 @@ def annotate_document(
     chain = chat_template | model | parser
 
     logging.debug(
-        f"Evaluated document: {document.name} - Model used: {model.model_name}"
-        f"Input length: {len(input_tokens)} - Input tokens: {input_tokens}"
+        f"Evaluated document: {document.name} - Model used: {model.model_name} "
+        f"Input length: {len(document.tokens)} - Input tokens: {document.tokens}"
     )
 
-    api_response = chain.invoke({"input": input_tokens})
+    api_response = chain.invoke({"input": document.tokens})
 
     logging.debug(f"API response: {api_response}")
 
@@ -185,6 +195,55 @@ def annotate_document(
     )
 
     return annotation_result
+
+
+def generate_prompt(
+    prompt_type: str,
+    input_tokens: list[str],
+    example_1: PetDocument,
+    example_2: PetDocument,
+) -> ChatPromptTemplate:
+
+    chat_messages = [
+        SystemMessage(
+            content=(
+                "You are an expert in the field of process management. You assist in annotating relevant entities "
+                "and relations in natural language process descriptions. You will be provided with definitions of the entities you need to extract."
+            )
+        )
+    ]
+
+    if prompt_type == "zero-shot":
+        chat_messages.append(
+            HumanMessagePromptTemplate.from_template(zero_shot_template).format(
+                input=str(input_tokens).replace("'", '"'),
+            ),
+        )
+    elif prompt_type == "one-shot":
+        example_annotations_1 = convert_to_template_example(example_1)
+        chat_messages.append(
+            HumanMessagePromptTemplate.from_template(one_shot_template).format(
+                input=str(input_tokens).replace("'", '"'),
+                example_tokens_1=str(example_1.tokens).replace("'", '"'),
+                example_annotations_1=str(example_annotations_1).replace("'", '"'),
+            ),
+        )
+    elif prompt_type == "few-shot":
+        example_annotations_1 = convert_to_template_example(example_1)
+        example_annotations_2 = convert_to_template_example(example_2)
+        chat_messages.append(
+            HumanMessagePromptTemplate.from_template(few_shot_template).format(
+                input=str(input_tokens).replace("'", '"'),
+                example_tokens_1=str(example_1.tokens).replace("'", '"'),
+                example_annotations_1=str(example_annotations_1).replace("'", '"'),
+                example_tokens_2=str(example_2.tokens).replace("'", '"'),
+                example_annotations_2=str(example_annotations_2).replace("'", '"'),
+            ),
+        )
+
+    return ChatPromptTemplate.from_messages(
+        chat_messages,
+    )
 
 
 if __name__ == "__main__":

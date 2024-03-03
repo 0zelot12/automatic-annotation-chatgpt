@@ -7,6 +7,8 @@ from entity_tag import EntityTag
 import json
 import os
 
+from pet_document import PetDocument
+
 
 def parse_entities(response: list[str]) -> list[Entity]:
     entities = []
@@ -85,26 +87,38 @@ def calculate_metrics(
 
 
 # TODO: Move to PetDocument class
-def convert_to_template_example(
-    tokens: list[str], ner_tags: list[EntityTag]
-) -> list[str]:
+def convert_to_template_example(document: PetDocument) -> list[str]:
     result = []
-    for token, ner_tag, index in zip(tokens, ner_tags, range(len(tokens))):
+    for token, ner_tag, index in zip(
+        document.tokens, document.ner_tags, range(len(document.tokens))
+    ):
 
         # ACTOR
-        if ner_tag == EntityTag.B_ACTOR and ner_tags[index + 1] == EntityTag.I_ACTOR:
+        if (
+            ner_tag == EntityTag.B_ACTOR
+            and document.ner_tags[index + 1] == EntityTag.I_ACTOR
+        ):
             result.append("<ACTOR>")
             result.append(f"{token}")
             continue
-        if ner_tag == EntityTag.B_ACTOR and ner_tags[index + 1] != EntityTag.I_ACTOR:
+        if (
+            ner_tag == EntityTag.B_ACTOR
+            and document.ner_tags[index + 1] != EntityTag.I_ACTOR
+        ):
             result.append("<ACTOR>")
             result.append(f"{token}")
             result.append("</ACTOR>")
             continue
-        if ner_tag == EntityTag.I_ACTOR and ner_tags[index + 1] == EntityTag.I_ACTOR:
+        if (
+            ner_tag == EntityTag.I_ACTOR
+            and document.ner_tags[index + 1] == EntityTag.I_ACTOR
+        ):
             result.append(f"{token}")
             continue
-        if ner_tag == EntityTag.I_ACTOR and ner_tags[index + 1] != EntityTag.I_ACTOR:
+        if (
+            ner_tag == EntityTag.I_ACTOR
+            and document.ner_tags[index + 1] != EntityTag.I_ACTOR
+        ):
             result.append(f"{token}")
             result.append("</ACTOR>")
             continue
@@ -112,14 +126,14 @@ def convert_to_template_example(
         # ACTIVITY
         if (
             ner_tag == EntityTag.B_ACTIVITY
-            and ner_tags[index + 1] == EntityTag.I_ACTIVITY
+            and document.ner_tags[index + 1] == EntityTag.I_ACTIVITY
         ):
             result.append("<ACTIVITY>")
             result.append(f"{token}")
             continue
         if (
             ner_tag == EntityTag.B_ACTIVITY
-            and ner_tags[index + 1] != EntityTag.I_ACTIVITY
+            and document.ner_tags[index + 1] != EntityTag.I_ACTIVITY
         ):
             result.append("<ACTIVITY>")
             result.append(f"{token}")
@@ -127,13 +141,13 @@ def convert_to_template_example(
             continue
         if (
             ner_tag == EntityTag.I_ACTIVITY
-            and ner_tags[index + 1] == EntityTag.I_ACTIVITY
+            and document.ner_tags[index + 1] == EntityTag.I_ACTIVITY
         ):
             result.append(f"{token}")
             continue
         if (
             ner_tag == EntityTag.I_ACTIVITY
-            and ner_tags[index + 1] != EntityTag.I_ACTIVITY
+            and document.ner_tags[index + 1] != EntityTag.I_ACTIVITY
         ):
             result.append(f"{token}")
             result.append("</ACTIVITY>")
@@ -142,14 +156,14 @@ def convert_to_template_example(
         # ACTIVITY_DATA
         if (
             ner_tag == EntityTag.B_ACTIVITY_DATA
-            and ner_tags[index + 1] == EntityTag.I_ACTIVITY_DATA
+            and document.ner_tags[index + 1] == EntityTag.I_ACTIVITY_DATA
         ):
             result.append("<ACTIVITY_DATA>")
             result.append(f"{token}")
             continue
         if (
             ner_tag == EntityTag.B_ACTIVITY_DATA
-            and ner_tags[index + 1] != EntityTag.I_ACTIVITY_DATA
+            and document.ner_tags[index + 1] != EntityTag.I_ACTIVITY_DATA
         ):
             result.append("<ACTIVITY_DATA>")
             result.append(f"{token}")
@@ -157,13 +171,13 @@ def convert_to_template_example(
             continue
         if (
             ner_tag == EntityTag.I_ACTIVITY_DATA
-            and ner_tags[index + 1] == EntityTag.I_ACTIVITY_DATA
+            and document.ner_tags[index + 1] == EntityTag.I_ACTIVITY_DATA
         ):
             result.append(f"{token}")
             continue
         if (
             ner_tag == EntityTag.I_ACTIVITY_DATA
-            and ner_tags[index + 1] != EntityTag.I_ACTIVITY_DATA
+            and document.ner_tags[index + 1] != EntityTag.I_ACTIVITY_DATA
         ):
             result.append(f"{token}")
             result.append("</ACTIVITY_DATA>")
