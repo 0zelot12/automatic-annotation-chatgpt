@@ -1,7 +1,7 @@
 import unittest
 import pandas as pd
 
-from src.pet_dataset import PetDataset
+from pet_dataset import PetDataset
 
 
 class TestPetDataset(unittest.TestCase):
@@ -29,7 +29,7 @@ class TestPetDataset(unittest.TestCase):
 
     def test_get_document_by_name(self):
         # Test if get_document_by_name() returns a PetDocument object
-        document_name = "doc-10.1"
+        document_name = "doc-3.2"
         document = self.pet_data_instance.get_document_by_name(document_name)
         self.assertTrue(hasattr(document, "name"))
         self.assertTrue(hasattr(document, "tokens"))

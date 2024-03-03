@@ -5,6 +5,55 @@ from pet_document import PetDocument
 from entity_tag import str_to_entity
 
 
+ORDERED_DOCUMENT_NAMES = [
+    "doc-1.1",
+    "doc-1.2",
+    "doc-1.3",
+    "doc-1.4",
+    "doc-2.1",
+    "doc-2.2",
+    "doc-3.1",
+    "doc-3.2",
+    "doc-3.3",
+    "doc-3.5",
+    "doc-3.6",
+    "doc-3.7",
+    "doc-3.8",
+    "doc-4.1",
+    "doc-5.1",
+    "doc-5.2",
+    "doc-5.3",
+    "doc-5.4",
+    "doc-6.1",
+    "doc-6.2",
+    "doc-6.3",
+    "doc-6.4",
+    "doc-7.1",
+    "doc-8.1",
+    "doc-8.2",
+    "doc-8.3",
+    "doc-9.1",
+    "doc-9.2",
+    "doc-9.3",
+    "doc-9.4",
+    "doc-9.5",
+    "doc-10.1",
+    "doc-10.2",
+    "doc-10.3",
+    "doc-10.4",
+    "doc-10.5",
+    "doc-10.6",
+    "doc-10.7",
+    "doc-10.8",
+    "doc-10.9",
+    "doc-10.10",
+    "doc-10.11",
+    "doc-10.12",
+    "doc-10.13",
+    "doc-10.14",
+]
+
+
 # TODO: Rename
 def foo(x):
     return float(x.replace("doc-", ""))
