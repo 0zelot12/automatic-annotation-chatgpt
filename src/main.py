@@ -66,7 +66,7 @@ def main() -> None:
     annotate_parser.add_argument(
         "--example_document_2",
         required=False,
-        default="doc-2.1",
+        default="doc-3.1",
         help="Second document to use as example",
     )
 
@@ -88,22 +88,44 @@ def main() -> None:
         example_document_2 = pet_dataset.get_document_by_name(
             document_name=args.example_document_2
         )
-        document = pet_dataset.get_document_by_name(document_name=args.document_name)
-        try:
-            print(f"Processing {document.name}")
-            annotation_result = annotate_document(
-                document=document,
-                model_name=args.model,
-                example_document_1=example_document_1,
-                example_document_2=example_document_2,
-                prompt_type=args.prompt_type,
+        if args.document_name:
+            document = pet_dataset.get_document_by_name(
+                document_name=args.document_name
             )
-            annotation_result.save_to_file("./out")
-            print(f"Processing {document.name} completed")
-        except Exception as e:
-            print(f"Processing {document.name} failed")
-            logging.error("An exception occurred: %s", str(e))
-            logging.error(traceback.format_exc())
+            try:
+                print(f"Processing {document.name}")
+                annotation_result = annotate_document(
+                    document=document,
+                    model_name=args.model,
+                    example_document_1=example_document_1,
+                    example_document_2=example_document_2,
+                    prompt_type=args.prompt_type,
+                )
+                annotation_result.save_to_file("./out")
+                print(f"Processing {document.name} completed")
+            except Exception as e:
+                print(f"Processing {document.name} failed")
+                logging.error("An exception occurred: %s", str(e))
+                logging.error(traceback.format_exc())
+        else:
+            number_of_documents = len(pet_dataset.get_data())
+            for i in range(number_of_documents):
+                try:
+                    document = pet_dataset.get_document(document_number=i)
+                    print(f"Processing {document.name}")
+                    annotation_result = annotate_document(
+                        document=document,
+                        model_name=args.model,
+                        example_document_1=example_document_1,
+                        example_document_2=example_document_2,
+                        prompt_type=args.prompt_type,
+                    )
+                    annotation_result.save_to_file("./out")
+                    print(f"Processing {document.name} completed")
+                except Exception as e:
+                    print(f"Processing {document.name} failed")
+                    logging.error("An exception occurred: %s", str(e))
+                    logging.error(traceback.format_exc())
     else:
         parser.print_help()
 

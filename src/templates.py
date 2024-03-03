@@ -35,8 +35,6 @@ Here is the example:
     "data": {example_annotations_1}
 }}
 
-Now annotate the following text:
-
 {input}
 """
 
@@ -67,8 +65,6 @@ Here is the second example:
 {{
     "data": {example_annotations_2}
 }}
-
-Now annotate the following text:
 
 {input}
 """
