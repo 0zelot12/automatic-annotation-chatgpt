@@ -143,7 +143,6 @@ def annotate_document(
     recognized_entities = parse_entities(api_response.data)
     present_entities = document.get_entities()
 
-    # TODO: Remove magic numbers
     annotation_result = AnnotationResult(
         document_name=document.name,
         tokens=document.tokens,
