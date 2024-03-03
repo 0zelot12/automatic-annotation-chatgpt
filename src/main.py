@@ -58,6 +58,12 @@ def main() -> None:
         "--prompt_type", required=False, default="one-shot", help="Prompt type"
     )
     annotate_parser.add_argument(
+        "--retries",
+        required=False,
+        default=3,
+        help="Number of retries in case an API call fails",
+    )
+    annotate_parser.add_argument(
         "--example_document_1",
         required=False,
         default="doc-1.1",
@@ -92,27 +98,9 @@ def main() -> None:
             document = pet_dataset.get_document_by_name(
                 document_name=args.document_name
             )
-            try:
+            for i in range(args.retries):
                 print(f"Processing {document.name}")
-                annotation_result = annotate_document(
-                    document=document,
-                    model_name=args.model,
-                    example_document_1=example_document_1,
-                    example_document_2=example_document_2,
-                    prompt_type=args.prompt_type,
-                )
-                annotation_result.save_to_file("./out")
-                print(f"Processing {document.name} completed")
-            except Exception as e:
-                print(f"Processing {document.name} failed")
-                logging.error("An exception occurred: %s", str(e))
-                logging.error(traceback.format_exc())
-        else:
-            number_of_documents = len(pet_dataset.get_data())
-            for i in range(number_of_documents):
                 try:
-                    document = pet_dataset.get_document(document_number=i)
-                    print(f"Processing {document.name}")
                     annotation_result = annotate_document(
                         document=document,
                         model_name=args.model,
@@ -122,10 +110,31 @@ def main() -> None:
                     )
                     annotation_result.save_to_file("./out")
                     print(f"Processing {document.name} completed")
+                    break
                 except Exception as e:
                     print(f"Processing {document.name} failed")
                     logging.error("An exception occurred: %s", str(e))
                     logging.error(traceback.format_exc())
+        else:
+            number_of_documents = len(pet_dataset.get_data())
+            for i in range(number_of_documents):
+                for j in range(args.retries):
+                    print(f"Processing {document.name}")
+                    try:
+                        annotation_result = annotate_document(
+                            document=document,
+                            model_name=args.model,
+                            example_document_1=example_document_1,
+                            example_document_2=example_document_2,
+                            prompt_type=args.prompt_type,
+                        )
+                        annotation_result.save_to_file("./out")
+                        print(f"Processing {document.name} completed")
+                        break
+                    except Exception as e:
+                        print(f"Processing {document.name} failed")
+                        logging.error("An exception occurred: %s", str(e))
+                        logging.error(traceback.format_exc())
     else:
         parser.print_help()
 
