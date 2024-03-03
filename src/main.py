@@ -49,7 +49,7 @@ def main() -> None:
     # Annotate
     annotate_parser = subparsers.add_parser("annotate", help="annotate command")
     annotate_parser.add_argument(
-        "--document_name", required=True, help="Name of the document to annotate"
+        "--document_name", required=False, help="Name of the document to annotate"
     )
     annotate_parser.add_argument(
         "--model", required=False, default="gpt-3.5-turbo", help="OpenAI model to use"
@@ -66,7 +66,7 @@ def main() -> None:
     annotate_parser.add_argument(
         "--example_document_2",
         required=False,
-        default="doc-10.1",
+        default="doc-2.1",
         help="Second document to use as example",
     )
 
