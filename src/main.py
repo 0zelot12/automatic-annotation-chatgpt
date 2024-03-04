@@ -118,6 +118,7 @@ def main() -> None:
         else:
             number_of_documents = len(pet_dataset.get_data())
             for i in range(number_of_documents):
+                document = pet_dataset.get_document(i)
                 for j in range(args.retries):
                     print(f"Processing {document.name}")
                     try:

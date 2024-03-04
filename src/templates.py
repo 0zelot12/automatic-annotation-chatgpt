@@ -9,6 +9,7 @@ Entity definition:
 If a sequence of tokens matches one of the entities above add a string "<Entity type>" before the first token and add a string "</Entity type>" after the last token.
 
 The output must contain every token that the input contains.
+The output must be valid JSON.
 
 Now annotate the following text:
 
@@ -26,6 +27,7 @@ Entity definition:
 If a sequence of tokens matches one of the entities above add a string "<Entity type>" before the first token and add a string "</Entity type>" after the last token.
 
 The output must contain every token that the input contains.
+The output must be valid JSON.
 
 Here is the example:
 
@@ -49,6 +51,7 @@ Entity definition:
 If a sequence of tokens matches one of the entities above add a string "<Entity type>" before the first token and add a string "</Entity type>" after the last token.
 
 The output must contain every token that the input contains.
+The output must be valid JSON.
 
 Here is the first example:
 
