@@ -175,8 +175,17 @@ def annotate_document(
     recognized_entities = parse_entities(api_response.data)
     present_entities = document.get_entities()
 
+    example_documents = []
+    if prompt_type == "one-shot":
+        example_documents.append(example_document_1.name)
+    elif prompt_type == "few-shot":
+        example_documents.append(example_document_1.name, example_document_2.name)
+
     annotation_result = AnnotationResult(
         document_name=document.name,
+        document_length=len(document.tokens),
+        prompt_type=prompt_type,
+        examples_documents=example_documents,
         tokens=document.tokens,
         api_response=api_response.data,
         present_entities=present_entities,

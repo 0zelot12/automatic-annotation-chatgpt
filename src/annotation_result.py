@@ -10,8 +10,11 @@ from entity import Entity
 @dataclass
 class AnnotationResult:
     document_name: str
+    document_length: int
+    prompt_type: str
     metrics: AnnotationMetrics
-    api_response: list[str]
+    api_response: list[str] = field(default_factory=list)
+    examples_documents: list[str] = field(default_factory=list)
     tokens: list[str] = field(default_factory=list)
     recognized_entities: list[Entity] = field(default_factory=list)
     present_entities: list[Entity] = field(default_factory=list)
@@ -20,6 +23,9 @@ class AnnotationResult:
         return {
             "document_name": self.document_name,
             "metrics": self.metrics.to_json(),
+            "document_length": self.document_length,
+            "prompt_type": self.prompt_type,
+            "examples_documents": self.examples_documents,
             "tokens": self.tokens,
             "recognized_entities": [
                 entity.to_json() for entity in self.recognized_entities
