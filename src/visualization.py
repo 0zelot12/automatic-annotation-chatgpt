@@ -3,8 +3,6 @@ import numpy as np
 import os
 import json
 
-from helper import avg
-
 
 def generate_simple_bar_chart(values, categories, xLabel, yLabel, title):
     """
@@ -100,19 +98,19 @@ def generate_horizontal_bar_chart(values, categories, xLabel, yLabel, title):
     plt.show()
 
 
-def generate_scatterplot(path: str):
-    data = []
-    for filename in os.listdir(path):
+def generate_scatterplot(path_1: str, path_2: str):
+    data_1 = []
+    for filename in os.listdir(path_1):
         if filename.endswith(".json"):
-            filepath = os.path.join(path, filename)
+            filepath = os.path.join(path_1, filename)
             with open(filepath, "r") as file:
                 json_data = json.load(file)
-                data.append(json_data)
+                data_1.append(json_data)
 
-    plot_data = []
+    plot_data_1 = []
 
-    for d in data:
-        plot_data.append(
+    for d in data_1:
+        plot_data_1.append(
             {
                 "recall": d["metrics"]["recall"],
                 "precision": d["metrics"]["precision"],
@@ -122,14 +120,41 @@ def generate_scatterplot(path: str):
         )
 
     # Extract recall and precision values from the data
-    recalls = [d["recall"] for d in plot_data]
-    precisions = [d["precision"] for d in plot_data]
-    f1_scores = [d["f1_score"] for d in plot_data]
-    lengths = [d["document_length"] for d in plot_data]
+    recalls_1 = [d["recall"] for d in plot_data_1]
+    precisions_1 = [d["precision"] for d in plot_data_1]
+    f1_scores_1 = [d["f1_score"] for d in plot_data_1]
+    lengths_1 = [d["document_length"] for d in plot_data_1]
 
-    # # Create scatter plot
+    data_2 = []
+    for filename in os.listdir(path_2):
+        if filename.endswith(".json"):
+            filepath = os.path.join(path_2, filename)
+            with open(filepath, "r") as file:
+                json_data = json.load(file)
+                data_2.append(json_data)
+
+    plot_data_2 = []
+
+    for d in data_2:
+        plot_data_2.append(
+            {
+                "recall": d["metrics"]["recall"],
+                "precision": d["metrics"]["precision"],
+                "f1_score": d["metrics"]["f1_score"],
+                "document_length": len(d["tokens"]),
+            }
+        )
+
+    # Extract recall and precision values from the data
+    recalls_2 = [d["recall"] for d in plot_data_2]
+    precisions_2 = [d["precision"] for d in plot_data_2]
+    f1_scores_2 = [d["f1_score"] for d in plot_data_2]
+    lengths_2 = [d["document_length"] for d in plot_data_2]
+
+    # Create scatter plot
     plt.figure(figsize=(8, 6))
-    plt.scatter(lengths, f1_scores, color="blue", alpha=0.5)
+    plt.scatter(lengths_1, f1_scores_1, color="blue", alpha=0.5)
+    plt.scatter(lengths_2, f1_scores_2, color="red", alpha=0.5)
     plt.title("Length and F1-Score")
     plt.xlabel("Length (#Tokens)")
     plt.ylabel("F1-Score")
@@ -140,5 +165,6 @@ def generate_scatterplot(path: str):
 
 
 generate_scatterplot(
-    path="/Users/andreaslauritz/Desktop/Testreihen/Zwei Beispiele + Kurze Defintionen/Annotationen_04_03_2024_Short_Examples_Few_Shot"
+    path_1="/Users/andreaslauritz/Desktop/Testreihen/Ein Beispiel + Kurze Defintionen/Annotationen_01_03_2024",
+    path_2="/Users/andreaslauritz/Desktop/Testreihen/Zwei Beispiele + Lange Defintionen/Annotationen_04_03_2024_Long_Examples_Few_Shot",
 )
