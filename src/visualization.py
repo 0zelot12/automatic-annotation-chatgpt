@@ -162,9 +162,3 @@ def generate_scatterplot(path_1: str, path_2: str):
     plt.ylim(0.0, 1.0)
     plt.grid(True)
     plt.show()
-
-
-generate_scatterplot(
-    path_1="/Users/andreaslauritz/Desktop/Testreihen/Ein Beispiel + Kurze Defintionen/Annotationen_01_03_2024",
-    path_2="/Users/andreaslauritz/Desktop/Testreihen/Zwei Beispiele + Lange Defintionen/Annotationen_04_03_2024_Long_Examples_Few_Shot",
-)
