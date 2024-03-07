@@ -113,26 +113,32 @@ def generate_scatterplot(path: str):
 
     for d in data:
         plot_data.append(
-            {"recall": d["metrics"]["recall"], "precision": d["metrics"]["precision"]}
+            {
+                "recall": d["metrics"]["recall"],
+                "precision": d["metrics"]["precision"],
+                "f1_score": d["metrics"]["f1_score"],
+                "document_length": len(d["tokens"]),
+            }
         )
 
     # Extract recall and precision values from the data
     recalls = [d["recall"] for d in plot_data]
     precisions = [d["precision"] for d in plot_data]
+    f1_scores = [d["f1_score"] for d in plot_data]
+    lengths = [d["document_length"] for d in plot_data]
 
-    print(f"Average recall: {avg(recalls)}")
-    print(f"Average precision: {avg(precisions)}")
-
-    # Create scatter plot
+    # # Create scatter plot
     plt.figure(figsize=(8, 6))
-    plt.scatter(recalls, precisions, color="blue", alpha=0.5)
-    plt.title("Precision and Recall")
-    plt.xlabel("Recall")
-    plt.ylabel("Precision")
-    plt.xlim(0.0, 1.0)
+    plt.scatter(lengths, f1_scores, color="blue", alpha=0.5)
+    plt.title("Length and F1-Score")
+    plt.xlabel("Length (#Tokens)")
+    plt.ylabel("F1-Score")
+    plt.xlim(0.0, 800)
     plt.ylim(0.0, 1.0)
     plt.grid(True)
     plt.show()
 
 
-generate_scatterplot(path="/Users/andreaslauritz/Desktop/Annotationen_29_02_24")
+generate_scatterplot(
+    path="/Users/andreaslauritz/Desktop/Testreihen/Zwei Beispiele + Kurze Defintionen/Annotationen_04_03_2024_Short_Examples_Few_Shot"
+)
