@@ -108,10 +108,10 @@ def main() -> None:
                         prompt_type=args.prompt_type,
                     )
                     annotation_result.save_to_file("./out")
-                    print(f"Processing {document.name} completed")
+                    print(f"Processing {document.name} completed ✅")
                     break
                 except Exception as e:
-                    print(f"Processing {document.name} failed")
+                    print(f"Processing {document.name} failed ❌")
                     logging.error("An exception occurred: %s", str(e))
                     logging.error(traceback.format_exc())
         else:
@@ -129,10 +129,10 @@ def main() -> None:
                             prompt_type=args.prompt_type,
                         )
                         annotation_result.save_to_file("./out")
-                        print(f"Processing {document.name} completed")
+                        print(f"Processing {document.name} completed ✅")
                         break
                     except Exception as e:
-                        print(f"Processing {document.name} failed")
+                        print(f"Processing {document.name} failed ❌")
                         logging.error("An exception occurred: %s", str(e))
                         logging.error(traceback.format_exc())
     else:
@@ -176,9 +176,9 @@ def annotate_document(
 
     example_documents = []
     if prompt_type == "one-shot":
-        example_documents.append(example_document_1.name)
+        example_documents.extend([example_document_1.name])
     elif prompt_type == "few-shot":
-        example_documents.append(example_document_1.name, example_document_2.name)
+        example_documents.extend([example_document_1.name, example_document_2.name])
 
     annotation_result = AnnotationResult(
         document_name=document.name,
