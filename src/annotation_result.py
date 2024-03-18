@@ -6,6 +6,7 @@ from datetime import datetime
 from annotation_metrics import AnnotationMetrics
 from entity import Entity
 
+# TODO: Write a test to check if AnnotationResult can be saved to a file
 
 @dataclass
 class AnnotationResult:
@@ -26,7 +27,7 @@ class AnnotationResult:
             "document_length": self.document_length,
             "prompt_type": self.prompt_type,
             "examples_documents": self.examples_documents,
-            "tokens": self.tokens,
+            "tokens": [str(token) for token in self.tokens], # TODO: Check why this is needed in Windows
             "recognized_entities": [
                 entity.to_json() for entity in self.recognized_entities
             ],
