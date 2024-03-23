@@ -8,10 +8,12 @@ from entity import Entity
 
 # TODO: Write a test to check if AnnotationResult can be saved to a file
 
+
 @dataclass
 class AnnotationResult:
     document_name: str
     document_length: int
+    temperature: float
     prompt_type: str
     metrics: AnnotationMetrics
     api_response: list[str] = field(default_factory=list)
@@ -27,7 +29,9 @@ class AnnotationResult:
             "document_length": self.document_length,
             "prompt_type": self.prompt_type,
             "examples_documents": self.examples_documents,
-            "tokens": [str(token) for token in self.tokens], # TODO: Check why this is needed in Windows
+            "tokens": [
+                str(token) for token in self.tokens
+            ],  # TODO: Check why this is needed in Windows
             "recognized_entities": [
                 entity.to_json() for entity in self.recognized_entities
             ],
