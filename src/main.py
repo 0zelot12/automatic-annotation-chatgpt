@@ -74,6 +74,12 @@ def main() -> None:
         default="doc-3.1",
         help="Second document to use as example",
     )
+    annotate_parser.add_argument(
+        "--temperature",
+        required=False,
+        default=0.7,
+        help="Model temperature",
+    )
 
     # Evaluate
     evaluate_parser = subparsers.add_parser("evaluate", help="evaluate command")
@@ -106,6 +112,7 @@ def main() -> None:
                         example_document_1=example_document_1,
                         example_document_2=example_document_2,
                         prompt_type=args.prompt_type,
+                        temperature=args.temperature,
                     )
                     annotation_result.save_to_file("./out")
                     print(f"Processing {document.name} completed ✅")
@@ -127,6 +134,7 @@ def main() -> None:
                             example_document_1=example_document_1,
                             example_document_2=example_document_2,
                             prompt_type=args.prompt_type,
+                            temperature=args.temperature,
                         )
                         annotation_result.save_to_file("./out")
                         print(f"Processing {document.name} completed ✅")
@@ -146,6 +154,7 @@ def annotate_document(
     example_document_2: PetDocument,
     model_name: str,
     prompt_type: str,
+    temperature: float,
 ) -> AnnotationResult:
 
     chat_template = generate_prompt(
@@ -155,7 +164,7 @@ def annotate_document(
         example_2=example_document_2,
     )
 
-    model = ChatOpenAI(model=model_name)
+    model = ChatOpenAI(model=model_name, temperature=temperature)
     parser = PydanticOutputParser(pydantic_object=ModelResponse)
 
     # TODO: Generate input format via parser.get_format_instructions()
