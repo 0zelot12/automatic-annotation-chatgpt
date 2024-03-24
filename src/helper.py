@@ -53,10 +53,21 @@ def parse_entities(response: list[str]) -> list[Entity]:
     return entities
 
 
+def count_entities_of_type(entities: list[Entity], type: EntityType) -> int:
+    result = 0
+    for entity in entities:
+        if entity.type == type:
+            result += 1
+    return result
+
+
 def calculate_metrics(
     model_annotations: list[Entity], reference_annotations: list[Entity]
 ) -> AnnotationMetrics:
-    true_positives = 0
+    true_positives_overall = 0
+    true_positives_actor = 0
+    true_positives_activity = 0
+    true_positives_activity_data = 0
     for reference_annotation in reference_annotations:
         found_element = next(
             (
@@ -71,19 +82,110 @@ def calculate_metrics(
             and reference_annotation.tokens == found_element.tokens
             and reference_annotation.type == found_element.type
         ):
-            true_positives += 1
+            true_positives_overall += 1
+            if found_element.type == EntityType.ACTOR:
+                true_positives_actor += 1
+            if found_element.type == EntityType.ACTIVITY:
+                true_positives_activity += 1
+            if found_element.type == EntityType.ACTIVITY_DATA:
+                true_positives_activity_data += 1
 
-    precision = round(true_positives / len(model_annotations), 2)
-    recall = round(true_positives / len(reference_annotations), 2)
+    precision = round(true_positives_overall / len(model_annotations), 2)
+    recall = round(true_positives_overall / len(reference_annotations), 2)
+
+    # Metrics ACTOR
+
+    actor_precision = round(
+        true_positives_actor
+        / count_entities_of_type(model_annotations, EntityType.ACTOR),
+        2,
+    )
+
+    actor_recall = round(
+        true_positives_actor
+        / count_entities_of_type(reference_annotations, EntityType.ACTOR),
+        2,
+    )
+
+    actor_f1_score = (
+        0.0
+        if actor_precision + actor_recall == 0.0
+        else round(
+            2 * actor_precision * actor_recall / (actor_precision + actor_recall), 2
+        )
+    )
+
+    # Metrics ACTIVITY
+
+    activity_precision = round(
+        true_positives_activity
+        / count_entities_of_type(model_annotations, EntityType.ACTIVITY),
+        2,
+    )
+
+    activity_recall = round(
+        true_positives_activity
+        / count_entities_of_type(reference_annotations, EntityType.ACTIVITY),
+        2,
+    )
+
+    activity_f1_score = (
+        0.0
+        if activity_precision + activity_recall == 0.0
+        else round(
+            2
+            * activity_precision
+            * activity_recall
+            / (activity_precision + activity_recall),
+            2,
+        )
+    )
+
+    # Metrics ACTIVITY_DATA
+
+    activity_data_precision = round(
+        true_positives_activity_data
+        / count_entities_of_type(model_annotations, EntityType.ACTIVITY_DATA),
+        2,
+    )
+
+    activity_data_recall = round(
+        true_positives_activity_data
+        / count_entities_of_type(reference_annotations, EntityType.ACTIVITY_DATA),
+        2,
+    )
+
+    activity_data_f1_score = (
+        0.0
+        if activity_data_precision + activity_data_recall == 0.0
+        else round(
+            2
+            * activity_data_precision
+            * activity_data_recall
+            / (activity_data_precision + activity_data_recall),
+            2,
+        )
+    )
 
     if precision + recall == 0:
-        return AnnotationMetrics(
-            precision=precision, recall=recall, f1_score=0.0
-        )  # TODO: Clarify what to return when precision + recall = 0
+        return AnnotationMetrics(precision=precision, recall=recall, f1_score=0.0)
 
     f1_score = round(2 * precision * recall / (precision + recall), 2)
 
-    return AnnotationMetrics(precision=precision, recall=recall, f1_score=f1_score)
+    return AnnotationMetrics(
+        precision=precision,
+        recall=recall,
+        f1_score=f1_score,
+        actor_precision=actor_precision,
+        actor_recall=actor_recall,
+        actor_f1_score=actor_f1_score,
+        activity_precision=activity_precision,
+        activity_recall=activity_recall,
+        activity_f1_score=activity_f1_score,
+        activity_data_precision=activity_data_precision,
+        activity_data_recall=activity_data_recall,
+        activity_data_f1_score=activity_data_f1_score,
+    )
 
 
 # TODO: Move to PetDocument class
