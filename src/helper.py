@@ -95,10 +95,14 @@ def calculate_metrics(
 
     # Metrics ACTOR
 
-    actor_precision = round(
-        true_positives_actor
-        / count_entities_of_type(model_annotations, EntityType.ACTOR),
-        2,
+    actor_recognized = count_entities_of_type(model_annotations, EntityType.ACTOR)
+    actor_precision = (
+        0.0
+        if actor_recognized == 0
+        else round(
+            true_positives_actor / actor_recognized,
+            2,
+        )
     )
 
     actor_recall = round(
@@ -117,10 +121,15 @@ def calculate_metrics(
 
     # Metrics ACTIVITY
 
-    activity_precision = round(
-        true_positives_activity
-        / count_entities_of_type(model_annotations, EntityType.ACTIVITY),
-        2,
+    activity_recognized = count_entities_of_type(model_annotations, EntityType.ACTIVITY)
+    activity_precision = (
+        0.0
+        if activity_recognized == 0
+        else round(
+            true_positives_activity
+            / count_entities_of_type(model_annotations, EntityType.ACTIVITY),
+            2,
+        )
     )
 
     activity_recall = round(
@@ -143,10 +152,17 @@ def calculate_metrics(
 
     # Metrics ACTIVITY_DATA
 
-    activity_data_precision = round(
-        true_positives_activity_data
-        / count_entities_of_type(model_annotations, EntityType.ACTIVITY_DATA),
-        2,
+    activity_data_recognized = count_entities_of_type(
+        model_annotations, EntityType.ACTIVITY_DATA
+    )
+    activity_data_precision = (
+        0.0
+        if activity_data_recognized == 0.0
+        else round(
+            true_positives_activity_data
+            / count_entities_of_type(model_annotations, EntityType.ACTIVITY_DATA),
+            2,
+        )
     )
 
     activity_data_recall = round(
@@ -168,7 +184,20 @@ def calculate_metrics(
     )
 
     if precision + recall == 0:
-        return AnnotationMetrics(precision=precision, recall=recall, f1_score=0.0)
+        return AnnotationMetrics(
+            precision=precision,
+            recall=recall,
+            f1_score=0.0,
+            actor_precision=actor_precision,
+            actor_recall=actor_recall,
+            actor_f1_score=actor_f1_score,
+            activity_precision=activity_precision,
+            activity_recall=activity_recall,
+            activity_f1_score=activity_f1_score,
+            activity_data_precision=activity_data_precision,
+            activity_data_recall=activity_data_recall,
+            activity_data_f1_score=activity_data_f1_score,
+        )
 
     f1_score = round(2 * precision * recall / (precision + recall), 2)
 
