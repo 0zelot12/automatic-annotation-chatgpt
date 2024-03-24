@@ -2,35 +2,23 @@ from dataclasses import dataclass
 
 
 @dataclass
-class AnnotationMetrics:
+class Metrics:
     precision: float
     recall: float
     f1_score: float
 
-    actor_precision: float
-    actor_recall: float
-    actor_f1_score: float
 
-    activity_precision: float
-    activity_recall: float
-    activity_f1_score: float
-
-    activity_data_precision: float
-    activity_data_recall: float
-    activity_data_f1_score: float
+@dataclass
+class AnnotationMetrics:
+    overall: Metrics
+    actor: Metrics
+    activity: Metrics
+    activity_data: Metrics
 
     def to_json(self):
         return {
-            "precision": self.precision,
-            "recall": self.recall,
-            "f1_score": self.f1_score,
-            "actor_precision": self.actor_precision,
-            "actor_recall": self.actor_recall,
-            "actor_f1_score": self.actor_f1_score,
-            "activity_precision": self.activity_precision,
-            "activity_recall": self.activity_recall,
-            "activity_f1_score": self.activity_f1_score,
-            "activity_data_precision": self.activity_data_precision,
-            "activity_data_recall": self.activity_data_recall,
-            "activity_data_f1_score": self.activity_data_f1_score,
+            "overall": self.overall.__dict__,
+            "actor": self.actor.__dict__,
+            "activity": self.activity.__dict__,
+            "activity_data": self.activity_data.__dict__,
         }

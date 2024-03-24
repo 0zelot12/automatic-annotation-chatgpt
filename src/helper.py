@@ -1,4 +1,4 @@
-from annotation_metrics import AnnotationMetrics
+from annotation_metrics import AnnotationMetrics, Metrics
 
 from entity import Entity
 from entity_type import EntityType
@@ -202,18 +202,26 @@ def calculate_metrics(
     f1_score = round(2 * precision * recall / (precision + recall), 2)
 
     return AnnotationMetrics(
-        precision=precision,
-        recall=recall,
-        f1_score=f1_score,
-        actor_precision=actor_precision,
-        actor_recall=actor_recall,
-        actor_f1_score=actor_f1_score,
-        activity_precision=activity_precision,
-        activity_recall=activity_recall,
-        activity_f1_score=activity_f1_score,
-        activity_data_precision=activity_data_precision,
-        activity_data_recall=activity_data_recall,
-        activity_data_f1_score=activity_data_f1_score,
+        overall=Metrics(
+            precision=precision,
+            recall=recall,
+            f1_score=f1_score,
+        ),
+        actor=Metrics(
+            precision=actor_precision,
+            recall=actor_recall,
+            f1_score=actor_f1_score,
+        ),
+        activity=Metrics(
+            precision=activity_precision,
+            recall=activity_recall,
+            f1_score=activity_f1_score,
+        ),
+        activity_data=Metrics(
+            precision=activity_data_precision,
+            recall=activity_data_recall,
+            f1_score=activity_data_f1_score,
+        ),
     )
 
 
