@@ -171,35 +171,40 @@ def extract_relations(
     return relations
 
 
+def plain_to_class(document) -> PetDocument:
+    # Convert ner-tags
+    ner_tags = []
+    for ner_tag in document["ner_tags"]:
+        ner_tags.append(str_to_entity(ner_tag))
+
+    # Convert entities
+    entities = (
+        get_actors(ner_tags=ner_tags, tokens=document["tokens"])
+        + get_activites(ner_tags=ner_tags, tokens=document["tokens"])
+        + get_activity_data(ner_tags=ner_tags, tokens=document["tokens"])
+    )
+
+    # Convert relations
+    relations = extract_relations(
+        source_head_sentence_ids=document["relations.source-head-sentence-ID"],
+        source_head_word_ids=document["relations.source-head-word-ID"],
+        types=document["relations.relation-type"],
+        target_head_sentence_ids=document["relations.target-head-sentence-ID"],
+        target_head_word_ids=document["relations.target-head-word-ID"],
+        sentence_ids=document["sentence-IDs"],
+        entities=entities,
+    )
+
+    return PetDocument(
+        name=document["document name"],
+        tokens=document["tokens"],
+        ner_tags=ner_tags,
+        relations=relations,
+        entities=entities,
+    )
+
+
 class PetDataset:
-    """
-    Singleton class for accessing the PET dataset.
-
-    This class ensures that only one instance is created and provides a global
-    point of access to the pet dataset.
-
-    Attributes:
-    - _instance (PetDataset): The single instance of the PetDataset class.
-    - _data (pd.DataFrame): The pet dataset loaded from a .parquet file.
-
-    Methods:
-    - __new__(cls): Creates a new instance if it doesn't exist, otherwise returns
-      the existing instance.
-    - get_data(self): Returns the loaded dataframe.
-
-    Usage:
-    ```python
-    # Creating an instance of the PetDataset class
-    pet_data_instance = PetDataset()
-
-    # Accessing the pet dataset
-    data = pet_data_instance.get_data()
-    ```
-
-    Note: The pet dataset is loaded from a parquet file during the creation of
-    the first instance.
-    """
-
     _instance = None
     _data = None
 
@@ -215,48 +220,10 @@ class PetDataset:
         return self._data
 
     def get_document(self, document_number: int) -> PetDocument:
-
-        # Get raw data from the dataframe
         document = self._data.iloc[document_number]
-
-        # Convert ner-tags
-        ner_tags = []
-        for ner_tag in document["ner_tags"]:
-            ner_tags.append(str_to_entity(ner_tag))
-
-        # Convert entities
-        entities = (
-            get_actors(ner_tags=ner_tags, tokens=document["tokens"])
-            + get_activites(ner_tags=ner_tags, tokens=document["tokens"])
-            + get_activity_data(ner_tags=ner_tags, tokens=document["tokens"])
-        )
-
-        # Convert relations
-        relations = extract_relations(
-            source_head_sentence_ids=document["relations.source-head-sentence-ID"],
-            source_head_word_ids=document["relations.source-head-word-ID"],
-            types=document["relations.relation-type"],
-            target_head_sentence_ids=document["relations.target-head-sentence-ID"],
-            target_head_word_ids=document["relations.target-head-word-ID"],
-            sentence_ids=document["sentence-IDs"],
-            entities=entities,
-        )
-
-        return PetDocument(
-            name=document["document name"],
-            tokens=document["tokens"],
-            ner_tags=ner_tags,
-            relations=relations,
-        )
+        return plain_to_class(document)
 
     def get_document_by_name(self, document_name: str) -> PetDocument:
         matching_rows = self._data[self._data["document name"] == document_name]
         document = matching_rows.iloc[0]
-        converted_ner_tags = []
-        for ner_tag in document["ner_tags"]:
-            converted_ner_tags.append(str_to_entity(ner_tag))
-        return PetDocument(
-            name=document["document name"],
-            tokens=document["tokens"],
-            ner_tags=converted_ner_tags,
-        )
+        return plain_to_class(document)
