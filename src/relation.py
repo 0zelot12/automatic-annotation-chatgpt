@@ -28,3 +28,4 @@ for relation in document.relations:
     relations.append(Relation(type=str_to_type(relation)))
 
 print(relations)
+print(document)

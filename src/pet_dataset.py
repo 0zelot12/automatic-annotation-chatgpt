@@ -106,6 +106,7 @@ class PetDataset:
     def get_document(self, document_number: int) -> PetDocument:
         converted_ner_tags = []
         print(self._data.iloc[document_number])
+        print(self._data.iloc[document_number])
         for ner_tag in self._data.iloc[document_number]["ner_tags"]:
             converted_ner_tags.append(str_to_entity(ner_tag))
         return PetDocument(
@@ -113,6 +114,7 @@ class PetDataset:
             tokens=self._data.iloc[document_number]["tokens"],
             ner_tags=converted_ner_tags,
             relations=self._data.iloc[document_number]["relations.relation-type"],
+            relations=self._data.iloc[document_number]["relations"],
         )
 
     def get_document_by_name(self, document_name: str) -> PetDocument:
