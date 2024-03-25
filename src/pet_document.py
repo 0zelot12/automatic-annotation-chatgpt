@@ -19,6 +19,7 @@ class PetDocument:
     name: str
     tokens: list[str]
     ner_tags: list[EntityTag]
+    relations: str
 
     # TODO: Refactor entity methods
 
