@@ -90,9 +90,6 @@ def calculate_metrics(
             if found_element.type == EntityType.ACTIVITY_DATA:
                 true_positives_activity_data += 1
 
-    precision = round(true_positives_overall / len(model_annotations), 2)
-    recall = round(true_positives_overall / len(reference_annotations), 2)
-
     # Metrics ACTOR
 
     actor_recognized = count_entities_of_type(model_annotations, EntityType.ACTOR)
@@ -171,6 +168,20 @@ def calculate_metrics(
         2,
     )
 
+    # Metrics Overall
+
+    precision = (
+        0.0
+        if len(model_annotations)
+        else round(true_positives_overall / len(model_annotations), 2)
+    )
+
+    recall = (
+        0.0
+        if len(reference_annotations) == 0
+        else round(true_positives_overall / len(reference_annotations), 2)
+    )
+
     activity_data_f1_score = (
         0.0
         if activity_data_precision + activity_data_recall == 0.0
@@ -183,23 +194,11 @@ def calculate_metrics(
         )
     )
 
-    if precision + recall == 0:
-        return AnnotationMetrics(
-            precision=precision,
-            recall=recall,
-            f1_score=0.0,
-            actor_precision=actor_precision,
-            actor_recall=actor_recall,
-            actor_f1_score=actor_f1_score,
-            activity_precision=activity_precision,
-            activity_recall=activity_recall,
-            activity_f1_score=activity_f1_score,
-            activity_data_precision=activity_data_precision,
-            activity_data_recall=activity_data_recall,
-            activity_data_f1_score=activity_data_f1_score,
-        )
-
-    f1_score = round(2 * precision * recall / (precision + recall), 2)
+    f1_score = (
+        0
+        if precision + recall == 0
+        else round(2 * precision * recall / (precision + recall), 2)
+    )
 
     return AnnotationMetrics(
         overall=Metrics(
