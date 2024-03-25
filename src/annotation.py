@@ -53,7 +53,7 @@ def annotate_document(
     logging.debug(f"API response: {api_response}")
 
     recognized_entities = parse_entities(api_response.data)
-    present_entities = document.get_entities()
+    present_entities = document.entities
 
     example_documents = []
     if prompt_type == "one-shot":
