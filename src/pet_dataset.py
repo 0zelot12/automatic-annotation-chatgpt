@@ -112,7 +112,7 @@ class PetDataset:
             name=self._data.iloc[document_number]["document name"],
             tokens=self._data.iloc[document_number]["tokens"],
             ner_tags=converted_ner_tags,
-            relations=self._data.iloc[document_number]["relations"],
+            relations=self._data.iloc[document_number]["relations.relation-type"],
         )
 
     def get_document_by_name(self, document_name: str) -> PetDocument:
