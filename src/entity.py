@@ -11,7 +11,7 @@ class Entity:
 
     def to_json(self):
         return {
-            "type": self.type.value,
+            "type": self.type.name,
             "start_index": self.start_index,
             "tokens": self.tokens,
         }

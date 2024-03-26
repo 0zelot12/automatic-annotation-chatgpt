@@ -5,6 +5,7 @@ from datetime import datetime
 
 from annotation_metrics import AnnotationMetrics
 from entity import Entity
+from relation import Relation
 
 # TODO: Write a test to check if AnnotationResult can be saved to a file
 
@@ -21,6 +22,7 @@ class AnnotationResult:
     tokens: list[str] = field(default_factory=list)
     recognized_entities: list[Entity] = field(default_factory=list)
     present_entities: list[Entity] = field(default_factory=list)
+    present_relations: list[Relation] = field(default_factory=list)
 
     def to_json(self):
         return {
@@ -36,6 +38,9 @@ class AnnotationResult:
                 entity.to_json() for entity in self.recognized_entities
             ],
             "present_entities": [entity.to_json() for entity in self.present_entities],
+            "present_relations": [
+                relation.to_json() for relation in self.present_relations
+            ],
             "api_response": self.api_response,
         }
 

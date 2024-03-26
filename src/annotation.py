@@ -69,6 +69,7 @@ def annotate_document(
         api_response=api_response.data,
         present_entities=present_entities,
         recognized_entities=recognized_entities,
+        present_relations=document.relations,
         metrics=calculate_metrics(recognized_entities, present_entities),
     )
 
