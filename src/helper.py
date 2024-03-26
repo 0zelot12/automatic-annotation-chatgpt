@@ -110,7 +110,7 @@ def calculate_metrics(
 
     actor_f1_score = (
         0.0
-        if actor_precision + actor_recall == 0.0
+        if actor_precision == 0 and actor_recall == 0.0
         else round(
             2 * actor_precision * actor_recall / (actor_precision + actor_recall), 2
         )
@@ -123,8 +123,7 @@ def calculate_metrics(
         0.0
         if activity_recognized == 0
         else round(
-            true_positives_activity
-            / count_entities_of_type(model_annotations, EntityType.ACTIVITY),
+            true_positives_activity / activity_recognized,
             2,
         )
     )
@@ -137,7 +136,7 @@ def calculate_metrics(
 
     activity_f1_score = (
         0.0
-        if activity_precision + activity_recall == 0.0
+        if activity_precision == 0 and activity_recall == 0.0
         else round(
             2
             * activity_precision
@@ -156,8 +155,7 @@ def calculate_metrics(
         0.0
         if activity_data_recognized == 0.0
         else round(
-            true_positives_activity_data
-            / count_entities_of_type(model_annotations, EntityType.ACTIVITY_DATA),
+            true_positives_activity_data / activity_data_recognized,
             2,
         )
     )
@@ -168,23 +166,9 @@ def calculate_metrics(
         2,
     )
 
-    # Metrics Overall
-
-    precision = (
-        0.0
-        if len(model_annotations)
-        else round(true_positives_overall / len(model_annotations), 2)
-    )
-
-    recall = (
-        0.0
-        if len(reference_annotations) == 0
-        else round(true_positives_overall / len(reference_annotations), 2)
-    )
-
     activity_data_f1_score = (
         0.0
-        if activity_data_precision + activity_data_recall == 0.0
+        if activity_data_precision == 0.0 and activity_data_recall == 0.0
         else round(
             2
             * activity_data_precision
@@ -194,17 +178,37 @@ def calculate_metrics(
         )
     )
 
-    f1_score = (
+    # Metrics Overall
+
+    overall_precision = (
+        0.0
+        if len(model_annotations)
+        else round(true_positives_overall / len(model_annotations), 2)
+    )
+
+    overall_recall = (
+        0.0
+        if len(reference_annotations) == 0
+        else round(true_positives_overall / len(reference_annotations), 2)
+    )
+
+    overall_f1_score = (
         0
-        if precision + recall == 0
-        else round(2 * precision * recall / (precision + recall), 2)
+        if overall_precision == 0 and overall_recall == 0
+        else round(
+            2
+            * overall_precision
+            * overall_recall
+            / (overall_precision + overall_recall),
+            2,
+        )
     )
 
     return AnnotationMetrics(
         overall=Metrics(
-            precision=precision,
-            recall=recall,
-            f1_score=f1_score,
+            precision=overall_precision,
+            recall=overall_recall,
+            f1_score=overall_f1_score,
         ),
         actor=Metrics(
             precision=actor_precision,
