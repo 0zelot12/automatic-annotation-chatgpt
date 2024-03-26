@@ -18,4 +18,4 @@ def str_to_entity(string_value: str) -> EntityTag:
     for entity in EntityTag:
         if entity.value == string_value:
             return entity
-    return EntityTag.NO_ENTITY
+    raise ValueError
