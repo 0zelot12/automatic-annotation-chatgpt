@@ -10,6 +10,7 @@ import os
 from pet_document import PetDocument
 
 
+# TODO: Move to entity.py
 def parse_entities(response: list[str]) -> list[Entity]:
     entities = []
     current_entity = None
@@ -53,6 +54,7 @@ def parse_entities(response: list[str]) -> list[Entity]:
     return entities
 
 
+# TODO: Move to entity.py
 def count_entities_of_type(entities: list[Entity], type: EntityType) -> int:
     result = 0
     for entity in entities:
@@ -61,6 +63,7 @@ def count_entities_of_type(entities: list[Entity], type: EntityType) -> int:
     return result
 
 
+# TODO: Move to metrics.py
 def calculate_metrics(
     model_annotations: list[Entity], reference_annotations: list[Entity]
 ) -> AnnotationMetrics:
@@ -228,7 +231,7 @@ def calculate_metrics(
     )
 
 
-# TODO: Move to PetDocument class
+# TODO: Move to pet_document.py
 def convert_to_template_example(document: PetDocument) -> list[str]:
     result = []
     for token, ner_tag, index in zip(
