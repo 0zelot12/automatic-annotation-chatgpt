@@ -88,9 +88,9 @@ def calculate_metrics(
             true_positives_overall += 1
             if found_element.type == EntityType.ACTOR:
                 true_positives_actor += 1
-            if found_element.type == EntityType.ACTIVITY:
+            elif found_element.type == EntityType.ACTIVITY:
                 true_positives_activity += 1
-            if found_element.type == EntityType.ACTIVITY_DATA:
+            elif found_element.type == EntityType.ACTIVITY_DATA:
                 true_positives_activity_data += 1
 
     # Metrics ACTOR
@@ -185,7 +185,7 @@ def calculate_metrics(
 
     overall_precision = (
         0.0
-        if len(model_annotations)
+        if len(model_annotations) == 0
         else round(true_positives_overall / len(model_annotations), 2)
     )
 
