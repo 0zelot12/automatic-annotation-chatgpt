@@ -96,6 +96,8 @@ def calculate_metrics(
     # Metrics ACTOR
 
     actor_recognized = count_entities_of_type(model_annotations, EntityType.ACTOR)
+    actor_present = count_entities_of_type(reference_annotations, EntityType.ACTOR)
+
     actor_precision = (
         0.0
         if actor_recognized == 0
@@ -106,8 +108,7 @@ def calculate_metrics(
     )
 
     actor_recall = round(
-        true_positives_actor
-        / count_entities_of_type(reference_annotations, EntityType.ACTOR),
+        true_positives_actor / actor_present,
         2,
     )
 
@@ -122,6 +123,10 @@ def calculate_metrics(
     # Metrics ACTIVITY
 
     activity_recognized = count_entities_of_type(model_annotations, EntityType.ACTIVITY)
+    activity_present = count_entities_of_type(
+        reference_annotations, EntityType.ACTIVITY
+    )
+
     activity_precision = (
         0.0
         if activity_recognized == 0
@@ -132,8 +137,7 @@ def calculate_metrics(
     )
 
     activity_recall = round(
-        true_positives_activity
-        / count_entities_of_type(reference_annotations, EntityType.ACTIVITY),
+        true_positives_activity / activity_present,
         2,
     )
 
@@ -151,9 +155,13 @@ def calculate_metrics(
 
     # Metrics ACTIVITY_DATA
 
+    activity_data_present = count_entities_of_type(
+        reference_annotations, EntityType.ACTIVITY_DATA
+    )
     activity_data_recognized = count_entities_of_type(
         model_annotations, EntityType.ACTIVITY_DATA
     )
+
     activity_data_precision = (
         0.0
         if activity_data_recognized == 0.0
@@ -164,8 +172,7 @@ def calculate_metrics(
     )
 
     activity_data_recall = round(
-        true_positives_activity_data
-        / count_entities_of_type(reference_annotations, EntityType.ACTIVITY_DATA),
+        true_positives_activity_data / activity_data_present,
         2,
     )
 
@@ -212,21 +219,33 @@ def calculate_metrics(
             precision=overall_precision,
             recall=overall_recall,
             f1_score=overall_f1_score,
+            true_positives=true_positives_overall,
+            false_positives=len(model_annotations) - true_positives_overall,
+            reference_count=len(reference_annotations),
         ),
         actor=Metrics(
             precision=actor_precision,
             recall=actor_recall,
             f1_score=actor_f1_score,
+            true_positives=true_positives_actor,
+            false_positives=actor_recognized - true_positives_actor,
+            reference_count=actor_present,
         ),
         activity=Metrics(
             precision=activity_precision,
             recall=activity_recall,
             f1_score=activity_f1_score,
+            true_positives=true_positives_activity,
+            false_positives=activity_recognized - true_positives_activity,
+            reference_count=activity_present,
         ),
         activity_data=Metrics(
             precision=activity_data_precision,
             recall=activity_data_recall,
             f1_score=activity_data_f1_score,
+            true_positives=true_positives_activity_data,
+            false_positives=activity_data_recognized - true_positives_activity_data,
+            reference_count=activity_data_present,
         ),
     )
 
