@@ -1,8 +1,7 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from entity_tag import EntityTag
 from entity import Entity
-from entity_type import EntityType
 from relation import Relation
 
 
@@ -18,7 +17,7 @@ class PetDocument:
     """
 
     name: str
-    tokens: list[str]
-    ner_tags: list[EntityTag]
-    relations: list[Relation]
-    entities: list[Entity]
+    tokens: list[str] = field(default_factory=list)
+    ner_tags: list[EntityTag] = field(default_factory=list)
+    relations: list[Relation] = field(default_factory=list)
+    entities: list[Entity] = field(default_factory=list)
