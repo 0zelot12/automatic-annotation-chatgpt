@@ -39,8 +39,6 @@ def annotate_document(
     model = ChatOpenAI(model=model_name, temperature=temperature)
     parser = PydanticOutputParser(pydantic_object=ModelResponse)
 
-    # TODO: Generate input format via parser.get_format_instructions()
-
     chain = chat_template | model | parser
 
     logging.debug(
