@@ -6,18 +6,18 @@ from langchain.prompts import HumanMessagePromptTemplate
 from langchain_core.messages import SystemMessage
 from langchain_openai import ChatOpenAI
 
-from pet_document import PetDocument
+from pet.pet_document import PetDocument
 
-from templates import (
+from llm.templates import (
     zero_shot_template_base,
     one_shot_template_base,
     few_shot_template_base,
 )
 
-from annotation_result import AnnotationResult
-from model_response import ModelResponse
+from annotation.annotation_result import AnnotationResult
+from llm.model_response import ModelResponse
 
-from helper import (
+from utils.helper import (
     parse_entities,
     calculate_metrics,
     convert_to_template_example,

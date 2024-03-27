@@ -1,11 +1,11 @@
 import pandas as pd
 
-from entity import Entity
-from entity_type import EntityType
-from pet_document import PetDocument
+from entity.entity import Entity
+from entity.entity_type import EntityType
+from pet.pet_document import PetDocument
 
-from entity_tag import EntityTag, str_to_entity
-from relation import Relation, str_to_type
+from entity.entity_tag import EntityTag, str_to_entity
+from relation.relation import Relation, str_to_type
 
 
 def get_actors(ner_tags: list[EntityTag], tokens: list[str]) -> list[Entity]:

@@ -1,8 +1,8 @@
 from dataclasses import dataclass, field
 
-from entity_tag import EntityTag
-from entity import Entity
-from relation import Relation
+from entity.entity_tag import EntityTag
+from entity.entity import Entity
+from relation.relation import Relation
 
 
 @dataclass

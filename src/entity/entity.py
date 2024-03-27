@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from entity_type import EntityType
+from entity.entity_type import EntityType
 
 
 @dataclass

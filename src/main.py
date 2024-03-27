@@ -7,10 +7,10 @@ from datetime import datetime
 
 from dotenv import load_dotenv
 
-from pet_dataset import PetDataset
+from pet.pet_dataset import PetDataset
 
-from helper import evaluate_results
-from annotation import annotate_document
+from utils.helper import evaluate_results
+from annotation.annotation import annotate_document
 
 
 def main() -> None:

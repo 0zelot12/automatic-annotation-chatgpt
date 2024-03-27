@@ -3,9 +3,9 @@ import json
 from dataclasses import dataclass, field
 from datetime import datetime
 
-from annotation_metrics import AnnotationMetrics
-from entity import Entity
-from relation import Relation
+from annotation.annotation_metrics import AnnotationMetrics
+from entity.entity import Entity
+from relation.relation import Relation
 
 # TODO: Write a test to check if AnnotationResult can be saved to a file
 

@@ -1,7 +1,8 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
-from entity import Entity
-from relation_type import RelationType
+from entity.entity import Entity
+
+from relation.relation_type import RelationType
 
 
 @dataclass

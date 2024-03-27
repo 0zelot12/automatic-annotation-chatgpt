@@ -1,13 +1,13 @@
-from annotation_metrics import AnnotationMetrics, Metrics
-
-from entity import Entity
-from entity_type import EntityType
-from entity_tag import EntityTag
-
 import json
 import os
 
-from pet_document import PetDocument
+from annotation.annotation_metrics import AnnotationMetrics, Metrics
+
+from entity.entity import Entity
+from entity.entity_type import EntityType
+from entity.entity_tag import EntityTag
+
+from pet.pet_document import PetDocument
 
 
 # TODO: Move to entity.py
