@@ -199,11 +199,11 @@ def plain_to_class(document) -> PetDocument:
         )
     else:
         relations = extract_relations(
-            source_head_sentence_ids=document["source-head-sentence-ID"],
-            source_head_word_ids=document["source-head-word-ID"],
-            types=document["relation-type"],
-            target_head_sentence_ids=document["target-head-sentence-ID"],
-            target_head_word_ids=document["target-head-word-ID"],
+            source_head_sentence_ids=document["relations.source-head-sentence-ID"],
+            source_head_word_ids=document["relations.source-head-word-ID"],
+            types=document["relations.relation-type"],
+            target_head_sentence_ids=document["relations.target-head-sentence-ID"],
+            target_head_word_ids=document["relations.target-head-word-ID"],
             sentence_ids=document["sentence-IDs"],
             entities=entities,
         )
