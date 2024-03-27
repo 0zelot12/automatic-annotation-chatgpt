@@ -173,9 +173,7 @@ def extract_relations(
 
 def plain_to_class(document) -> PetDocument:
     # Convert ner-tags
-    ner_tags = []
-    for ner_tag in document["ner_tags"]:
-        ner_tags.append(str_to_entity(ner_tag))
+    ner_tags = [str_to_entity(ner_tag) for ner_tag in document["ner_tags"]]
 
     # Convert entities
     entities = (
@@ -186,11 +184,11 @@ def plain_to_class(document) -> PetDocument:
 
     # Convert relations
     relations = extract_relations(
-        source_head_sentence_ids=document["relations.source-head-sentence-ID"],
-        source_head_word_ids=document["relations.source-head-word-ID"],
-        types=document["relations.relation-type"],
-        target_head_sentence_ids=document["relations.target-head-sentence-ID"],
-        target_head_word_ids=document["relations.target-head-word-ID"],
+        source_head_sentence_ids=document["relations"]["source-head-sentence-ID"],
+        source_head_word_ids=document["relations"]["source-head-word-ID"],
+        types=document["relations"]["relation-type"],
+        target_head_sentence_ids=document["relations"]["target-head-sentence-ID"],
+        target_head_word_ids=document["relations"]["target-head-word-ID"],
         sentence_ids=document["sentence-IDs"],
         entities=entities,
     )
@@ -215,9 +213,6 @@ class PetDataset:
             df["index"] = df["document name"]
             cls._data = df.sort_values(by="index")
         return cls._instance
-
-    def get_data(self):
-        return self._data
 
     def get_document(self, document_number: int) -> PetDocument:
         document = self._data.iloc[document_number]
