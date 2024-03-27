@@ -1,4 +1,4 @@
-zero_shot_template = """
+zero_shot_template_base = """
 The input is a list of tokens.
 
 Entity definition:
@@ -16,7 +16,7 @@ Now annotate the following text:
 {input}
 """
 
-one_shot_template = """
+one_shot_template_base = """
 The input is a list of tokens.
 
 Entity definition:
@@ -40,7 +40,7 @@ Here is the example:
 {input}
 """
 
-few_shot_template = """
+few_shot_template_base = """
 The input is a list of tokens.
 
 Entity definition:

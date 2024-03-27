@@ -8,7 +8,11 @@ from langchain_openai import ChatOpenAI
 
 from pet_document import PetDocument
 
-from templates import zero_shot_template, one_shot_template, few_shot_template
+from templates import (
+    zero_shot_template_base,
+    one_shot_template_base,
+    few_shot_template_base,
+)
 
 from annotation_result import AnnotationResult
 from model_response import ModelResponse
@@ -94,14 +98,14 @@ def generate_prompt(
 
     if prompt_type == "zero-shot":
         chat_messages.append(
-            HumanMessagePromptTemplate.from_template(zero_shot_template).format(
+            HumanMessagePromptTemplate.from_template(zero_shot_template_base).format(
                 input=str(input_tokens).replace("'", '"'),
             ),
         )
     elif prompt_type == "one-shot":
         example_annotations_1 = convert_to_template_example(example_1)
         chat_messages.append(
-            HumanMessagePromptTemplate.from_template(one_shot_template).format(
+            HumanMessagePromptTemplate.from_template(one_shot_template_base).format(
                 input=str(input_tokens).replace("'", '"'),
                 example_tokens_1=str(example_1.tokens).replace("'", '"'),
                 example_annotations_1=str(example_annotations_1).replace("'", '"'),
@@ -111,7 +115,7 @@ def generate_prompt(
         example_annotations_1 = convert_to_template_example(example_1)
         example_annotations_2 = convert_to_template_example(example_2)
         chat_messages.append(
-            HumanMessagePromptTemplate.from_template(few_shot_template).format(
+            HumanMessagePromptTemplate.from_template(few_shot_template_base).format(
                 input=str(input_tokens).replace("'", '"'),
                 example_tokens_1=str(example_1.tokens).replace("'", '"'),
                 example_annotations_1=str(example_annotations_1).replace("'", '"'),
