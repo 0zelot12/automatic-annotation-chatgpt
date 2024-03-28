@@ -71,3 +71,29 @@ Here is the second example:
 
 {input}
 """
+
+relation_template = """
+If an actor is responsible for an activity mark it as ACTOR-PERFORMER.
+If an actor receives data or a trigger from an ACTIVITY mark it as ACTOR-RECIPIENT.
+
+Use the following format to describe the relation between entities:
+
+<startTokenId>,<endTokenId>,<type>,<startTokenId>,<endTokenId>
+<startTokenId>,<endTokenId>,<type>,<startTokenId>,<endTokenId>
+<startTokenId>,<endTokenId>,<type>,<startTokenId>,<endTokenId>
+
+The input text hast the following format:
+
+<token>$<tokenId>
+<token>$<tokenId>
+<token>$<tokenId>
+<token>$<tokenId>
+
+This is an example:
+
+{exmaple_input}
+
+Now annotate the following text:
+
+{input}
+"""

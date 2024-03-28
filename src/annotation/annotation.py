@@ -80,6 +80,7 @@ def annotate_document(
     return annotation_result
 
 
+# TODO: Move to llm package
 def generate_prompt(
     prompt_type: str,
     input_tokens: list[str],
