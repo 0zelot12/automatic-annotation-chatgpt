@@ -91,7 +91,7 @@ The input text hast the following format:
 
 This is an example:
 
-{exmaple_input}
+{example_input}
 
 Now annotate the following text:
 

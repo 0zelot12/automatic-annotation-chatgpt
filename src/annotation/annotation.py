@@ -12,7 +12,10 @@ from llm.templates import (
     zero_shot_template_base,
     one_shot_template_base,
     few_shot_template_base,
+    relation_template,
 )
+
+from llm.utils import generate_model_relations
 
 from annotation.annotation_result import AnnotationResult
 from llm.model_response import ModelResponse
@@ -22,6 +25,47 @@ from utils.helper import (
     calculate_metrics,
     convert_to_template_example,
 )
+
+
+def annotate_relations(
+    document: PetDocument,
+    example_document: PetDocument,
+    model_name: str,
+    prompt_type: str,
+    temperature: float,
+) -> None:
+    chat_messages = [
+        SystemMessage(
+            content=(
+                "You are an expert in the field of process management. You assist in annotating relevant entities "
+                "and relations in natural language process descriptions. You will be provided with definitions of the entities you need to extract."
+            )
+        )
+    ]
+
+    test_relations = generate_model_relations(document.relations)
+    training_relations = generate_model_relations(example_document.relations)
+
+    chat_messages.append(
+        HumanMessagePromptTemplate.from_template(relation_template).format(
+            example_input=training_relations,
+            input=test_relations,
+        ),
+    )
+
+    template = ChatPromptTemplate.from_messages(
+        chat_messages,
+    )
+
+    model = ChatOpenAI(model=model_name, temperature=temperature)
+    chain = template | model
+
+    # Why do I need input here?
+    api_response = chain.invoke({"input": ""})
+
+    print(api_response.content)
+
+    return None
 
 
 def annotate_document(

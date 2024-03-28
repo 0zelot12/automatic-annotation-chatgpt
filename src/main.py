@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 from pet.pet_dataset import PetDataset
 
 from utils.helper import evaluate_results
-from annotation.annotation import annotate_document
+from annotation.annotation import annotate_document, annotate_relations
 
 
 def main() -> None:
@@ -65,6 +65,12 @@ def main() -> None:
         default=0.7,
         help="Model temperature",
     )
+    annotate_parser.add_argument(
+        "--relations",
+        required=False,
+        default=False,
+        help="Annotate relations only",
+    )
 
     # Evaluate
     evaluate_parser = subparsers.add_parser("evaluate", help="evaluate command")
@@ -84,6 +90,16 @@ def main() -> None:
         example_document_2 = pet_dataset.get_document_by_name(
             document_name=args.example_document_2
         )
+        document = pet_dataset.get_document_by_name(document_name=args.document_name)
+        if args.relations:
+            annotate_relations(
+                document=document,
+                model_name=args.model,
+                example_document=example_document_1,
+                prompt_type=args.prompt_type,
+                temperature=args.temperature,
+            )
+            return
         if args.document_name:
             document = pet_dataset.get_document_by_name(
                 document_name=args.document_name

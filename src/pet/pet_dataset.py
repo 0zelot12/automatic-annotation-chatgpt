@@ -187,7 +187,7 @@ def plain_to_class(document) -> PetDocument:
     # Convert relations
     relations = None
     # TODO: Check why this is needed
-    if platform.system() == "Darwin":
+    if platform.system() == "Windows":
         relations = extract_relations(
             source_head_sentence_ids=document["relations"]["source-head-sentence-ID"],
             source_head_word_ids=document["relations"]["source-head-word-ID"],
