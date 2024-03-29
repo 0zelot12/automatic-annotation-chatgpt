@@ -11,6 +11,12 @@ class EntityTag(Enum):
     I_ACTIVITY_DATA = "I-Activity Data"
     B_FURTHER_SPECIFICATION = "B-Further Specification"
     I_FURTHER_SPECIFICATION = "I-Further Specification"
+    B_AND_GATEWAY = ""
+    I_AND_GATEWAY = ""
+    B_XOR_GATEWAY = ""
+    I_XOR_GATEWAY = ""
+    B_CONDITION_SPECIFICATION = ""
+    I_CONDITION_SPECIFICATION = ""
     NO_ENTITY = "O"
 
 

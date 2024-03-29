@@ -2,114 +2,65 @@ import platform
 
 import pandas as pd
 
+from typing import Tuple
+
 from entity.entity import Entity
 from entity.entity_type import EntityType
+from entity.entity_tag import EntityTag, str_to_entity
+
 from pet.pet_document import PetDocument
 
-from entity.entity_tag import EntityTag, str_to_entity
 from relation.relation import Relation, str_to_type
 
 
-def get_actors(ner_tags: list[EntityTag], tokens: list[str]) -> list[Entity]:
-    actors = []
-    current_actor = None
+def get_tags(entityType: EntityType) -> Tuple[EntityTag, EntityTag]:
+    if entityType == EntityType.ACTOR:
+        return (EntityTag.B_ACTOR, EntityTag.I_ACTOR)
+    elif entityType == EntityType.ACTIVITY:
+        return (EntityTag.B_ACTIVITY, EntityTag.I_ACTIVITY)
+    elif entityType == EntityType.ACTIVITY_DATA:
+        return (EntityTag.B_ACTIVITY_DATA, EntityTag.I_ACTIVITY_DATA)
+    elif entityType == EntityType.AND_GATEWAY:
+        return (EntityTag.B_AND_GATEWAY, EntityTag.I_AND_GATEWAY)
+    elif entityType == EntityType.XOR_GATEWAY:
+        return (EntityTag.B_XOR_GATEWAY, EntityTag.I_XOR_GATEWAY)
+    elif entityType == EntityType.CONDITION_SPECIFICATION:
+        return (
+            EntityTag.B_CONDITION_SPECIFICATION,
+            EntityTag.I_CONDITION_SPECIFICATION,
+        )
+    elif entityType == EntityType.FURTHER_SPECIFICATION:
+        return (
+            EntityTag.B_FURTHER_SPECIFICATION,
+            EntityTag.I_FURTHER_SPECIFICATION,
+        )
+    else:
+        raise ValueError(f"EntityType: {entityType} not recognized.")
+
+
+def extract_entities(
+    ner_tags: list[EntityTag], entity_type: EntityType, tokens: list[str]
+) -> list[Entity]:
+    begin_tag, inside_tag = get_tags(entity_type)
+    entities = []
+    current_entity = None
     for ner_tag, token, index in zip(ner_tags, tokens, range(len(ner_tags))):
-        if ner_tag == EntityTag.B_ACTOR and ner_tags[index + 1] != EntityTag.I_ACTOR:
-            actors.append(
-                Entity(type=EntityType.ACTOR, start_index=index, tokens=[token])
-            )
-            current_actor = None
+        if ner_tag == begin_tag and ner_tags[index + 1] != inside_tag:
+            entities.append(Entity(type=entity_type, start_index=index, tokens=[token]))
+            current_entity = None
             continue
-        if ner_tag == EntityTag.B_ACTOR and ner_tags[index + 1] == EntityTag.I_ACTOR:
-            current_actor = Entity(
-                type=EntityType.ACTOR, start_index=index, tokens=[token]
-            )
+        if ner_tag == begin_tag and ner_tags[index + 1] == inside_tag:
+            current_entity = Entity(type=entity_type, start_index=index, tokens=[token])
             continue
-        if ner_tag == EntityTag.I_ACTOR and ner_tags[index + 1] == EntityTag.I_ACTOR:
-            current_actor.tokens.append(token)
+        if ner_tag == inside_tag and ner_tags[index + 1] == inside_tag:
+            current_entity.tokens.append(token)
             continue
-        if ner_tag == EntityTag.I_ACTOR and ner_tags[index + 1] != EntityTag.I_ACTOR:
-            current_actor.tokens.append(token)
-            actors.append(current_actor)
-            current_actor = None
+        if ner_tag == inside_tag and ner_tags[index + 1] != inside_tag:
+            current_entity.tokens.append(token)
+            entities.append(current_entity)
+            current_entity = None
 
-    return actors
-
-
-def get_activites(ner_tags: list[EntityTag], tokens: list[str]) -> list[Entity]:
-    activities = []
-    current_activity = None
-    for ner_tag, token, index in zip(ner_tags, tokens, range(len(ner_tags))):
-        if (
-            ner_tag == EntityTag.B_ACTIVITY
-            and ner_tags[index + 1] != EntityTag.I_ACTIVITY
-        ):
-            activities.append(
-                Entity(type=EntityType.ACTIVITY, start_index=index, tokens=[token])
-            )
-            current_activity = None
-            continue
-        if (
-            ner_tag == EntityTag.B_ACTIVITY
-            and ner_tags[index + 1] == EntityTag.I_ACTIVITY
-        ):
-            current_activity = Entity(
-                type=EntityType.ACTIVITY, start_index=index, tokens=[token]
-            )
-            continue
-        if (
-            ner_tag == EntityTag.I_ACTIVITY
-            and ner_tags[index + 1] == EntityTag.I_ACTIVITY
-        ):
-            current_activity.tokens.append(token)
-            continue
-        if (
-            ner_tag == EntityTag.I_ACTIVITY
-            and ner_tags[index + 1] != EntityTag.I_ACTIVITY
-        ):
-            current_activity.tokens.append(token)
-            activities.append(current_activity)
-            current_activity = None
-
-    return activities
-
-
-def get_activity_data(ner_tags: list[EntityTag], tokens: list[str]) -> list[Entity]:
-    activity_data = []
-    current_activity_data = None
-    for ner_tag, token, index in zip(ner_tags, tokens, range(len(ner_tags))):
-        if (
-            ner_tag == EntityTag.B_ACTIVITY_DATA
-            and ner_tags[index + 1] != EntityTag.I_ACTIVITY_DATA
-        ):
-            activity_data.append(
-                Entity(type=EntityType.ACTIVITY_DATA, start_index=index, tokens=[token])
-            )
-            current_activity_data = None
-            continue
-        if (
-            ner_tag == EntityTag.B_ACTIVITY_DATA
-            and ner_tags[index + 1] == EntityTag.I_ACTIVITY_DATA
-        ):
-            current_activity_data = Entity(
-                type=EntityType.ACTIVITY_DATA, start_index=index, tokens=[token]
-            )
-            continue
-        if (
-            ner_tag == EntityTag.I_ACTIVITY_DATA
-            and ner_tags[index + 1] == EntityTag.I_ACTIVITY_DATA
-        ):
-            current_activity_data.tokens.append(token)
-            continue
-        if (
-            ner_tag == EntityTag.I_ACTIVITY_DATA
-            and ner_tags[index + 1] != EntityTag.I_ACTIVITY_DATA
-        ):
-            current_activity_data.tokens.append(token)
-            activity_data.append(current_activity_data)
-            current_activity_data = None
-
-    return activity_data
+    return entities
 
 
 def get_linear_index(sentence_ids: list[int], sid: int, wid: int) -> int:
@@ -178,11 +129,13 @@ def plain_to_class(document) -> PetDocument:
     ner_tags = [str_to_entity(ner_tag) for ner_tag in document["ner_tags"]]
 
     # Convert entities
-    entities = (
-        get_actors(ner_tags=ner_tags, tokens=document["tokens"])
-        + get_activites(ner_tags=ner_tags, tokens=document["tokens"])
-        + get_activity_data(ner_tags=ner_tags, tokens=document["tokens"])
-    )
+    entities = []
+    for entityType in EntityType:
+        entities.extend(
+            extract_entities(
+                ner_tags=ner_tags, entity_type=entityType, tokens=document["tokens"]
+            )
+        )
 
     # Convert relations
     relations = None
