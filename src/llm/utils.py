@@ -5,13 +5,6 @@ from relation.relation import Relation
 def generate_model_relations(relations: list[Relation]) -> str:
     result = ""
     for relation in relations:
-        # At the moment not all relations are supported
-        if not (relation.target and relation.source) or not (
-            relation.type == RelationType.ACTOR_PERFORMER
-            or relation.type == RelationType.ACTOR_RECIPIENT
-        ):
-            continue
-
         source_length = (
             0 if len(relation.source.tokens) == 1 else len(relation.source.tokens) - 1
         )
