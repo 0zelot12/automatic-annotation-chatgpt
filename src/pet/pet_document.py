@@ -21,3 +21,12 @@ class PetDocument:
     ner_tags: list[EntityTag] = field(default_factory=list)
     relations: list[Relation] = field(default_factory=list)
     entities: list[Entity] = field(default_factory=list)
+
+    def to_json(self):
+        return {
+            "document_name": self.name,
+            "tokens": [str(token) for token in self.tokens],
+            "ner_tags": [str(ner_tag) for ner_tag in self.ner_tags],
+            "relations": [relation.to_json() for relation in self.relations],
+            "entities": [entity.to_json() for entity in self.entities],
+        }

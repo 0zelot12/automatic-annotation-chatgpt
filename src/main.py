@@ -12,6 +12,8 @@ from pet.pet_dataset import PetDataset
 from utils.helper import evaluate_results
 from annotation.annotation import annotate_document, annotate_relations
 
+from server.server import start_server
+
 
 def main() -> None:
     logging.basicConfig(
@@ -78,10 +80,15 @@ def main() -> None:
         "--path", required=False, default="./out", help="Path to some directory"
     )
 
+    # Server
+    evaluate_parser = subparsers.add_parser("server", help="server command")
+
     args = parser.parse_args()
 
     if args.subcommand == "evaluate":
         evaluate_results(args.path)
+    elif args.subcommand == "server":
+        start_server()
     elif args.subcommand == "annotate":
         pet_dataset = PetDataset()
         example_document_1 = pet_dataset.get_document_by_name(
