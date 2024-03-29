@@ -6,3 +6,4 @@ langchain
 langchain-openai
 fastparquet
 flask
+flask_cors
