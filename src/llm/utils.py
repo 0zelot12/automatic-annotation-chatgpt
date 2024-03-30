@@ -13,6 +13,6 @@ def generate_model_relations(relations: list[Relation]) -> str:
             0 if len(relation.target.tokens) == 1 else len(relation.target.tokens) - 1
         )
 
-        result += f"${relation.source.start_index},${relation.source.start_index + source_length},{relation.type.name},${relation.target.start_index}${relation.target.start_index + target_length}\n"
+        result += f"{relation.source.type.name},${relation.source.start_index},${relation.source.start_index + source_length},{relation.type.name},{relation.target.type.name},${relation.target.start_index},${relation.target.start_index + target_length}\n"
 
     return result

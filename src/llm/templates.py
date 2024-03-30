@@ -95,9 +95,9 @@ Relation definitions:
 
 Use the following format to describe the relation between entities:
 
-<startTokenId>,<endTokenId>,<type>,<startTokenId>,<endTokenId>
-<startTokenId>,<endTokenId>,<type>,<startTokenId>,<endTokenId>
-<startTokenId>,<endTokenId>,<type>,<startTokenId>,<endTokenId>
+<entityType>,<startTokenId>,<endTokenId>,<relationtype>,<entityType>,<startTokenId>,<endTokenId>
+<entityType>,<startTokenId>,<endTokenId>,<relationtype>,<entityType>,<startTokenId>,<endTokenId>
+<entityType>,<startTokenId>,<endTokenId>,<relationtype>,<entityType>,<startTokenId>,<endTokenId>
 
 The input text hast the following format:
 
