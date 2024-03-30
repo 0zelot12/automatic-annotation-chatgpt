@@ -20,6 +20,7 @@ from llm.utils import generate_model_relations, to_model_tokens
 from annotation.annotation_result import AnnotationResult
 from llm.model_response import ModelResponse
 
+from relation.relation import parse_relations
 from utils.helper import (
     parse_entities,
     calculate_metrics,
@@ -65,7 +66,11 @@ def annotate_relations(
         {"training_data": training_data, "test_data": test_data}
     )
 
-    print(api_response.content)
+    parsed_relations = parse_relations(
+        relation_strings=api_response.content.splitlines(), tokens=document.tokens
+    )
+
+    print(parsed_relations)
 
     return None
 

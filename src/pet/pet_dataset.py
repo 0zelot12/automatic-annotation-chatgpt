@@ -10,7 +10,8 @@ from entity.entity_tag import EntityTag, str_to_entity
 
 from pet.pet_document import PetDocument
 
-from relation.relation import Relation, str_to_type
+from relation.relation import Relation
+from relation.relation_type import str_to_relation_type
 
 
 def get_tags(entityType: EntityType) -> Tuple[EntityTag, EntityTag]:
@@ -35,7 +36,7 @@ def get_tags(entityType: EntityType) -> Tuple[EntityTag, EntityTag]:
             EntityTag.I_FURTHER_SPECIFICATION,
         )
     else:
-        raise ValueError(f"EntityType: {entityType} not recognized.")
+        raise ValueError(f"EntityType: {entityType} not recognized")
 
 
 def extract_entities(
@@ -110,7 +111,7 @@ def extract_relations(
         )
 
         relation = Relation(
-            type=str_to_type(plain_relation[2]),
+            type=str_to_relation_type(plain_relation[2]),
             source=find_entity_by_start_index(
                 start_index=source_start_index, entities=entities
             ),
