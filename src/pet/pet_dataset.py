@@ -191,7 +191,7 @@ class PetDataset:
         document = matching_rows.iloc[0]
         return plain_to_class(document)
 
-    def get_documents_by_names(self, document_names: list[str]) -> list[PetDocument]:
+    def get_documents_by_name(self, document_names: list[str]) -> list[PetDocument]:
         documents = []
         for document_name in document_names:
             matching_rows = self._data[self._data["document name"] == document_name]
