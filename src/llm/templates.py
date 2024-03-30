@@ -108,9 +108,9 @@ The input text hast the following format:
 
 This is an example:
 
-{example_input}
+{training_data}
 
 Now annotate the following text:
 
-{input}
+{test_data}
 """

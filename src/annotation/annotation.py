@@ -15,7 +15,7 @@ from llm.templates import (
     relation_template,
 )
 
-from llm.utils import generate_model_relations
+from llm.utils import generate_model_relations, to_model_tokens
 
 from annotation.annotation_result import AnnotationResult
 from llm.model_response import ModelResponse
@@ -43,15 +43,16 @@ def annotate_relations(
         )
     ]
 
-    test_relations = generate_model_relations(document.relations)
+    training_tokens = to_model_tokens(example_document.tokens)
     training_relations = generate_model_relations(example_document.relations)
 
-    chat_messages.append(
-        HumanMessagePromptTemplate.from_template(relation_template).format(
-            example_input=training_relations,
-            input=test_relations,
-        ),
-    )
+    test_tokens = to_model_tokens(document.tokens)
+    test_relations = generate_model_relations(document.relations)
+
+    training_data = f"{training_tokens}\n{training_relations}"
+    test_data = f"{test_tokens}\n{test_relations}"
+
+    chat_messages.append(HumanMessagePromptTemplate.from_template(relation_template))
 
     template = ChatPromptTemplate.from_messages(
         chat_messages,
@@ -60,8 +61,9 @@ def annotate_relations(
     model = ChatOpenAI(model=model_name, temperature=temperature)
     chain = template | model
 
-    # Why do I need input here?
-    api_response = chain.invoke({"input": ""})
+    api_response = chain.invoke(
+        {"training_data": training_data, "test_data": test_data}
+    )
 
     print(api_response.content)
 

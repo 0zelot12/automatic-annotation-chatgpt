@@ -2,6 +2,13 @@ from relation.relation_type import RelationType
 from relation.relation import Relation
 
 
+def to_model_tokens(tokens: list[str]):
+    result = ""
+    for token, index in zip(tokens, range(0, len(tokens))):
+        result += f"{token}${index}\n"
+    return result
+
+
 def generate_model_relations(relations: list[Relation]) -> str:
     result = ""
     for relation in relations:
