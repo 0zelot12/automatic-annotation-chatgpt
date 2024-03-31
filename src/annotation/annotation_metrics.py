@@ -4,8 +4,7 @@ from annotation.metrics import Metrics
 
 
 @dataclass
-class AnnotationMetrics:
-    # Entities
+class EntityMetrics:
     overall: Metrics
     actor: Metrics
     activity: Metrics
@@ -14,7 +13,6 @@ class AnnotationMetrics:
     and_gateway: Metrics
     xor_gateway: Metrics
     condition_specification: Metrics
-    # Relations
 
     def to_json(self):
         return {

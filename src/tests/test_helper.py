@@ -1,6 +1,6 @@
 import unittest
 
-from annotation_metrics import AnnotationMetrics
+from annotation_metrics import EntityMetrics
 
 from entity import Entity
 from entity_type import EntityType
@@ -80,7 +80,7 @@ class TestHelperMethods(unittest.TestCase):
         self.assertEqual(len(tokens), len(annotated_tokens) - len(entities) * 2)
 
     def test_calculate_metrics(self):
-        expected_metrics = AnnotationMetrics(precision=0.67, recall=0.5, f1_score=0.57)
+        expected_metrics = EntityMetrics(precision=0.67, recall=0.5, f1_score=0.57)
         metrics = calculate_metrics(
             [
                 Entity(EntityType.ACTOR, 1, ["MPON"]),
@@ -97,7 +97,7 @@ class TestHelperMethods(unittest.TestCase):
         self.assertEqual(metrics, expected_metrics)
 
     def test_calculate_metrics_wrong_type(self):
-        expected_metrics = AnnotationMetrics(precision=0.33, recall=0.25, f1_score=0.28)
+        expected_metrics = EntityMetrics(precision=0.33, recall=0.25, f1_score=0.28)
         metrics = calculate_metrics(
             [
                 Entity(EntityType.ACTOR, 1, ["MPON"]),
@@ -114,7 +114,7 @@ class TestHelperMethods(unittest.TestCase):
         self.assertEqual(metrics, expected_metrics)
 
     def test_calculate_metrics_total_match(self):
-        expected_metrics = AnnotationMetrics(precision=1.0, recall=1.0, f1_score=1.0)
+        expected_metrics = EntityMetrics(precision=1.0, recall=1.0, f1_score=1.0)
         metrics = calculate_metrics(
             [
                 Entity(EntityType.ACTOR, 0, ["The", "MPON"]),
@@ -132,7 +132,7 @@ class TestHelperMethods(unittest.TestCase):
         self.assertEqual(metrics, expected_metrics)
 
     def test_calculate_metrics_total_mismatch(self):
-        expected_metrics = AnnotationMetrics(precision=0.0, recall=0.0, f1_score=-1.0)
+        expected_metrics = EntityMetrics(precision=0.0, recall=0.0, f1_score=-1.0)
         metrics = calculate_metrics(
             [
                 Entity(EntityType.ACTOR, 3, ["The", "MPON"]),

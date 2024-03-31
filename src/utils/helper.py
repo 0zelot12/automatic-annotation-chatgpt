@@ -1,7 +1,7 @@
 import json
 import os
 
-from annotation.annotation_metrics import AnnotationMetrics, Metrics
+from annotation.annotation_metrics import EntityMetrics, Metrics
 
 from entity.entity import Entity
 from entity.entity_type import EntityType
@@ -96,7 +96,7 @@ def get_f1_score(precision: float, recall: float):
 # TODO: Move to some other file
 def calculate_entity_metrics(
     model_entities: list[Entity], reference_entities: list[Entity]
-) -> AnnotationMetrics:
+) -> EntityMetrics:
 
     true_positives_overall = 0
     true_positives = {}
@@ -140,7 +140,7 @@ def calculate_entity_metrics(
             reference_count=entity_present,
         )
 
-    return AnnotationMetrics(
+    return EntityMetrics(
         overall=Metrics(
             precision=overall_precision,
             recall=overall_recall,

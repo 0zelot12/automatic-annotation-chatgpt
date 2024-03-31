@@ -3,7 +3,7 @@ import json
 from dataclasses import dataclass, field
 from datetime import datetime
 
-from annotation.annotation_metrics import AnnotationMetrics
+from annotation.annotation_metrics import EntityMetrics
 from entity.entity import Entity
 from relation.relation import Relation
 
@@ -16,7 +16,7 @@ class AnnotationResult:
     document_length: int
     temperature: float
     prompt_type: str
-    metrics: AnnotationMetrics
+    metrics: EntityMetrics
     api_response: list[str] = field(default_factory=list)
     examples_documents: list[str] = field(default_factory=list)
     tokens: list[str] = field(default_factory=list)
