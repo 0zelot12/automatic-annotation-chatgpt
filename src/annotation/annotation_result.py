@@ -3,8 +3,10 @@ import json
 from dataclasses import dataclass, field
 from datetime import datetime
 
-from annotation.entity_metrics import EntityMetrics
+from annotation.annotation_metrics import AnnotationMetrics
+
 from entity.entity import Entity
+
 from relation.relation import Relation
 
 # TODO: Write a test to check if AnnotationResult can be saved to a file
@@ -14,9 +16,9 @@ from relation.relation import Relation
 class AnnotationResult:
     document_name: str
     document_length: int
+    metrics: AnnotationMetrics
     temperature: float
     prompt_type: str
-    metrics: EntityMetrics
     api_response: list[str] = field(default_factory=list)
     examples_documents: list[str] = field(default_factory=list)
     tokens: list[str] = field(default_factory=list)
@@ -46,7 +48,7 @@ class AnnotationResult:
             "api_response": self.api_response,
         }
 
-    # Refactor to a generic method that saves JSON objects
+    # TODO: Extract a generic method that saves JSON objects
     def save_to_file(self, path: str) -> None:
         with open(
             f"{path}/{self.document_name}-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.json",
