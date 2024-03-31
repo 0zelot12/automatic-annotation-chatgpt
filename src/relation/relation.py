@@ -19,6 +19,17 @@ class Relation:
             "target": None if not self.target else self.target.to_json(),
         }
 
+    def __str__(self) -> str:
+        source_length = (
+            0 if len(self.source.tokens) == 1 else len(self.source.tokens) - 1
+        )
+
+        target_length = (
+            0 if len(self.target.tokens) == 1 else len(self.target.tokens) - 1
+        )
+
+        return f"{self.source.type.name},${self.source.start_index},${self.source.start_index + source_length},{self.type.name},{self.target.type.name},${self.target.start_index},${self.target.start_index + target_length}\n"
+
 
 def parse_relations(relation_strings: list[str], tokens: list[str]) -> list[Relation]:
     relations = []

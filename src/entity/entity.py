@@ -12,6 +12,10 @@ class Entity:
     def __hash__(self):
         return hash((self.type, self.start_index, tuple(self.tokens)))
 
+    def __str__(self) -> str:
+        length = 0 if len(self.tokens) == 1 else len(self.tokens) - 1
+        return f"{self.type.name},${self.start_index},${self.start_index + length}"
+
     def to_json(self):
         return {
             "type": self.type.name,
