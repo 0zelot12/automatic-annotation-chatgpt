@@ -32,9 +32,7 @@ class AnnotationResult:
             "document_length": self.document_length,
             "prompt_type": self.prompt_type,
             "examples_documents": self.examples_documents,
-            "tokens": [
-                str(token) for token in self.tokens
-            ],  # TODO: Check why this is needed in Windows
+            "tokens": [str(token) for token in self.tokens],
             "recognized_entities": [
                 entity.to_json() for entity in self.recognized_entities
             ],
