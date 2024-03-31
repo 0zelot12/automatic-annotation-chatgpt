@@ -93,9 +93,9 @@ def get_f1_score(precision: float, recall: float):
     )
 
 
-# TODO: Move to metrics.py
-def calculate_metrics(
-    model_annotations: list[Entity], reference_annotations: list[Entity]
+# TODO: Move to some other file
+def calculate_entity_metrics(
+    model_entities: list[Entity], reference_entities: list[Entity]
 ) -> AnnotationMetrics:
 
     true_positives_overall = 0
@@ -103,11 +103,11 @@ def calculate_metrics(
     for entity_type in EntityType:
         true_positives[entity_type] = 0
 
-    for reference_annotation in reference_annotations:
+    for reference_annotation in reference_entities:
         found_element = next(
             (
                 o
-                for o in model_annotations
+                for o in model_entities
                 if o.start_index == reference_annotation.start_index
             ),
             None,
@@ -120,14 +120,14 @@ def calculate_metrics(
             true_positives_overall += 1
             true_positives[found_element.type] += 1
 
-    overall_precision = get_precision(true_positives_overall, len(model_annotations))
-    overall_recall = get_recall(true_positives_overall, len(reference_annotations))
+    overall_precision = get_precision(true_positives_overall, len(model_entities))
+    overall_recall = get_recall(true_positives_overall, len(reference_entities))
     overall_f1_score = get_f1_score(overall_precision, overall_recall)
 
     metrics = {}
     for entity_type in EntityType:
-        entity_present = count_entities_of_type(reference_annotations, entity_type)
-        entity_recognized = count_entities_of_type(model_annotations, entity_type)
+        entity_present = count_entities_of_type(reference_entities, entity_type)
+        entity_recognized = count_entities_of_type(model_entities, entity_type)
         precision = get_precision(true_positives[entity_type], entity_recognized)
         recall = get_recall(true_positives[entity_type], entity_present)
         f1_score = get_f1_score(precision, recall)
@@ -146,8 +146,8 @@ def calculate_metrics(
             recall=overall_recall,
             f1_score=overall_f1_score,
             true_positives=true_positives_overall,
-            false_positives=len(model_annotations) - true_positives_overall,
-            reference_count=len(reference_annotations),
+            false_positives=len(model_entities) - true_positives_overall,
+            reference_count=len(reference_entities),
         ),
         actor=metrics[EntityType.ACTOR],
         activity=metrics[EntityType.ACTIVITY],

@@ -13,6 +13,7 @@ class Metrics:
 
 @dataclass
 class AnnotationMetrics:
+    # Entities
     overall: Metrics
     actor: Metrics
     activity: Metrics
@@ -21,6 +22,7 @@ class AnnotationMetrics:
     and_gateway: Metrics
     xor_gateway: Metrics
     condition_specification: Metrics
+    # Relations
 
     def to_json(self):
         return {

@@ -22,8 +22,8 @@ from llm.model_response import ModelResponse
 
 from relation.relation import parse_relations
 from utils.helper import (
+    calculate_entity_metrics,
     parse_entities,
-    calculate_metrics,
     convert_to_template_example,
 )
 
@@ -87,7 +87,7 @@ def annotate_relations(
         recognized_entities=recognized_entities,
         present_relations=document.relations,
         recognized_relations=parsed_relations,
-        metrics=calculate_metrics(recognized_entities, document.entities),
+        metrics=calculate_entity_metrics(recognized_entities, document.entities),
     )
 
     return annotation_result
@@ -143,7 +143,7 @@ def annotate_document(
         present_entities=present_entities,
         recognized_entities=recognized_entities,
         present_relations=document.relations,
-        metrics=calculate_metrics(recognized_entities, present_entities),
+        metrics=calculate_entity_metrics(recognized_entities, present_entities),
     )
 
     return annotation_result
