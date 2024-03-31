@@ -25,21 +25,21 @@ def parse_relations(relation_strings: list[str], tokens: list[str]) -> list[Rela
     for relation_string in relation_strings:
         items = relation_string.split(",")
 
-        target_entity_type = str_to_entity_type(items[0])
-        target_start_index = int(items[1].replace("$", ""))
-        target_end_index = int(items[2].replace("$", "")) + 1
+        source_entity_type = str_to_entity_type(items[0])
+        source_start_index = int(items[1].replace("$", ""))
+        source_end_index = int(items[2].replace("$", "")) + 1
+
+        relation_type = str_to_relation_type(items[3])
+
+        target_entity_type = str_to_entity_type(items[4])
+        target_start_index = int(items[5].replace("$", ""))
+        target_end_index = int(items[6].replace("$", "")) + 1
 
         target = Entity(
             type=target_entity_type,
             start_index=target_start_index,
             tokens=tokens[target_start_index:target_end_index],
         )
-
-        relation_type = str_to_relation_type(items[3])
-
-        source_entity_type = str_to_entity_type(items[4])
-        source_start_index = int(items[5].replace("$", ""))
-        source_end_index = int(items[6].replace("$", "")) + 1
 
         source = Entity(
             type=source_entity_type,
