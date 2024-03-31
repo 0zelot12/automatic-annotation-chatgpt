@@ -23,6 +23,7 @@ class AnnotationResult:
     recognized_entities: list[Entity] = field(default_factory=list)
     present_entities: list[Entity] = field(default_factory=list)
     present_relations: list[Relation] = field(default_factory=list)
+    recognized_relations: list[Relation] = field(default_factory=list)
 
     def to_json(self):
         return {
@@ -40,6 +41,9 @@ class AnnotationResult:
             "present_entities": [entity.to_json() for entity in self.present_entities],
             "present_relations": [
                 relation.to_json() for relation in self.present_relations
+            ],
+            "recognized_relations": [
+                relation.to_json() for relation in self.recognized_relations
             ],
             "api_response": self.api_response,
         }

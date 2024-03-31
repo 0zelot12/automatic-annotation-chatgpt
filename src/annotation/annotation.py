@@ -86,6 +86,7 @@ def annotate_relations(
         present_entities=document.entities,
         recognized_entities=recognized_entities,
         present_relations=document.relations,
+        recognized_relations=parsed_relations,
         metrics=calculate_metrics(recognized_entities, document.entities),
     )
 
