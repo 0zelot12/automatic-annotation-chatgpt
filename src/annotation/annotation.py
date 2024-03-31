@@ -34,7 +34,7 @@ def annotate_relations(
     model_name: str,
     prompt_type: str,
     temperature: float,
-) -> None:
+) -> AnnotationResult:
     chat_messages = [
         SystemMessage(
             content=(
@@ -70,9 +70,26 @@ def annotate_relations(
         relation_strings=api_response.content.splitlines(), tokens=document.tokens
     )
 
-    print(parsed_relations)
+    recognized_entities = []
+    for parsed_relation in parsed_relations:
+        recognized_entities.extend([parsed_relation.source, parsed_relation.target])
+    recognized_entities = set(recognized_entities)
 
-    return None
+    annotation_result = AnnotationResult(
+        document_name=document.name,
+        document_length=len(document.tokens),
+        prompt_type=prompt_type,
+        temperature=temperature,
+        examples_documents=[example_document.name],
+        tokens=document.tokens,
+        api_response=api_response.content,
+        present_entities=document.entities,
+        recognized_entities=recognized_entities,
+        present_relations=document.relations,
+        metrics=calculate_metrics(recognized_entities, document.entities),
+    )
+
+    return annotation_result
 
 
 def annotate_document(

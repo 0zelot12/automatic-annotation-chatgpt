@@ -9,6 +9,9 @@ class Entity:
     start_index: int
     tokens: list[str] = field(default_factory=list)
 
+    def __hash__(self):
+        return hash((self.type, self.start_index, tuple(self.tokens)))
+
     def to_json(self):
         return {
             "type": self.type.name,

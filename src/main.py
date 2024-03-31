@@ -99,13 +99,14 @@ def main() -> None:
         )
         document = pet_dataset.get_document_by_name(document_name=args.document_name)
         if args.relations:
-            annotate_relations(
+            annotation_result = annotate_relations(
                 document=document,
                 model_name=args.model,
                 example_document=example_document_1,
                 prompt_type=args.prompt_type,
                 temperature=args.temperature,
             )
+            annotation_result.save_to_file("./out")
             return
         if args.document_name:
             document = pet_dataset.get_document_by_name(
