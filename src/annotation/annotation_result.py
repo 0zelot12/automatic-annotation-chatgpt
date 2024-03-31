@@ -3,7 +3,7 @@ import json
 from dataclasses import dataclass, field
 from datetime import datetime
 
-from annotation.annotation_metrics import EntityMetrics
+from annotation.entity_metrics import EntityMetrics
 from entity.entity import Entity
 from relation.relation import Relation
 

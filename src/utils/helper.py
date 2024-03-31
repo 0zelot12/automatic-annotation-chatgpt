@@ -1,7 +1,7 @@
 import json
 import os
 
-from annotation.annotation_metrics import EntityMetrics, Metrics
+from annotation.entity_metrics import EntityMetrics, Metrics
 
 from entity.entity import Entity
 from entity.entity_type import EntityType
