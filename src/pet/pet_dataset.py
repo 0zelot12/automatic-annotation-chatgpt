@@ -6,7 +6,7 @@ from typing import Tuple
 
 from entity.entity import Entity
 from entity.entity_type import EntityType
-from entity.entity_tag import EntityTag, str_to_entity
+from entity.entity_tag import EntityTag, str_to_entity_tag
 
 from pet.pet_document import PetDocument
 
@@ -127,7 +127,7 @@ def extract_relations(
 
 def plain_to_class(document) -> PetDocument:
     # Convert ner-tags
-    ner_tags = [str_to_entity(ner_tag) for ner_tag in document["ner_tags"]]
+    ner_tags = [str_to_entity_tag(ner_tag) for ner_tag in document["ner_tags"]]
 
     # Convert entities
     entities = []

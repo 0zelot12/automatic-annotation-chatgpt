@@ -20,7 +20,7 @@ class EntityTag(Enum):
     NO_ENTITY = "O"
 
 
-def str_to_entity(string_value: str) -> EntityTag:
+def str_to_entity_tag(string_value: str) -> EntityTag:
     for entity in EntityTag:
         if entity.value == string_value:
             return entity
