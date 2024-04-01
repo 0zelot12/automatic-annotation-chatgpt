@@ -1,7 +1,7 @@
 import json
 import os
 
-from metrics.entity_metrics import EntityMetrics, Metrics
+from metrics.entity_metrics import EntityMetrics, BaseMetrics
 
 from metrics.relation_metrics import RelationMetrics
 from entity.entity import Entity
@@ -142,7 +142,7 @@ def calculate_entity_metrics(
         precision = get_precision(true_positives[entity_type], entity_recognized)
         recall = get_recall(true_positives[entity_type], entity_present)
         f1_score = get_f1_score(precision, recall)
-        metrics[entity_type] = Metrics(
+        metrics[entity_type] = BaseMetrics(
             precision=precision,
             recall=recall,
             f1_score=f1_score,
@@ -152,7 +152,7 @@ def calculate_entity_metrics(
         )
 
     return EntityMetrics(
-        overall=Metrics(
+        overall=BaseMetrics(
             precision=overall_precision,
             recall=overall_recall,
             f1_score=overall_f1_score,
@@ -197,7 +197,7 @@ def calculate_relation_metrics(
         precision = get_precision(true_positives[relation_type], relation_recognized)
         recall = get_recall(true_positives[relation_type], relation_present)
         f1_score = get_f1_score(precision, recall)
-        metrics[relation_type] = Metrics(
+        metrics[relation_type] = BaseMetrics(
             precision=precision,
             recall=recall,
             f1_score=f1_score,
@@ -207,7 +207,7 @@ def calculate_relation_metrics(
         )
 
     return RelationMetrics(
-        overall=Metrics(
+        overall=BaseMetrics(
             precision=overall_precision,
             recall=overall_recall,
             f1_score=overall_f1_score,

@@ -1,17 +1,17 @@
 from dataclasses import dataclass
 
-from metrics.metrics import Metrics
+from metrics.base_metrics import BaseMetrics
 
 
 @dataclass
 class RelationMetrics:
-    overall: Metrics
-    actor_performer: Metrics
-    actor_recipient: Metrics
-    same_gateway: Metrics
-    further_specification: Metrics
-    flow: Metrics
-    uses: Metrics
+    overall: BaseMetrics
+    actor_performer: BaseMetrics
+    actor_recipient: BaseMetrics
+    same_gateway: BaseMetrics
+    further_specification: BaseMetrics
+    flow: BaseMetrics
+    uses: BaseMetrics
 
     def to_json(self):
         return {

@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class Metrics:
+class BaseMetrics:
     precision: float
     recall: float
     f1_score: float

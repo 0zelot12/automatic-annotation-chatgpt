@@ -7,7 +7,7 @@ from langchain_core.messages import SystemMessage
 from langchain_openai import ChatOpenAI
 
 from annotation.annotation_metrics import AnnotationMetrics
-from metrics.metrics import Metrics
+from metrics.base_metrics import BaseMetrics
 from pet.pet_document import PetDocument
 
 from llm.templates import (
@@ -91,7 +91,7 @@ def annotate_relations(
         present_relations=document.relations,
         recognized_relations=recognized_relations,
         metrics=AnnotationMetrics(
-            overall_metrics=Metrics(
+            overall_metrics=BaseMetrics(
                 precision=0,
                 recall=0,
                 f1_score=0,

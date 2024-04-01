@@ -1,18 +1,18 @@
 from dataclasses import dataclass
 
-from metrics.metrics import Metrics
+from metrics.base_metrics import BaseMetrics
 
 
 @dataclass
 class EntityMetrics:
-    overall: Metrics
-    actor: Metrics
-    activity: Metrics
-    activity_data: Metrics
-    further_specification: Metrics
-    and_gateway: Metrics
-    xor_gateway: Metrics
-    condition_specification: Metrics
+    overall: BaseMetrics
+    actor: BaseMetrics
+    activity: BaseMetrics
+    activity_data: BaseMetrics
+    further_specification: BaseMetrics
+    and_gateway: BaseMetrics
+    xor_gateway: BaseMetrics
+    condition_specification: BaseMetrics
 
     def to_json(self):
         return {

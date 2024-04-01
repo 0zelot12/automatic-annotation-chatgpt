@@ -1,13 +1,13 @@
 from dataclasses import dataclass
 
 from metrics.entity_metrics import EntityMetrics
-from metrics.metrics import Metrics
+from metrics.base_metrics import BaseMetrics
 from metrics.relation_metrics import RelationMetrics
 
 
 @dataclass
 class AnnotationMetrics:
-    overall_metrics: Metrics
+    overall_metrics: BaseMetrics
     entity_metrics: EntityMetrics
     relation_metrics: RelationMetrics
 
