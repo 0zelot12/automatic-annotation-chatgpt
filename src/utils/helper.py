@@ -187,7 +187,7 @@ def calculate_relation_metrics(
                 true_positives[model_relation.type] += 1
 
     overall_precision = get_precision(true_positives_overall, len(model_relations))
-    overall_recall = get_recall(true_positives_overall, len(model_relations))
+    overall_recall = get_recall(true_positives_overall, len(reference_relations))
     overall_f1_score = get_f1_score(overall_precision, overall_recall)
 
     metrics = {}
