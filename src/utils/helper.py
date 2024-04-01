@@ -3,11 +3,14 @@ import os
 
 from annotation.entity_metrics import EntityMetrics, Metrics
 
+from annotation.relation_metrics import RelationMetrics
 from entity.entity import Entity
 from entity.entity_type import EntityType
 from entity.entity_tag import EntityTag
 
 from pet.pet_document import PetDocument
+from relation.relation import Relation
+from relation.relation_type import RelationType
 
 
 # TODO: Move to entity.py
@@ -59,6 +62,14 @@ def count_entities_of_type(entities: list[Entity], type: EntityType) -> int:
     result = 0
     for entity in entities:
         if entity.type == type:
+            result += 1
+    return result
+
+
+def count_relations_of_type(relations: list[Relation], type: RelationType) -> int:
+    result = 0
+    for relation in relations:
+        if relation.type == type:
             result += 1
     return result
 
@@ -156,6 +167,60 @@ def calculate_entity_metrics(
         xor_gateway=metrics[EntityType.XOR_GATEWAY],
         condition_specification=metrics[EntityType.CONDITION_SPECIFICATION],
         further_specification=metrics[EntityType.FURTHER_SPECIFICATION],
+    )
+
+
+def calculate_relation_metrics(
+    model_relations: list[Relation], reference_relations: list[Relation]
+) -> RelationMetrics:
+
+    true_positives_overall = 0
+    true_positives = {}
+
+    for relation_type in RelationType:
+        true_positives[relation_type] = 0
+
+    for model_relation in model_relations:
+        for reference_relation in reference_relations:
+            if str(model_relation) == str(reference_relation):
+                true_positives_overall += 1
+                true_positives[model_relation.type] += 1
+
+    overall_precision = get_precision(true_positives_overall, len(model_relations))
+    overall_recall = get_recall(true_positives_overall, len(model_relations))
+    overall_f1_score = get_f1_score(overall_precision, overall_recall)
+
+    metrics = {}
+    for relation_type in RelationType:
+        relation_present = count_relations_of_type(reference_relations, relation_type)
+        relation_recognized = count_entities_of_type(model_relations, relation_type)
+        precision = get_precision(true_positives[relation_type], relation_recognized)
+        recall = get_recall(true_positives[relation_type], relation_present)
+        f1_score = get_f1_score(precision, recall)
+        metrics[relation_type] = Metrics(
+            precision=precision,
+            recall=recall,
+            f1_score=f1_score,
+            true_positives=true_positives[relation_type],
+            false_positives=relation_recognized - true_positives[relation_type],
+            reference_count=relation_present,
+        )
+
+    return RelationMetrics(
+        overall=Metrics(
+            precision=overall_precision,
+            recall=overall_recall,
+            f1_score=overall_f1_score,
+            true_positives=true_positives_overall,
+            false_positives=len(model_relations) - true_positives_overall,
+            reference_count=len(reference_relations),
+        ),
+        actor_performer=metrics[RelationType.ACTOR_PERFORMER],
+        actor_recipient=metrics[RelationType.ACTOR_RECIPIENT],
+        flow=metrics[RelationType.FLOW],
+        further_specification=metrics[RelationType.FURTHER_SPECIFICATION],
+        same_gateway=metrics[RelationType.SAME_GATEWAY],
+        uses=metrics[RelationType.USES]
     )
 
 

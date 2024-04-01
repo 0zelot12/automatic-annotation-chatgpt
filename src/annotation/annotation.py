@@ -6,6 +6,8 @@ from langchain.prompts import HumanMessagePromptTemplate
 from langchain_core.messages import SystemMessage
 from langchain_openai import ChatOpenAI
 
+from annotation.annotation_metrics import AnnotationMetrics
+from annotation.metrics import Metrics
 from pet.pet_document import PetDocument
 
 from llm.templates import (
@@ -23,6 +25,7 @@ from llm.model_response import ModelResponse
 from relation.relation import parse_relations
 from utils.helper import (
     calculate_entity_metrics,
+    calculate_relation_metrics,
     parse_entities,
     convert_to_template_example,
 )
@@ -66,16 +69,16 @@ def annotate_relations(
         {"training_data": training_data, "test_data": test_data}
     )
 
-    parsed_relations = parse_relations(
+    recognized_relations = parse_relations(
         relation_strings=api_response.content.splitlines(), tokens=document.tokens
     )
 
     recognized_entities = []
-    for parsed_relation in parsed_relations:
-        recognized_entities.extend([parsed_relation.source, parsed_relation.target])
+    for relation in recognized_relations:
+        recognized_entities.extend([relation.source, relation.target])
     recognized_entities = set(recognized_entities)
 
-    annotation_result = AnnotationResult(
+    return AnnotationResult(
         document_name=document.name,
         document_length=len(document.tokens),
         prompt_type=prompt_type,
@@ -86,11 +89,25 @@ def annotate_relations(
         present_entities=document.entities,
         recognized_entities=recognized_entities,
         present_relations=document.relations,
-        recognized_relations=parsed_relations,
-        metrics=calculate_entity_metrics(recognized_entities, document.entities),
+        recognized_relations=recognized_relations,
+        metrics=AnnotationMetrics(
+            overall_metrics=Metrics(
+                precision=0,
+                recall=0,
+                f1_score=0,
+                true_positives=0,
+                false_positives=0,
+                reference_count=0,
+            ),
+            entity_metrics=calculate_entity_metrics(
+                model_entities=recognized_entities, reference_entities=document.entities
+            ),
+            relation_metrics=calculate_relation_metrics(
+                model_relations=recognized_relations,
+                reference_relations=document.relations,
+            ),
+        ),
     )
-
-    return annotation_result
 
 
 def annotate_document(
