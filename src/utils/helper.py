@@ -1,9 +1,9 @@
 import json
 import os
 
-from annotation.entity_metrics import EntityMetrics, Metrics
+from annotation.metrics.entity_metrics import EntityMetrics, Metrics
 
-from annotation.relation_metrics import RelationMetrics
+from annotation.metrics.relation_metrics import RelationMetrics
 from entity.entity import Entity
 from entity.entity_type import EntityType
 from entity.entity_tag import EntityTag
@@ -220,7 +220,7 @@ def calculate_relation_metrics(
         flow=metrics[RelationType.FLOW],
         further_specification=metrics[RelationType.FURTHER_SPECIFICATION],
         same_gateway=metrics[RelationType.SAME_GATEWAY],
-        uses=metrics[RelationType.USES]
+        uses=metrics[RelationType.USES],
     )
 
 

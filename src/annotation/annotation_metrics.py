@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
-from annotation.entity_metrics import EntityMetrics
-from annotation.metrics import Metrics
-from annotation.relation_metrics import RelationMetrics
+from annotation.metrics.entity_metrics import EntityMetrics
+from annotation.metrics.metrics import Metrics
+from annotation.metrics.relation_metrics import RelationMetrics
 
 
 @dataclass

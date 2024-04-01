@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from annotation.metrics import Metrics
+from annotation.metrics.metrics import Metrics
 
 
 @dataclass
