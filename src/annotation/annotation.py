@@ -7,7 +7,7 @@ from langchain_core.messages import SystemMessage
 from langchain_openai import ChatOpenAI
 
 from annotation.annotation_metrics import AnnotationMetrics
-from annotation.metrics.metrics import Metrics
+from metrics.metrics import Metrics
 from pet.pet_document import PetDocument
 
 from llm.templates import (

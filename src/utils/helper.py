@@ -1,9 +1,9 @@
 import json
 import os
 
-from annotation.metrics.entity_metrics import EntityMetrics, Metrics
+from metrics.entity_metrics import EntityMetrics, Metrics
 
-from annotation.metrics.relation_metrics import RelationMetrics
+from metrics.relation_metrics import RelationMetrics
 from entity.entity import Entity
 from entity.entity_type import EntityType
 from entity.entity_tag import EntityTag
