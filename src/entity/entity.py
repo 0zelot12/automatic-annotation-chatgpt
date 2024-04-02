@@ -2,6 +2,8 @@ from dataclasses import dataclass, field
 
 from entity.entity_type import EntityType
 
+# TODO: Tokens are not needed and can be replaced by end_index
+
 
 @dataclass
 class Entity:
