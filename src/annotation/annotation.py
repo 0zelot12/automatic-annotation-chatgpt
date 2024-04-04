@@ -6,7 +6,7 @@ from langchain.prompts import HumanMessagePromptTemplate
 from langchain_core.messages import SystemMessage
 from langchain_openai import ChatOpenAI
 
-from annotation.annotation_metrics import AnnotationMetrics
+from metrics.annotation_metrics import AnnotationMetrics
 from metrics.base_metrics import BaseMetrics
 from pet.pet_document import PetDocument
 
