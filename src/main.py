@@ -97,17 +97,6 @@ def main() -> None:
         example_document_2 = pet_dataset.get_document_by_name(
             document_name=args.example_document_2
         )
-        document = pet_dataset.get_document_by_name(document_name=args.document_name)
-        if args.relations:
-            annotation_result = annotate_relations(
-                document=document,
-                model_name=args.model,
-                example_document=example_document_1,
-                prompt_type=args.prompt_type,
-                temperature=args.temperature,
-            )
-            annotation_result.save_to_file("./out")
-            return
         if args.document_name:
             document = pet_dataset.get_document_by_name(
                 document_name=args.document_name
@@ -115,11 +104,10 @@ def main() -> None:
             for i in range(args.retries):
                 print(f"Processing {document.name}")
                 try:
-                    annotation_result = annotate_document(
+                    annotation_result = annotate_relations(
                         document=document,
                         model_name=args.model,
-                        example_document_1=example_document_1,
-                        example_document_2=example_document_2,
+                        example_document=example_document_1,
                         prompt_type=args.prompt_type,
                         temperature=args.temperature,
                     )
