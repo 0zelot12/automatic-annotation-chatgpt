@@ -128,7 +128,8 @@ def main() -> None:
                         annotation_result = annotate_relations(
                             document=document,
                             model_name=args.model,
-                            example_document=example_document_1,
+                            example_document_1=example_document_1,
+                            example_document_2=example_document_2,
                             prompt_type=args.prompt_type,
                             temperature=args.temperature,
                         )
