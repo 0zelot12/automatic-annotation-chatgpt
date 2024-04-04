@@ -167,6 +167,9 @@ class PetDataset:
             cls._data = df.sort_values(by="index")
         return cls._instance
 
+    def get_number_of_documents(self):
+        return len(self._data)
+
     def get_document(self, document_number: int) -> PetDocument:
         document = self._data.iloc[document_number]
         return plain_to_class(document)

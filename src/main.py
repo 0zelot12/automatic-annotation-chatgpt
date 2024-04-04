@@ -119,17 +119,16 @@ def main() -> None:
                     logging.error("An exception occurred: %s", str(e))
                     logging.error(traceback.format_exc())
         else:
-            number_of_documents = len(pet_dataset.get_data())
+            number_of_documents = pet_dataset.get_number_of_documents()
             for i in range(number_of_documents):
                 document = pet_dataset.get_document(i)
                 for j in range(args.retries):
                     print(f"Processing {document.name}")
                     try:
-                        annotation_result = annotate_document(
+                        annotation_result = annotate_relations(
                             document=document,
                             model_name=args.model,
-                            example_document_1=example_document_1,
-                            example_document_2=example_document_2,
+                            example_document=example_document_1,
                             prompt_type=args.prompt_type,
                             temperature=args.temperature,
                         )
