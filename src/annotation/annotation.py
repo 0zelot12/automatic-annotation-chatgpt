@@ -55,7 +55,7 @@ def annotate_relations(
     test_relations = generate_model_relations(document.relations)
 
     training_data = f"{training_tokens}\n{training_relations}"
-    test_data = f"{test_tokens}\n{test_relations}"
+    test_data = f"{test_tokens}"
 
     chat_messages.append(HumanMessagePromptTemplate.from_template(relation_template))
 
