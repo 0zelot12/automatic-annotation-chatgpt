@@ -104,6 +104,38 @@ def get_f1_score(precision: float, recall: float):
     )
 
 
+def calculate_overall_metrics(
+    entitiy_metrics: EntityMetrics, relations_metrics: RelationMetrics
+) -> BaseMetrics:
+    true_positives_entity = entitiy_metrics.overall.true_positives
+    false_positives_entity = entitiy_metrics.overall.false_positives
+
+    true_positives_relation = relations_metrics.overall.true_positives
+    false_positives_relation = relations_metrics.overall.false_positives
+
+    true_positives_total = true_positives_entity + true_positives_relation
+    false_positives_total = false_positives_entity + false_positives_relation
+
+    number_recognized_total = true_positives_total + false_positives_total
+    reference_count_total = (
+        entitiy_metrics.overall.reference_count
+        + relations_metrics.overall.reference_count
+    )
+
+    precision = get_precision(true_positives_total, number_recognized_total)
+    recall = get_recall(true_positives_total, reference_count_total)
+    f1_score = get_f1_score(precision, recall)
+
+    return BaseMetrics(
+        precision,
+        recall,
+        f1_score,
+        true_positives_total,
+        false_positives_total,
+        reference_count_total,
+    )
+
+
 # TODO: Move to some other file
 def calculate_entity_metrics(
     model_entities: list[Entity], reference_entities: list[Entity]

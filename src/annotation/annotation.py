@@ -25,6 +25,7 @@ from llm.model_response import ModelResponse
 from relation.relation import parse_relations
 from utils.helper import (
     calculate_entity_metrics,
+    calculate_overall_metrics,
     calculate_relation_metrics,
     parse_entities,
     convert_to_template_example,
@@ -78,6 +79,16 @@ def annotate_relations(
         recognized_entities.extend([relation.source, relation.target])
     recognized_entities = set(recognized_entities)
 
+    entity_metrics = calculate_entity_metrics(
+        model_entities=recognized_entities, reference_entities=document.entities
+    )
+
+    relation_metrics = calculate_relation_metrics(
+        model_relations=recognized_relations, reference_relations=document.relations
+    )
+
+    overall_metrics = calculate_overall_metrics(entity_metrics, relation_metrics)
+
     return AnnotationResult(
         document_name=document.name,
         document_length=len(document.tokens),
@@ -91,21 +102,9 @@ def annotate_relations(
         present_relations=document.relations,
         recognized_relations=recognized_relations,
         metrics=AnnotationMetrics(
-            overall_metrics=BaseMetrics(
-                precision=0,
-                recall=0,
-                f1_score=0,
-                true_positives=0,
-                false_positives=0,
-                reference_count=0,
-            ),
-            entity_metrics=calculate_entity_metrics(
-                model_entities=recognized_entities, reference_entities=document.entities
-            ),
-            relation_metrics=calculate_relation_metrics(
-                model_relations=recognized_relations,
-                reference_relations=document.relations,
-            ),
+            overall_metrics=overall_metrics,
+            entity_metrics=entity_metrics,
+            relation_metrics=relation_metrics,
         ),
     )
 
