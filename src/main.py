@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 from pet.pet_dataset import PetDataset
 
 from utils.helper import evaluate_results
-from annotation.annotation import annotate_document, annotate_relations
+from annotation.annotation import annotate_relations
 
 from server.server import start_server
 
@@ -34,44 +34,36 @@ def main() -> None:
 
     # Annotate
     annotate_parser = subparsers.add_parser("annotate", help="annotate command")
+
     annotate_parser.add_argument(
         "--document_name", required=False, help="Name of the document to annotate"
     )
+
     annotate_parser.add_argument(
         "--model", required=False, default="gpt-3.5-turbo", help="OpenAI model to use"
     )
-    annotate_parser.add_argument(
-        "--prompt_type", required=False, default="one-shot", help="Prompt type"
-    )
+
     annotate_parser.add_argument(
         "--retries",
         required=False,
         default=3,
         help="Number of retries in case an API call fails",
     )
+
     annotate_parser.add_argument(
-        "--example_document_1",
+        "--training_documents",
         required=False,
-        default="doc-1.1",
+        default=["doc-1.1"],
+        metavar="string",
+        nargs="+",
         help="First document to use as example",
     )
-    annotate_parser.add_argument(
-        "--example_document_2",
-        required=False,
-        default="doc-3.1",
-        help="Second document to use as example",
-    )
+
     annotate_parser.add_argument(
         "--temperature",
         required=False,
         default=0.7,
         help="Model temperature",
-    )
-    annotate_parser.add_argument(
-        "--relations",
-        required=False,
-        default=False,
-        help="Annotate relations only",
     )
 
     # Evaluate
@@ -91,12 +83,10 @@ def main() -> None:
         start_server()
     elif args.subcommand == "annotate":
         pet_dataset = PetDataset()
-        example_document_1 = pet_dataset.get_document_by_name(
-            document_name=args.example_document_1
-        )
-        example_document_2 = pet_dataset.get_document_by_name(
-            document_name=args.example_document_2
-        )
+        training_documents = [
+            pet_dataset.get_document_by_name(document_name)
+            for document_name in args.training_documents
+        ]
         if args.document_name:
             document = pet_dataset.get_document_by_name(
                 document_name=args.document_name
@@ -107,8 +97,7 @@ def main() -> None:
                     annotation_result = annotate_relations(
                         document=document,
                         model_name=args.model,
-                        example_document=example_document_1,
-                        prompt_type=args.prompt_type,
+                        training_documents=training_documents,
                         temperature=args.temperature,
                     )
                     annotation_result.save_to_file("./out")
@@ -128,9 +117,7 @@ def main() -> None:
                         annotation_result = annotate_relations(
                             document=document,
                             model_name=args.model,
-                            example_document_1=example_document_1,
-                            example_document_2=example_document_2,
-                            prompt_type=args.prompt_type,
+                            training_documents=training_documents,
                             temperature=args.temperature,
                         )
                         annotation_result.save_to_file("./out")

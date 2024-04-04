@@ -34,10 +34,8 @@ from utils.helper import (
 
 def annotate_relations(
     document: PetDocument,
-    example_document_1: PetDocument,
-    example_document_2: PetDocument,
+    training_documents: list[PetDocument],
     model_name: str,
-    prompt_type: str,
     temperature: float,
 ) -> AnnotationResult:
     chat_messages = [
@@ -48,8 +46,6 @@ def annotate_relations(
             )
         )
     ]
-
-    training_documents = [example_document_1, example_document_2]
 
     training_data = ""
     for training_document in training_documents:
@@ -95,7 +91,7 @@ def annotate_relations(
     return AnnotationResult(
         document_name=document.name,
         document_length=len(document.tokens),
-        prompt_type=prompt_type,
+        prompt_type="<TODO>",
         temperature=temperature,
         examples_documents="<TODO>",
         tokens=document.tokens,
