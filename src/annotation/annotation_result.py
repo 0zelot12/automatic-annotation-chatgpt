@@ -18,7 +18,7 @@ class AnnotationResult:
     document_length: int
     metrics: AnnotationMetrics
     temperature: float
-    prompt_type: str
+    model: str
     api_response: list[str] = field(default_factory=list)
     examples_documents: list[str] = field(default_factory=list)
     tokens: list[str] = field(default_factory=list)
@@ -32,7 +32,7 @@ class AnnotationResult:
             "document_name": self.document_name,
             "metrics": self.metrics.to_json(),
             "document_length": self.document_length,
-            "prompt_type": self.prompt_type,
+            "model": self.model,
             "examples_documents": self.examples_documents,
             "tokens": [str(token) for token in self.tokens],
             "recognized_entities": [

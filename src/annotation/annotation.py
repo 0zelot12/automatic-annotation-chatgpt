@@ -91,9 +91,9 @@ def annotate_relations(
     return AnnotationResult(
         document_name=document.name,
         document_length=len(document.tokens),
-        prompt_type="<TODO>",
+        model=model_name,
         temperature=temperature,
-        examples_documents="<TODO>",
+        examples_documents=[document.name for document in training_documents],
         tokens=document.tokens,
         api_response=api_response.content,
         present_entities=document.entities,
