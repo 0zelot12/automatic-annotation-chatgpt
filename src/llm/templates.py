@@ -114,3 +114,8 @@ Now annotate the following text:
 
 {test_data}
 """
+
+# Nicht nur genau matchen
+# Prompt eventuell optimieren
+# Welche Fehlerklassen gibt es?
+#   Ähnlichkeitsindex berechnen
