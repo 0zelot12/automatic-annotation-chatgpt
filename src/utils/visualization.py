@@ -104,13 +104,19 @@ def generate_plots(data_path: str):
         d["metrics"]["relation_metrics"]["overall"]["f1_score"] for d in data
     ]
 
-    mean_f1_score = np.mean(f1_scores)
-    mean_f1_score_entity = np.mean(f1_scores_entity)
-    mean_f1_score_relation = np.mean(f1_scores_relation)
+    mean_f1_score = np.round(np.mean(f1_scores), 2)
+    mean_f1_score_entity = np.round(np.mean(f1_scores_entity), 2)
+    mean_f1_score_relation = np.round(np.mean(f1_scores_relation), 2)
 
-    print(f"Overall {mean_f1_score}")
-    print(f"Entity: {mean_f1_score_entity}")
-    print(f"Relation {mean_f1_score_relation}")
+    print(
+        f"(Overall) Mean F1-Score: {mean_f1_score} - Standard Deviation: {np.round(np.std(f1_scores), 2)}"
+    )
+    print(
+        f"(Entity) Mean F1-Score: {mean_f1_score_entity} - Standard Deviation: {np.round(np.std(f1_scores_entity), 2)}"
+    )
+    print(
+        f"(Relation) Mean F1-Score: {mean_f1_score_relation} - Standard Deviation: {np.round(np.std(f1_scores_relation), 2)}"
+    )
 
     entity_keys = [
         "actor",

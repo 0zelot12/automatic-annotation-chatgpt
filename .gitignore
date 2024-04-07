@@ -16,3 +16,5 @@ out/*.json
 **/__pycache__/
 
 src/scratchpad.py
+
+*.png
