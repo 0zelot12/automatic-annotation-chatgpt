@@ -55,76 +55,33 @@ def generate_horizontal_bar_chart(
     for i, value in enumerate(values):
         plt.text(value + 0.1, bar_positions[i], str(value), ha="left", va="center")
 
-    plt.savefig(f"{title}.png")
+    plt.savefig(f"{title.lower()}.png", dpi=700)
 
     if show:
         plt.show()
 
 
-def generate_scatterplot(path_1: str, path_2: str):
-    data_1 = []
-    for filename in os.listdir(path_1):
-        if filename.endswith(".json"):
-            filepath = os.path.join(path_1, filename)
-            with open(filepath, "r") as file:
-                json_data = json.load(file)
-                data_1.append(json_data)
-
-    plot_data_1 = []
-
-    for d in data_1:
-        plot_data_1.append(
-            {
-                "recall": d["metrics"]["recall"],
-                "precision": d["metrics"]["precision"],
-                "f1_score": d["metrics"]["f1_score"],
-                "document_length": len(d["tokens"]),
-            }
-        )
-
-    # Extract recall and precision values from the data
-    recalls_1 = [d["recall"] for d in plot_data_1]
-    precisions_1 = [d["precision"] for d in plot_data_1]
-    f1_scores_1 = [d["f1_score"] for d in plot_data_1]
-    lengths_1 = [d["document_length"] for d in plot_data_1]
-
-    data_2 = []
-    for filename in os.listdir(path_2):
-        if filename.endswith(".json"):
-            filepath = os.path.join(path_2, filename)
-            with open(filepath, "r") as file:
-                json_data = json.load(file)
-                data_2.append(json_data)
-
-    plot_data_2 = []
-
-    for d in data_2:
-        plot_data_2.append(
-            {
-                "recall": d["metrics"]["recall"],
-                "precision": d["metrics"]["precision"],
-                "f1_score": d["metrics"]["f1_score"],
-                "document_length": len(d["tokens"]),
-            }
-        )
-
-    # Extract recall and precision values from the data
-    recalls_2 = [d["recall"] for d in plot_data_2]
-    precisions_2 = [d["precision"] for d in plot_data_2]
-    f1_scores_2 = [d["f1_score"] for d in plot_data_2]
-    lengths_2 = [d["document_length"] for d in plot_data_2]
-
-    # Create scatter plot
+def generate_scatterplot(
+    x_values: list,
+    y_values: list,
+    x_label: str,
+    y_label: str,
+    show: bool,
+    title: str,
+):
     plt.figure(figsize=(8, 6))
-    plt.scatter(lengths_1, f1_scores_1, color="blue", alpha=0.5)
-    plt.scatter(lengths_2, f1_scores_2, color="red", alpha=0.5)
-    plt.title("Length and F1-Score")
-    plt.xlabel("Length (#Tokens)")
-    plt.ylabel("F1-Score")
+    plt.scatter(x_values, y_values, color="blue", alpha=0.5)
+    plt.title(title)
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
     plt.xlim(0.0, 800)
     plt.ylim(0.0, 1.0)
     plt.grid(True)
-    plt.show()
+
+    plt.savefig(f"{title.lower()}.png", dpi=700)
+
+    if show:
+        plt.show()
 
 
 def generate_plots(data_path: str):
@@ -201,14 +158,13 @@ def generate_plots(data_path: str):
         show=False,
     )
 
-    # lengths = [d["document_length"] for d in data]
+    lengths = [d["document_length"] for d in data]
 
-    # plt.figure(figsize=(8, 6))
-    # plt.scatter(lengths, f1_scores, color="blue", alpha=0.5)
-    # plt.title("Length and F1-Score")
-    # plt.xlabel("Length (#Tokens)")
-    # plt.ylabel("F1-Score")
-    # plt.xlim(0.0, 800)
-    # plt.ylim(0.0, 1.0)
-    # plt.grid(True)
-    # plt.show()
+    generate_scatterplot(
+        x_values=lengths,
+        y_values=f1_scores,
+        title="Length and F1-Score",
+        x_label="Length (#Tokens)",
+        y_label="F1-Score",
+        show=False,
+    )
