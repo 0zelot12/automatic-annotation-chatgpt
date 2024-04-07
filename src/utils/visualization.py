@@ -50,6 +50,7 @@ def generate_horizontal_bar_chart(
     plt.xlabel(xLabel)
     plt.ylabel(yLabel)
     plt.title(title)
+    plt.xlim(0.0, 1.0)
     plt.yticks(bar_positions, categories)
 
     for i, value in enumerate(values):
@@ -130,14 +131,23 @@ def generate_plots(data_path: str):
 
     mean_f1_scores_entity = {}
     for entity_key in entity_keys:
-        mean_f1_scores_entity[entity_key] = np.mean(
-            [d["metrics"]["entity_metrics"][entity_key]["f1_score"] for d in data]
+        mean_f1_scores_entity[entity_key] = np.round(
+            np.mean(
+                [d["metrics"]["entity_metrics"][entity_key]["f1_score"] for d in data]
+            ),
+            2,
         )
 
     mean_f1_scores_relations = {}
     for relation_key in relation_keys:
-        mean_f1_scores_relations[relation_key] = np.mean(
-            [d["metrics"]["relation_metrics"][relation_key]["f1_score"] for d in data]
+        mean_f1_scores_relations[relation_key] = np.round(
+            np.mean(
+                [
+                    d["metrics"]["relation_metrics"][relation_key]["f1_score"]
+                    for d in data
+                ]
+            ),
+            2,
         )
 
     generate_horizontal_bar_chart(
