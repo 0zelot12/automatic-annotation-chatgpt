@@ -9,7 +9,8 @@ from dotenv import load_dotenv
 
 from pet.pet_dataset import PetDataset
 
-from utils.helper import evaluate_results
+from utils.visualization import generate_plots
+
 from annotation.annotation import annotate_relations
 
 from server.server import start_server
@@ -78,7 +79,7 @@ def main() -> None:
     args = parser.parse_args()
 
     if args.subcommand == "evaluate":
-        evaluate_results(args.path)
+        generate_plots(args.path)
     elif args.subcommand == "server":
         start_server()
     elif args.subcommand == "annotate":

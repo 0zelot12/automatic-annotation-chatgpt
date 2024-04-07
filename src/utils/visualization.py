@@ -164,8 +164,7 @@ def generate_scatterplot(path_1: str, path_2: str):
     plt.show()
 
 
-if __name__ == "__main__":
-    data_path = "C:\\Users\\alauritz\\Desktop\\three-shot"
+def generate_plots(data_path: str):
     data = []
     for filename in os.listdir(data_path):
         if filename.endswith(".json"):
