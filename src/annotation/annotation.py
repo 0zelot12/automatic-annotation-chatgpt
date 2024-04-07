@@ -7,7 +7,6 @@ from langchain_core.messages import SystemMessage
 from langchain_openai import ChatOpenAI
 
 from metrics.annotation_metrics import AnnotationMetrics
-from metrics.base_metrics import BaseMetrics
 from pet.pet_document import PetDocument
 
 from llm.templates import (
@@ -23,6 +22,7 @@ from annotation.annotation_result import AnnotationResult
 from llm.model_response import ModelResponse
 
 from relation.relation import parse_relations
+
 from utils.helper import (
     calculate_entity_metrics,
     calculate_overall_metrics,
@@ -42,7 +42,8 @@ def annotate_relations(
         SystemMessage(
             content=(
                 "You are an expert in the field of process management. You assist in annotating relevant entities "
-                "and relations in natural language process descriptions. You will be provided with definitions of the entities you need to extract."
+                "and relations in natural language process descriptions. You will be provided with definitions of the "
+                "entities you need to extract."
             )
         )
     ]
@@ -76,7 +77,7 @@ def annotate_relations(
     recognized_entities = []
     for relation in recognized_relations:
         recognized_entities.extend([relation.source, relation.target])
-    recognized_entities = set(recognized_entities)
+    recognized_entities = list(set(recognized_entities))
 
     entity_metrics = calculate_entity_metrics(
         model_entities=recognized_entities, reference_entities=document.entities
