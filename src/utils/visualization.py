@@ -162,3 +162,89 @@ def generate_scatterplot(path_1: str, path_2: str):
     plt.ylim(0.0, 1.0)
     plt.grid(True)
     plt.show()
+
+
+if __name__ == "__main__":
+    data_path = "C:\\Users\\alauritz\\Desktop\\three-shot"
+    data = []
+    for filename in os.listdir(data_path):
+        if filename.endswith(".json"):
+            filepath = os.path.join(data_path, filename)
+            with open(filepath, "r") as file:
+                json_data = json.load(file)
+                data.append(json_data)
+
+    f1_scores = [d["metrics"]["overall_metrics"]["f1_score"] for d in data]
+
+    f1_scores_entity = [
+        d["metrics"]["entity_metrics"]["overall"]["f1_score"] for d in data
+    ]
+
+    f1_scores_relation = [
+        d["metrics"]["relation_metrics"]["overall"]["f1_score"] for d in data
+    ]
+
+    mean_f1_score = np.mean(f1_scores)
+    mean_f1_score_entity = np.mean(f1_scores_entity)
+    mean_f1_score_relation = np.mean(f1_scores_relation)
+
+    print(f"Overall {mean_f1_score}")
+    print(f"Entity: {mean_f1_score_entity}")
+    print(f"Relation {mean_f1_score_relation}")
+
+    entity_keys = [
+        "actor",
+        "activity",
+        "activity_data",
+        "and_gateway",
+        "xor_gateway",
+        "condition_specification",
+    ]
+
+    relation_keys = [
+        "actor_performer",
+        "actor_recipient",
+        "same_gateway",
+        "flow",
+        "uses",
+    ]
+
+    mean_f1_scores_entity = {}
+    for entity_key in entity_keys:
+        mean_f1_scores_entity[entity_key] = np.mean(
+            [d["metrics"]["entity_metrics"][entity_key]["f1_score"] for d in data]
+        )
+
+    mean_f1_scores_relations = {}
+    for relation_key in relation_keys:
+        mean_f1_scores_relations[relation_key] = np.mean(
+            [d["metrics"]["relation_metrics"][relation_key]["f1_score"] for d in data]
+        )
+
+    generate_horizontal_bar_chart(
+        values=list(mean_f1_scores_entity.values()),
+        categories=entity_keys,
+        title="F1-Scores and Entity Types",
+        xLabel="F1-Score",
+        yLabel="Entity Type",
+    )
+
+    generate_horizontal_bar_chart(
+        values=list(mean_f1_scores_relations.values()),
+        categories=relation_keys,
+        title="F1-Scores and Relation Types",
+        xLabel="F1-Score",
+        yLabel="Relation Type",
+    )
+
+    lengths = [d["document_length"] for d in data]
+
+    plt.figure(figsize=(8, 6))
+    plt.scatter(lengths, f1_scores, color="blue", alpha=0.5)
+    plt.title("Length and F1-Score")
+    plt.xlabel("Length (#Tokens)")
+    plt.ylabel("F1-Score")
+    plt.xlim(0.0, 800)
+    plt.ylim(0.0, 1.0)
+    plt.grid(True)
+    plt.show()
