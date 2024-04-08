@@ -177,7 +177,7 @@ class PetDataset:
         document = matching_rows.iloc[0]
         return plain_to_class(document)
 
-    def get_all_documents(self):
+    def get_all_documents(self) -> list[PetDocument]:
         documents = []
         for index, row in self._data.iterrows():
             documents.append(plain_to_class(row))
