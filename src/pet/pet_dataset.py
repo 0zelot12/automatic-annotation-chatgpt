@@ -1,5 +1,3 @@
-import platform
-
 import pandas as pd
 
 from typing import Tuple
@@ -178,6 +176,12 @@ class PetDataset:
         matching_rows = self._data[self._data["document name"] == document_name]
         document = matching_rows.iloc[0]
         return plain_to_class(document)
+
+    def get_all_documents(self):
+        documents = []
+        for index, row in self._data.iterrows():
+            documents.append(plain_to_class(row))
+        return documents
 
     def get_documents_by_name(self, document_names: list[str]) -> list[PetDocument]:
         documents = []
