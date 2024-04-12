@@ -15,6 +15,4 @@ out/*.json
 .DS_Store
 **/__pycache__/
 
-src/scratchpad.py
-
 *.png
