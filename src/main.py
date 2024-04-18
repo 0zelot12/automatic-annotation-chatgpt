@@ -52,6 +52,13 @@ def main() -> None:
     )
 
     annotate_parser.add_argument(
+        "--matching_mode",
+        required=False,
+        default="exact",
+        help="PLACEHOLDER",
+    )
+
+    annotate_parser.add_argument(
         "--training_documents",
         required=False,
         default=["doc-1.1"],

@@ -201,6 +201,63 @@ def calculate_entity_metrics(
     )
 
 
+def calculate_entity_partial(
+    model_entities: list[Entity], reference_entities: list[Entity]
+) -> EntityMetrics:
+
+    true_positives_overall = 0
+    true_positives = {}
+    for entity_type in EntityType:
+        true_positives[entity_type] = 0
+
+    for gold_entity in reference_entities:
+        index_range_gold = gold_entity.get_index_range()
+        for entity in model_entities:
+            index_range = entity.get_index_range()
+            intersection = np.intersect1d(index_range, index_range_gold)
+            if entity.type == gold_entity.type and len(intersection) > 1:
+                true_positives_overall += 1
+                true_positives[entity.type] += 1
+
+    overall_precision = get_precision(true_positives_overall, len(model_entities))
+    overall_recall = get_recall(true_positives_overall, len(reference_entities))
+    overall_f1_score = get_f1_score(overall_precision, overall_recall)
+
+    metrics = {}
+    for entity_type in EntityType:
+        entity_present = count_entities_of_type(reference_entities, entity_type)
+        entity_recognized = count_entities_of_type(model_entities, entity_type)
+        precision = get_precision(true_positives[entity_type], entity_recognized)
+        recall = get_recall(true_positives[entity_type], entity_present)
+        f1_score = get_f1_score(precision, recall)
+        metrics[entity_type] = BaseMetrics(
+            precision=precision,
+            recall=recall,
+            f1_score=f1_score,
+            true_positives=true_positives[entity_type],
+            false_positives=entity_recognized - true_positives[entity_type],
+            reference_count=entity_present,
+        )
+
+    return EntityMetrics(
+        overall=BaseMetrics(
+            precision=overall_precision,
+            recall=overall_recall,
+            f1_score=overall_f1_score,
+            true_positives=true_positives_overall,
+            false_positives=len(model_entities) - true_positives_overall,
+            reference_count=len(reference_entities),
+        ),
+        actor=metrics[EntityType.ACTOR],
+        activity=metrics[EntityType.ACTIVITY],
+        activity_data=metrics[EntityType.ACTIVITY_DATA],
+        and_gateway=metrics[EntityType.AND_GATEWAY],
+        xor_gateway=metrics[EntityType.XOR_GATEWAY],
+        condition_specification=metrics[EntityType.CONDITION_SPECIFICATION],
+        further_specification=metrics[EntityType.FURTHER_SPECIFICATION],
+    )
+
+
 def calculate_relation_metrics(
     model_relations: list[Relation], reference_relations: list[Relation]
 ) -> RelationMetrics:
@@ -359,6 +416,7 @@ def convert_to_template_example(document: PetDocument) -> list[str]:
 
     return result
 
+
 def split_list(lst, n):
     if n <= 0:
         raise ValueError("Number of splits must be greater than 0")
@@ -371,6 +429,7 @@ def split_list(lst, n):
     result = [lst[sum(sizes[:i]) : sum(sizes[: i + 1])] for i in range(n)]
 
     return result
+
 
 def k_fold(data: list, k: int):
     np.random.seed(42)

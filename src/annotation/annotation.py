@@ -25,6 +25,7 @@ from relation.relation import parse_relations
 
 from utils.helper import (
     calculate_entity_metrics,
+    calculate_entity_partial,
     calculate_overall_metrics,
     calculate_relation_metrics,
     parse_entities,
@@ -79,7 +80,7 @@ def annotate_relations(
         recognized_entities.extend([relation.source, relation.target])
     recognized_entities = list(set(recognized_entities))
 
-    entity_metrics = calculate_entity_metrics(
+    entity_metrics = calculate_entity_partial(
         model_entities=recognized_entities, reference_entities=document.entities
     )
 
