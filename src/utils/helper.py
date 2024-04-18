@@ -1,5 +1,4 @@
-import json
-import os
+import numpy as np
 
 from metrics.entity_metrics import EntityMetrics, BaseMetrics
 
@@ -359,3 +358,24 @@ def convert_to_template_example(document: PetDocument) -> list[str]:
             continue
 
     return result
+
+def split_list(lst, n):
+    if n <= 0:
+        raise ValueError("Number of splits must be greater than 0")
+
+    chunk_size = len(lst) // n
+    remainder = len(lst) % n
+
+    sizes = [chunk_size + 1 if i < remainder else chunk_size for i in range(n)]
+
+    result = [lst[sum(sizes[:i]) : sum(sizes[: i + 1])] for i in range(n)]
+
+    return result
+
+def k_fold(data: list, k: int):
+    np.random.seed(42)
+    np.random.shuffle(data)
+
+    k_fold = split_list(data, k)
+
+    return k_fold[0], k_fold[1:]
