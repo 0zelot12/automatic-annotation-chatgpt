@@ -85,6 +85,32 @@ def generate_scatterplot(
         plt.show()
 
 
+def generate_scatterplot_comperative(
+    x_values_1: list,
+    y_values_1: list,
+    x_values_2: list,
+    y_values_2: list,
+    x_label: str,
+    y_label: str,
+    show: bool,
+    title: str,
+):
+    plt.figure(figsize=(8, 6))
+    plt.scatter(x_values_1, y_values_1, color="blue", alpha=0.5)
+    plt.scatter(x_values_2, y_values_2, color="green", alpha=0.5)
+    plt.title(title)
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
+    plt.xlim(0.0, 800)
+    plt.ylim(0.0, 1.0)
+    plt.grid(True)
+
+    plt.savefig(f"{title.lower()}.png", dpi=700)
+
+    if show:
+        plt.show()
+
+
 def generate_plots(data_path: str):
     data = []
     for filename in os.listdir(data_path):
