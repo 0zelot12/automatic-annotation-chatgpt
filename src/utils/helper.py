@@ -375,7 +375,4 @@ def split_list(lst, n):
 def k_fold(data: list, k: int):
     np.random.seed(42)
     np.random.shuffle(data)
-
-    k_fold = split_list(data, k)
-
-    return k_fold[0], k_fold[1:]
+    return split_list(data, k)
