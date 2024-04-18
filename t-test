@@ -1,0 +1,23 @@
+Nullhypothese -> Der Mittelwert der Grundgesamtheit ist gleich dem vorgegebenen Wert
+
+Alternativhypothese -> Der Mittelwert der Grundgesamtheit ist nicht gleich dem vorgegebenen Wert
+
+Im Schnitt erreicht ein Model einen F1-Score von 0.5. Die Kontextlänge wurde verdoppelt. Wirkt sich der vergrößerte Kontext positiv auf den F1-Score aus?
+
+Nullhypothese: Der vergrößerte Kontext hat keinen oder einen negativen Einfluss auf den F1-Score.
+
+Alternativhypothese: Der vergrößerte Kontext hat einen positiven Einfluss auf den F1-Score.
+
+Signifikanzniveau a = 0.05
+
+Anzahl der Stichprobenwerte n = 45
+
+Mittelwert x = 0.5
+
+Standardabweichung s = ?
+
+Standardfehler der Mittelwertes = sx = s/sqrt(n)
+
+T-Wert t = (x - µ) / sx
+
+Freiheitsgrade df = n - 1 = 45 - 1 = 44 
