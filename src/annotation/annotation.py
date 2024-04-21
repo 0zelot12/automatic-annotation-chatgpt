@@ -1,13 +1,13 @@
 import logging
 
 from langchain.prompts import ChatPromptTemplate
-from langchain.output_parsers import PydanticOutputParser
 from langchain.prompts import HumanMessagePromptTemplate
 from langchain_core.messages import SystemMessage
 from langchain_openai import ChatOpenAI
 
 from metrics.annotation_metrics import AnnotationMetrics
 from metrics.base_metrics import BaseMetrics
+
 from pet.pet_document import PetDocument
 
 from llm.templates import (
@@ -19,16 +19,16 @@ from llm.templates import (
 from llm.utils import generate_model_entities, generate_model_relations, to_model_tokens
 
 from annotation.annotation_result import AnnotationResult
-from llm.model_response import ModelResponse
 
 from relation.relation import parse_relations
+
+from entity.entity import parse_entities
 
 from utils.helper import (
     calculate_entity_metrics,
     calculate_entity_partial,
     calculate_overall_metrics,
     calculate_relation_metrics,
-    parse_entities,
 )
 
 
@@ -232,10 +232,10 @@ def annotate_entities(
         {"training_data": training_data, "test_data": test_data}
     )
 
-    recognized_entities = parse_relations(
-        relation_strings=api_response.content.splitlines(), tokens=document.tokens
+    recognized_entities = parse_entities(
+        entity_strings=api_response.content.splitlines(), tokens=document.tokens
     )
 
-    print(api_response)
+    print(recognized_entities)
 
     return None

@@ -2,7 +2,7 @@ import numpy as np
 
 from dataclasses import dataclass, field
 
-from entity.entity_type import EntityType
+from entity.entity_type import EntityType, str_to_entity_type
 
 
 @dataclass
@@ -32,3 +32,24 @@ class Entity:
             "start_index": self.end_index,
             "tokens": self.tokens,
         }
+
+
+def parse_entities(entity_strings: list[str], tokens: list[str]) -> list[Entity]:
+    entities = []
+    for entitiy_string in entity_strings:
+        items = entitiy_string.split(",")
+
+        entity_type = str_to_entity_type(items[0])
+        start_index = int(items[1].replace("$", ""))
+        end_index = int(items[2].replace("$", ""))
+
+        parsed_entity = Entity(
+            type=entity_type,
+            start_index=start_index,
+            end_index=end_index,
+            tokens=tokens[start_index : end_index + 1],
+        )
+
+        entities.append(parsed_entity)
+
+    return entities

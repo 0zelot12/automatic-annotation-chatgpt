@@ -44,18 +44,29 @@ def extract_entities(
     entities = []
     current_entity = None
     for ner_tag, token, index in zip(ner_tags, tokens, range(len(ner_tags))):
+        # Entity of length one
         if ner_tag == begin_tag and ner_tags[index + 1] != inside_tag:
-            entities.append(Entity(type=entity_type, start_index=index, tokens=[token]))
+            entities.append(
+                Entity(
+                    type=entity_type, start_index=index, end_index=index, tokens=[token]
+                )
+            )
             current_entity = None
             continue
+        # Start of entity
         if ner_tag == begin_tag and ner_tags[index + 1] == inside_tag:
-            current_entity = Entity(type=entity_type, start_index=index, tokens=[token])
+            current_entity = Entity(
+                type=entity_type, start_index=index, end_index=-1, tokens=[token]
+            )
             continue
+        # Ongoing entity
         if ner_tag == inside_tag and ner_tags[index + 1] == inside_tag:
             current_entity.tokens.append(token)
             continue
+        # End of entity
         if ner_tag == inside_tag and ner_tags[index + 1] != inside_tag:
             current_entity.tokens.append(token)
+            current_entity.end_index = index
             entities.append(current_entity)
             current_entity = None
 
