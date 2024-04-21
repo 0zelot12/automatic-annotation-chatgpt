@@ -18,6 +18,7 @@ from annotation.annotation import (
     annotate_entities,
     annotate_relations_and_entities,
     annotate_relations_with_gold_entities,
+    annotate_relations_with_entities,
 )
 
 from server.server import start_server
@@ -113,7 +114,7 @@ def main() -> None:
             document = pet_dataset.get_document_by_name(
                 document_name=args.document_name
             )
-            for i in range(args.retries):
+            for i in range(int(args.retries)):
                 print(f"Processing {document.name}")
                 try:
                     if args.mode == "entity":
@@ -136,7 +137,7 @@ def main() -> None:
                         save_to_file(
                             path="./out", file_name=document.name, data=overall_metrics
                         )
-                    elif args.mode == "relation-with-reference":
+                    elif args.mode == "relation-with-gold":
                         relation_metrics = annotate_relations_with_gold_entities(
                             document=document,
                             model_name=args.model,
@@ -146,6 +147,17 @@ def main() -> None:
                         save_to_file(
                             path="./out", file_name=document.name, data=relation_metrics
                         )
+                    elif args.mode == "relation-with-reference":
+                        relation_metrics = annotate_relations_with_entities(
+                            document=document,
+                            model_name=args.model,
+                            training_documents=training_documents,
+                            temperature=args.temperature,
+                        )
+                        save_to_file(
+                            path="./out", file_name=document.name, data=relation_metrics
+                        )
+                        print(relation_metrics.metrics.overall_metrics.f1_score)
                     print(f"Processing {document.name} completed ✅")
                     break
                 except Exception as e:
@@ -156,7 +168,7 @@ def main() -> None:
             number_of_documents = pet_dataset.get_number_of_documents()
             for i in range(number_of_documents):
                 document = pet_dataset.get_document(i)
-                for j in range(args.retries):
+                for j in range(int(args.retries)):
                     print(f"Processing {document.name}")
                     try:
                         annotation_result = annotate_relations_and_entities(

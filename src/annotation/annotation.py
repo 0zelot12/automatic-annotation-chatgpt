@@ -200,7 +200,7 @@ def annotate_relations_with_entities(
     temperature: float,
 ) -> AnnotationResult:
 
-    entity_metrics = annotate_entities(
+    entity_metrics, recognized_entities = annotate_entities(
         document=document,
         model_name=model_name,
         training_documents=training_documents,
@@ -224,7 +224,7 @@ def annotate_relations_with_entities(
         training_data += f"{training_tokens}\n{training_relations}\n"
 
     test_tokens = to_model_tokens(document.tokens)
-    test_entities = generate_model_entities(entity_metrics.recognized_entities)
+    test_entities = generate_model_entities(recognized_entities)
 
     test_data = f"{test_tokens}\n{test_entities}"
 
@@ -262,7 +262,7 @@ def annotate_relations_with_entities(
         tokens=document.tokens,
         api_response=api_response.content,
         present_entities=document.entities,
-        recognized_entities=entity_metrics.recognized_entities,
+        recognized_entities=recognized_entities,
         present_relations=document.relations,
         recognized_relations=recognized_relations,
         metrics=AnnotationMetrics(
@@ -278,7 +278,7 @@ def annotate_entities(
     training_documents: list[PetDocument],
     model_name: str,
     temperature: float,
-) -> AnnotationResult:
+):
     chat_messages = [
         SystemMessage(
             content=(
@@ -320,4 +320,4 @@ def annotate_entities(
         model_entities=recognized_entities, reference_entities=document.entities
     )
 
-    return entity_metrics
+    return entity_metrics, recognized_entities

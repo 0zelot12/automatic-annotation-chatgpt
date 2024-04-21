@@ -42,14 +42,14 @@ def parse_relations(relation_strings: list[str], tokens: list[str]) -> list[Rela
             type=target_entity_type,
             start_index=target_start_index,
             end_index=target_end_index,
-            tokens=tokens[target_start_index:target_end_index],
+            tokens=tokens[target_start_index : target_end_index + 1],
         )
 
         source = Entity(
             type=source_entity_type,
             start_index=source_start_index,
-            end_index=source.end_index,
-            tokens=tokens[source_start_index:source_end_index],
+            end_index=source_end_index,
+            tokens=tokens[source_start_index : source_end_index + 1],
         )
 
         relations.append(Relation(source=source, target=target, type=relation_type))
