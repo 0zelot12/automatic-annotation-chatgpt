@@ -262,7 +262,7 @@ def annotate_relations_with_entities(
         tokens=document.tokens,
         api_response=api_response.content,
         present_entities=document.entities,
-        recognized_entities=[],
+        recognized_entities=entity_metrics.recognized_entities,
         present_relations=document.relations,
         recognized_relations=recognized_relations,
         metrics=AnnotationMetrics(
