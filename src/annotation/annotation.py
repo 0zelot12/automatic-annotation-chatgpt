@@ -200,12 +200,12 @@ def annotate_relations_with_entities(
     temperature: float,
 ) -> AnnotationResult:
 
-    reference_entities = annotate_entities(
+    entity_metrics = annotate_entities(
         document=document,
         model_name=model_name,
         training_documents=training_documents,
         temperature=temperature,
-    ).recognized_entities
+    )
 
     chat_messages = [
         SystemMessage(
@@ -224,7 +224,7 @@ def annotate_relations_with_entities(
         training_data += f"{training_tokens}\n{training_relations}\n"
 
     test_tokens = to_model_tokens(document.tokens)
-    test_entities = generate_model_entities(reference_entities)
+    test_entities = generate_model_entities(entity_metrics.recognized_entities)
 
     test_data = f"{test_tokens}\n{test_entities}"
 
@@ -251,6 +251,8 @@ def annotate_relations_with_entities(
         model_relations=recognized_relations, reference_relations=document.relations
     )
 
+    overall_metrics = calculate_overall_metrics(entity_metrics, relation_metrics)
+
     return AnnotationResult(
         document_name=document.name,
         document_length=len(document.tokens),
@@ -264,22 +266,8 @@ def annotate_relations_with_entities(
         present_relations=document.relations,
         recognized_relations=recognized_relations,
         metrics=AnnotationMetrics(
-            overall_metrics=BaseMetrics(
-                f1_score=0.0,
-                precision=0.0,
-                recall=0.0,
-                true_positives=0,
-                false_positives=0,
-                reference_count=0,
-            ),
-            entity_metrics=BaseMetrics(
-                f1_score=0.0,
-                precision=0.0,
-                recall=0.0,
-                true_positives=0,
-                false_positives=0,
-                reference_count=0,
-            ),
+            overall_metrics=overall_metrics,
+            entity_metrics=entity_metrics,
             relation_metrics=relation_metrics,
         ),
     )
