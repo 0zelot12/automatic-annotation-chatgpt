@@ -29,7 +29,7 @@ folder_path = f"./out/cross-validation-{datetime.now().strftime('%Y-%m-%d-%H-%M-
 if not os.path.exists(folder_path):
     os.makedirs(folder_path)
     for i in range(5):
-        os.makedirs(f"./{folder_path}/fold-{i}")
+        os.makedirs(f"./{folder_path}/{i}")
 
 for k in range(5):
     training_folds = []
