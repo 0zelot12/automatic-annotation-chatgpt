@@ -164,3 +164,37 @@ Now annotate the following text:
 
 {test_data}
 """
+
+entity_template = """
+
+Entity definitions:
+
+1. ACTOR: Any organizational element responsible for the action. Include the whole noun phrase including articles.
+2. ACTIVITY: The main activity in the text. Include only the verbal or nominal expression of the activity, excluding any objects, prepositional phrases, articles, or conjunctions.
+3. ACTIVITY_DATA: Object representing the data or the object directly used by an activity.
+4. FURTHER_SPECIFICATION: The Further Specification layer captures important details of an Activity, such as the mean or the manner of its execution.
+5. AND_GATEWAY: An AND_GATEWAY is a point in a process model where a single thread of control splits into multiple threads of control which are executed concurrently.
+6. XOR_GATEWAY: An XOR_GATEWAY is a point in a process model where one of several branches is chosen.
+7. CONDITION_SPECIFICATION: A CONDITION_SPECIFICATION element specifies the condition that must be satisfied by a process instance in order to be allowed to take a particular branch of a control point. Therefore, this process element is always bound with an XOR_GATEWAY.
+
+Use the following format to describe the entities:
+
+<entityType>,<startTokenId>,<endTokenId>
+<entityType>,<startTokenId>,<endTokenId>
+<entityType>,<startTokenId>,<endTokenId>
+
+The input text has the following format:
+
+<token>$<tokenId>
+<token>$<tokenId>
+<token>$<tokenId>
+<token>$<tokenId>
+
+This is an example:
+
+{training_data}
+
+Now annotate the following text:
+
+{test_data}
+"""
