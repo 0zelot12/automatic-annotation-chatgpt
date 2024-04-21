@@ -1,3 +1,5 @@
+from datetime import datetime
+import pickle
 import numpy as np
 
 from metrics.entity_metrics import EntityMetrics, BaseMetrics
@@ -10,50 +12,6 @@ from entity.entity_tag import EntityTag
 from pet.pet_document import PetDocument
 from relation.relation import Relation
 from relation.relation_type import RelationType
-
-
-# TODO: Move to entity.py
-def parse_entities(response: list[str]) -> list[Entity]:
-    entities = []
-    current_entity = None
-    offset = 0
-    for r, i in zip(response, range(0, len(response))):
-        if r == "<ACTOR>":
-            offset += 1
-            current_entity = Entity(
-                type=EntityType.ACTOR, start_index=(i - offset) + 1, tokens=[]
-            )
-            continue
-        if r == "</ACTOR>":
-            offset += 1
-            entities.append(current_entity)
-            current_entity = None
-            continue
-        if r == "<ACTIVITY>":
-            offset += 1
-            current_entity = Entity(
-                type=EntityType.ACTIVITY, start_index=(i - offset) + 1, tokens=[]
-            )
-            continue
-        if r == "</ACTIVITY>":
-            offset += 1
-            entities.append(current_entity)
-            current_entity = None
-            continue
-        if r == "<ACTIVITY_DATA>":
-            offset += 1
-            current_entity = Entity(
-                type=EntityType.ACTIVITY_DATA, start_index=(i - offset) + 1, tokens=[]
-            )
-            continue
-        if r == "</ACTIVITY_DATA>":
-            offset += 1
-            entities.append(current_entity)
-            current_entity = None
-            continue
-        if current_entity:
-            current_entity.tokens.append(r)
-    return entities
 
 
 # TODO: Move to entity.py
@@ -312,111 +270,6 @@ def calculate_relation_metrics(
     )
 
 
-# TODO: Move to pet_document.py
-def convert_to_template_example(document: PetDocument) -> list[str]:
-    result = []
-    for token, ner_tag, index in zip(
-        document.tokens, document.ner_tags, range(len(document.tokens))
-    ):
-
-        # ACTOR
-        if (
-            ner_tag == EntityTag.B_ACTOR
-            and document.ner_tags[index + 1] == EntityTag.I_ACTOR
-        ):
-            result.append("<ACTOR>")
-            result.append(f"{token}")
-            continue
-        if (
-            ner_tag == EntityTag.B_ACTOR
-            and document.ner_tags[index + 1] != EntityTag.I_ACTOR
-        ):
-            result.append("<ACTOR>")
-            result.append(f"{token}")
-            result.append("</ACTOR>")
-            continue
-        if (
-            ner_tag == EntityTag.I_ACTOR
-            and document.ner_tags[index + 1] == EntityTag.I_ACTOR
-        ):
-            result.append(f"{token}")
-            continue
-        if (
-            ner_tag == EntityTag.I_ACTOR
-            and document.ner_tags[index + 1] != EntityTag.I_ACTOR
-        ):
-            result.append(f"{token}")
-            result.append("</ACTOR>")
-            continue
-
-        # ACTIVITY
-        if (
-            ner_tag == EntityTag.B_ACTIVITY
-            and document.ner_tags[index + 1] == EntityTag.I_ACTIVITY
-        ):
-            result.append("<ACTIVITY>")
-            result.append(f"{token}")
-            continue
-        if (
-            ner_tag == EntityTag.B_ACTIVITY
-            and document.ner_tags[index + 1] != EntityTag.I_ACTIVITY
-        ):
-            result.append("<ACTIVITY>")
-            result.append(f"{token}")
-            result.append("</ACTIVITY>")
-            continue
-        if (
-            ner_tag == EntityTag.I_ACTIVITY
-            and document.ner_tags[index + 1] == EntityTag.I_ACTIVITY
-        ):
-            result.append(f"{token}")
-            continue
-        if (
-            ner_tag == EntityTag.I_ACTIVITY
-            and document.ner_tags[index + 1] != EntityTag.I_ACTIVITY
-        ):
-            result.append(f"{token}")
-            result.append("</ACTIVITY>")
-            continue
-
-        # ACTIVITY_DATA
-        if (
-            ner_tag == EntityTag.B_ACTIVITY_DATA
-            and document.ner_tags[index + 1] == EntityTag.I_ACTIVITY_DATA
-        ):
-            result.append("<ACTIVITY_DATA>")
-            result.append(f"{token}")
-            continue
-        if (
-            ner_tag == EntityTag.B_ACTIVITY_DATA
-            and document.ner_tags[index + 1] != EntityTag.I_ACTIVITY_DATA
-        ):
-            result.append("<ACTIVITY_DATA>")
-            result.append(f"{token}")
-            result.append("</ACTIVITY_DATA>")
-            continue
-        if (
-            ner_tag == EntityTag.I_ACTIVITY_DATA
-            and document.ner_tags[index + 1] == EntityTag.I_ACTIVITY_DATA
-        ):
-            result.append(f"{token}")
-            continue
-        if (
-            ner_tag == EntityTag.I_ACTIVITY_DATA
-            and document.ner_tags[index + 1] != EntityTag.I_ACTIVITY_DATA
-        ):
-            result.append(f"{token}")
-            result.append("</ACTIVITY_DATA>")
-            continue
-
-        # NO_ENTITY
-        if ner_tag == EntityTag.NO_ENTITY:
-            result.append(f"{token}")
-            continue
-
-    return result
-
-
 def split_list(lst, n):
     if n <= 0:
         raise ValueError("Number of splits must be greater than 0")
@@ -435,3 +288,15 @@ def k_fold(data: list, k: int):
     np.random.seed(42)
     np.random.shuffle(data)
     return split_list(data, k)
+
+
+def save_to_file(
+    path: str,
+    file_name: str,
+    data: any,
+) -> None:
+    with open(
+        f"./out/{file_name}-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.pickle",
+        "wb",
+    ) as f:
+        pickle.dump(data, f)

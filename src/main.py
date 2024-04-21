@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 
 from pet.pet_dataset import PetDataset
 
+from utils.helper import save_to_file
 from utils.visualization import generate_plots
 
 from annotation.annotation import (
@@ -122,15 +123,29 @@ def main() -> None:
                             model_name=args.model,
                             temperature=args.temperature,
                         )
-                        with open(
-                            f"./out/{document.name}-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.pickle",
-                            "wb",
-                        ) as f:
-                            pickle.dump(entity_metrics, f)
+                        save_to_file(
+                            path="./out", file_name=document.name, data=entity_metrics
+                        )
                     elif args.mode == "relation":
-                        print("relations")
+                        overall_metrics = annotate_relations_and_entities(
+                            document=document,
+                            model_name=args.model,
+                            training_documents=training_documents,
+                            temperature=args.temperature,
+                        )
+                        save_to_file(
+                            path="./out", file_name=document.name, data=overall_metrics
+                        )
                     elif args.mode == "relation-with-reference":
-                        print("relation-with-reference")
+                        relation_metrics = annotate_relations_with_gold_entities(
+                            document=document,
+                            model_name=args.model,
+                            training_documents=training_documents,
+                            temperature=args.temperature,
+                        )
+                        save_to_file(
+                            path="./out", file_name=document.name, data=relation_metrics
+                        )
                     print(f"Processing {document.name} completed ✅")
                     break
                 except Exception as e:
