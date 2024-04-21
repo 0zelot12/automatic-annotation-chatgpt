@@ -236,6 +236,8 @@ def annotate_entities(
         entity_strings=api_response.content.splitlines(), tokens=document.tokens
     )
 
-    print(recognized_entities)
+    entity_metrics = calculate_entity_metrics(
+        model_entities=recognized_entities, reference_entities=document.entities
+    )
 
-    return None
+    return entity_metrics

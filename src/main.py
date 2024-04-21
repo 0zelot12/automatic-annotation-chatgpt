@@ -116,12 +116,17 @@ def main() -> None:
                 print(f"Processing {document.name}")
                 try:
                     if args.mode == "entity":
-                        annotate_entities(
+                        entity_metrics = annotate_entities(
                             document=document,
                             training_documents=training_documents,
                             model_name=args.model,
                             temperature=args.temperature,
                         )
+                        with open(
+                            f"./out/{document.name}-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.pickle",
+                            "wb",
+                        ) as f:
+                            pickle.dump(entity_metrics, f)
                     elif args.mode == "relation":
                         print("relations")
                     elif args.mode == "relation-with-reference":
