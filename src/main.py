@@ -2,7 +2,6 @@ import argparse
 import os
 import logging
 import traceback
-import pickle
 
 
 from datetime import datetime
