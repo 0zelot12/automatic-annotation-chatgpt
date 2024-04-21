@@ -1,5 +1,3 @@
-import logging
-
 from langchain.prompts import ChatPromptTemplate
 from langchain.prompts import HumanMessagePromptTemplate
 from langchain_core.messages import SystemMessage

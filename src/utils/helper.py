@@ -1,15 +1,16 @@
-from datetime import datetime
 import pickle
+
 import numpy as np
+
+from datetime import datetime
 
 from metrics.entity_metrics import EntityMetrics, BaseMetrics
 
 from metrics.relation_metrics import RelationMetrics
+
 from entity.entity import Entity
 from entity.entity_type import EntityType
-from entity.entity_tag import EntityTag
 
-from pet.pet_document import PetDocument
 from relation.relation import Relation
 from relation.relation_type import RelationType
 
