@@ -1,5 +1,8 @@
+from datetime import datetime
+
 import logging
 import traceback
+import os
 
 import numpy as np
 
@@ -21,6 +24,12 @@ documents = dataset.get_all_documents()
 np.random.seed(42)
 
 folds = k_fold(data=documents, k=5)
+
+folder_path = f"./out/cross-validation-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}"
+if not os.path.exists(folder_path):
+    os.makedirs(folder_path)
+    for i in range(5):
+        os.makedirs(f"./{folder_path}/fold-{i}")
 
 for k in range(5):
     training_folds = []
