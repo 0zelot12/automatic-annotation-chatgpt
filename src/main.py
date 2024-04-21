@@ -154,10 +154,7 @@ def main() -> None:
                             training_documents=training_documents,
                             temperature=args.temperature,
                         )
-                        save_to_file(
-                            path="./out", file_name=document.name, data=relation_metrics
-                        )
-                        print(relation_metrics.metrics.overall_metrics.f1_score)
+                        relation_metrics.save_to_file("./out")
                     print(f"Processing {document.name} completed ✅")
                     break
                 except Exception as e:
