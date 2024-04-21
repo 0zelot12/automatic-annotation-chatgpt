@@ -212,7 +212,7 @@ def annotate_entities(
     training_data = ""
     for training_document in training_documents:
         training_tokens = to_model_tokens(training_document.tokens)
-        training_entities = generate_model_entities(training_document.relations)
+        training_entities = generate_model_entities(training_document.entities)
         training_data += f"{training_tokens}\n{training_entities}\n"
 
     test_tokens = to_model_tokens(document.tokens)
@@ -230,6 +230,10 @@ def annotate_entities(
 
     api_response = chain.invoke(
         {"training_data": training_data, "test_data": test_data}
+    )
+
+    recognized_entities = parse_relations(
+        relation_strings=api_response.content.splitlines(), tokens=document.tokens
     )
 
     print(api_response)

@@ -2,6 +2,8 @@ import argparse
 import os
 import logging
 import traceback
+import pickle
+
 
 from datetime import datetime
 
@@ -11,7 +13,11 @@ from pet.pet_dataset import PetDataset
 
 from utils.visualization import generate_plots
 
-from annotation.annotation import annotate_relations
+from annotation.annotation import (
+    annotate_entities,
+    annotate_relations_and_entities,
+    annotate_relations_with_gold_entities,
+)
 
 from server.server import start_server
 
@@ -59,6 +65,13 @@ def main() -> None:
     )
 
     annotate_parser.add_argument(
+        "--mode",
+        required=False,
+        default="relations",
+        help="Mode to annotate documents. The options are relation, relation-with-reference and entity",
+    )
+
+    annotate_parser.add_argument(
         "--training_documents",
         required=False,
         default=["doc-1.1"],
@@ -102,13 +115,17 @@ def main() -> None:
             for i in range(args.retries):
                 print(f"Processing {document.name}")
                 try:
-                    annotation_result = annotate_relations(
-                        document=document,
-                        model_name=args.model,
-                        training_documents=training_documents,
-                        temperature=args.temperature,
-                    )
-                    annotation_result.save_to_file("./out")
+                    if args.mode == "entity":
+                        annotate_entities(
+                            document=document,
+                            training_documents=training_documents,
+                            model_name=args.model,
+                            temperature=args.temperature,
+                        )
+                    elif args.mode == "relation":
+                        print("relations")
+                    elif args.mode == "relation-with-reference":
+                        print("relation-with-reference")
                     print(f"Processing {document.name} completed ✅")
                     break
                 except Exception as e:
@@ -122,7 +139,7 @@ def main() -> None:
                 for j in range(args.retries):
                     print(f"Processing {document.name}")
                     try:
-                        annotation_result = annotate_relations(
+                        annotation_result = annotate_relations_and_entities(
                             document=document,
                             model_name=args.model,
                             training_documents=training_documents,

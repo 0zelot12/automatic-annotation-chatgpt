@@ -20,15 +20,7 @@ class Relation:
         }
 
     def __str__(self) -> str:
-        source_length = (
-            0 if len(self.source.tokens) == 1 else len(self.source.tokens) - 1
-        )
-
-        target_length = (
-            0 if len(self.target.tokens) == 1 else len(self.target.tokens) - 1
-        )
-
-        return f"{self.source.type.name},${self.source.start_index},${self.source.start_index + source_length},{self.type.name},{self.target.type.name},${self.target.start_index},${self.target.start_index + target_length}\n"
+        return f"{self.source.type.name},${self.source.start_index},${self.source.end_index},{self.type.name},{self.target.type.name},${self.target.start_index},${self.target.end_index}\n"
 
 
 def parse_relations(relation_strings: list[str], tokens: list[str]) -> list[Relation]:
@@ -49,12 +41,14 @@ def parse_relations(relation_strings: list[str], tokens: list[str]) -> list[Rela
         target = Entity(
             type=target_entity_type,
             start_index=target_start_index,
+            end_index=target_end_index,
             tokens=tokens[target_start_index:target_end_index],
         )
 
         source = Entity(
             type=source_entity_type,
             start_index=source_start_index,
+            end_index=source.end_index,
             tokens=tokens[source_start_index:source_end_index],
         )
 
