@@ -63,14 +63,14 @@ def main() -> None:
         "--matching_mode",
         required=False,
         default="exact",
-        help="PLACEHOLDER",
+        help="TODO",
     )
 
     annotate_parser.add_argument(
         "--mode",
         required=False,
         default="relations",
-        help="Mode to annotate documents. The options are relation, relation-with-reference and entity",
+        help="Mode to annotate documents. The options are relation, entity, relation-with-gold and relation-with-reference",
     )
 
     annotate_parser.add_argument(
@@ -79,7 +79,7 @@ def main() -> None:
         default=["doc-1.1"],
         metavar="string",
         nargs="+",
-        help="First document to use as example",
+        help="Documents to use as example",
     )
 
     annotate_parser.add_argument(
