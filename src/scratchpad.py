@@ -14,22 +14,27 @@ dataset = PetDataset()
 documents = dataset.get_all_documents()
 documents = [d.name for d in documents]
 
+test_doc = dataset.get_document_by_name("doc-10.1")
 
-test_document = dataset.get_document_by_name("doc-9.1")
+for entity in test_doc.entities:
+    print(entity)
 
-recognized_relations = parse_relations(
-    mock_api_response.splitlines(), test_document.tokens
-)
 
-recognized_entities: list[Entity] = []
-for relation in recognized_relations:
-    recognized_entities.extend([relation.source, relation.target])
-recognized_entities = list(set(recognized_entities))
+# test_document = dataset.get_document_by_name("doc-9.1")
 
-for gold_entity in test_document.entities:
-    index_range_gold = gold_entity.get_index_range()
-    for entity in recognized_entities:
-        index_range = entity.get_index_range()
-        intersection = np.intersect1d(index_range, index_range_gold)
-        if entity.type == gold_entity.type and len(intersection) > 1:
-            print(f"MATCH: {index_range} <-> {index_range_gold}")
+# recognized_relations = parse_relations(
+#     mock_api_response.splitlines(), test_document.tokens
+# )
+
+# recognized_entities: list[Entity] = []
+# for relation in recognized_relations:
+#     recognized_entities.extend([relation.source, relation.target])
+# recognized_entities = list(set(recognized_entities))
+
+# for gold_entity in test_document.entities:
+#     index_range_gold = gold_entity.get_index_range()
+#     for entity in recognized_entities:
+#         index_range = entity.get_index_range()
+#         intersection = np.intersect1d(index_range, index_range_gold)
+#         if entity.type == gold_entity.type and len(intersection) > 1:
+#             print(f"MATCH: {index_range} <-> {index_range_gold}")
