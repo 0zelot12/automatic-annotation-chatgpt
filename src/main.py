@@ -114,7 +114,7 @@ def main() -> None:
                 document_name=args.document_name
             )
             for i in range(int(args.retries)):
-                print(f"Processing {document.name}")
+                print(f"Processing {document.name} ⏳")
                 try:
                     if args.mode == "entity":
                         entity_metrics = annotate_entities(
@@ -133,9 +133,7 @@ def main() -> None:
                             training_documents=training_documents,
                             temperature=args.temperature,
                         )
-                        save_to_file(
-                            path="./out", file_name=document.name, data=overall_metrics
-                        )
+                        overall_metrics.save_to_file("./out")
                     elif args.mode == "relation-with-gold":
                         relation_metrics = annotate_relations_with_gold_entities(
                             document=document,

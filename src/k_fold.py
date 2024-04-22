@@ -23,8 +23,9 @@ documents = dataset.get_all_documents()
 
 np.random.seed(42)
 
+np.random.shuffle(documents)
+
 folds = k_fold(data=documents, k=5)
-np.random.shuffle(folds)
 
 folder_path = f"./out/cross-validation-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}"
 if not os.path.exists(folder_path):
@@ -33,6 +34,7 @@ if not os.path.exists(folder_path):
         os.makedirs(f"./{folder_path}/{i}")
 
 for k in range(5):
+    print(f"➡️ RUN {k + 1} of {5} ⬅️")
     training_folds = []
     test_fold = []
     for fold, index in zip(folds, range(0, len(folds))):
@@ -42,17 +44,17 @@ for k in range(5):
             training_folds.append(fold)
     training_documents = list(chain(*training_folds))
     test_documents = test_fold
+    np.random.shuffle(training_documents)
     for test_document in test_documents:
         print(f"Processing {test_document.name}")
-        print(f"Test Documents: {[d.name for d in training_documents[0:2]]}")
         try:
-            # annotation_result = annotate_relations_and_entities(
-            #     document=test_document,
-            #     model_name="gpt-3.5-turbo",
-            #     training_documents=training_documents,
-            #     temperature=0.7,
-            # )
-            # annotation_result.save_to_file("./out")
+            annotation_result = annotate_relations_and_entities(
+                document=test_document,
+                model_name="gpt-3.5-turbo",
+                training_documents=training_documents[0:2],
+                temperature=0.7,
+            )
+            annotation_result.save_to_file(f"{folder_path}/{k}")
             print(f"Processing {test_document.name} completed ✅")
         except Exception as e:
             print(f"Processing {test_document.name} failed ❌")
