@@ -287,15 +287,3 @@ def split_list(lst, n):
 
 def k_fold(data: list, k: int):
     return split_list(data, k)
-
-
-def save_to_file(
-    path: str,
-    file_name: str,
-    data: any,
-) -> None:
-    with open(
-        f"./out/{file_name}-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.pickle",
-        "wb",
-    ) as f:
-        pickle.dump(data, f)

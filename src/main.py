@@ -3,14 +3,12 @@ import os
 import logging
 import traceback
 
-
 from datetime import datetime
 
 from dotenv import load_dotenv
 
 from pet.pet_dataset import PetDataset
 
-from utils.helper import save_to_file
 from utils.visualization import generate_plots
 
 from annotation.annotation import (
@@ -122,9 +120,6 @@ def main() -> None:
                             training_documents=training_documents,
                             model_name=args.model,
                             temperature=args.temperature,
-                        )
-                        save_to_file(
-                            path="./out", file_name=document.name, data=entity_metrics
                         )
                     elif args.mode == "relation":
                         overall_metrics = annotate_relations_and_entities(
