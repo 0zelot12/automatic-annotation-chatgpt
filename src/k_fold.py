@@ -34,6 +34,7 @@ if not os.path.exists(folder_path):
         os.makedirs(f"./{folder_path}/{i}")
 
 for k in range(5):
+    np.random.seed(43)
     print(f"➡️ RUN {k + 1} of {5} ⬅️")
     training_folds = []
     test_fold = []
@@ -46,17 +47,19 @@ for k in range(5):
     test_documents = test_fold
     np.random.shuffle(training_documents)
     for test_document in test_documents:
-        print(f"Processing {test_document.name}")
-        try:
-            annotation_result = annotate_relations_and_entities(
-                document=test_document,
-                model_name="gpt-3.5-turbo",
-                training_documents=training_documents[0:2],
-                temperature=0.7,
-            )
-            annotation_result.save_to_file(f"{folder_path}/{k}")
-            print(f"Processing {test_document.name} completed ✅")
-        except Exception as e:
-            print(f"Processing {test_document.name} failed ❌")
-            logging.error("An exception occurred: %s", str(e))
-            logging.error(traceback.format_exc())
+        print(f"Processing {test_document.name} ⏳")
+        for i in range(0, 3):
+            try:
+                annotation_result = annotate_relations_and_entities(
+                    document=test_document,
+                    model_name="gpt-3.5-turbo",
+                    training_documents=training_documents[0:2],
+                    temperature=0.7,
+                )
+                annotation_result.save_to_file(f"{folder_path}/{k}")
+                print(f"Processing {test_document.name} completed ✅")
+                break
+            except Exception as e:
+                print(f"Processing {test_document.name} failed ❌")
+                logging.error("An exception occurred: %s", str(e))
+                logging.error(traceback.format_exc())
