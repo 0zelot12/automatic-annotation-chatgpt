@@ -33,6 +33,8 @@ if not os.path.exists(folder_path):
     for i in range(5):
         os.makedirs(f"./{folder_path}/{i}")
 
+# 42 43 44 45 46
+
 for k in range(5):
     np.random.seed(43)
     print(f"➡️ RUN {k + 1} of {5} ⬅️")

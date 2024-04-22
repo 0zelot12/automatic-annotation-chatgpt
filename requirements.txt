@@ -8,3 +8,4 @@ fastparquet
 flask
 flask_cors
 pytest
+ipykernel
