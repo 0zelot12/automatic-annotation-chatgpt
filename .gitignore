@@ -17,5 +17,8 @@ out/*.pickle
 **/__pycache__/
 
 *.png
+*.ipynb
 
 src/scratchpad.py
+
+data/results
