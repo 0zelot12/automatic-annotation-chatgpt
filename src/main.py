@@ -141,9 +141,7 @@ def main() -> None:
                             training_documents=training_documents,
                             temperature=args.temperature,
                         )
-                        save_to_file(
-                            path="./out", file_name=document.name, data=relation_metrics
-                        )
+                        relation_metrics.save_to_file("./out")
                     elif args.mode == "relation-with-reference":
                         relation_metrics = annotate_relations_with_entities(
                             document=document,
