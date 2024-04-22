@@ -29,7 +29,7 @@ class Entity:
         return {
             "type": self.type.name,
             "start_index": self.start_index,
-            "start_index": self.end_index,
+            "end_index": self.end_index,
             "tokens": self.tokens,
         }
 
