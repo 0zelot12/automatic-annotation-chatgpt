@@ -13,7 +13,7 @@ from utils.visualization import generate_plots
 
 from annotation.annotation import (
     annotate_entities,
-    annotate_relations_and_entities,
+    annotate_relations,
     annotate_relations_with_gold_entities,
     annotate_relations_with_entities,
 )
@@ -122,7 +122,7 @@ def main() -> None:
                             temperature=args.temperature,
                         )
                     elif args.mode == "relation":
-                        overall_metrics = annotate_relations_and_entities(
+                        overall_metrics = annotate_relations(
                             document=document,
                             model_name=args.model,
                             training_documents=training_documents,

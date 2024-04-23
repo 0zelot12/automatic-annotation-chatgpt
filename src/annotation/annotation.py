@@ -30,7 +30,7 @@ from utils.helper import (
 )
 
 
-def annotate_relations_and_entities(
+def annotate_relations(
     document: PetDocument,
     training_documents: list[PetDocument],
     model_name: str,

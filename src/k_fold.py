@@ -9,7 +9,7 @@ import numpy as np
 
 from dotenv import load_dotenv
 
-from annotation.annotation import annotate_relations_with_gold_entities
+from annotation.annotation import 
 
 from pet.pet_dataset import PetDataset
 from utils.helper import k_fold
