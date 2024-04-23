@@ -9,7 +9,7 @@ import numpy as np
 
 from dotenv import load_dotenv
 
-from annotation.annotation import 
+from annotation.annotation import annotate_relations_with_entities
 
 from pet.pet_dataset import PetDataset
 from utils.helper import k_fold
@@ -47,7 +47,7 @@ for j in range(5):
             print(f"\t\t Processing {test_document.name} ⏳")
             for i in range(0, 5):
                 try:
-                    annotation_result = annotate_relations_with_gold_entities(
+                    annotation_result = annotate_relations_with_entities(
                         document=test_document,
                         model_name="gpt-3.5-turbo",
                         training_documents=training_documents[0:2],
