@@ -151,6 +151,7 @@ def generate_plots(data_path: str):
         "and_gateway",
         "xor_gateway",
         "condition_specification",
+        "further_specification",
     ]
 
     relation_keys = [
@@ -159,6 +160,7 @@ def generate_plots(data_path: str):
         "same_gateway",
         "flow",
         "uses",
+        "further_specification",
     ]
 
     mean_f1_scores_entity = {}
