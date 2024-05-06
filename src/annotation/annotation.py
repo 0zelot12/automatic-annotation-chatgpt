@@ -111,7 +111,7 @@ def annotate_relations(
         {"training_data": training_data, "test_data": test_data}
     )
 
-    recognized_relations = parse_relations(
+    recognized_relations, relation_errors = parse_relations(
         relation_strings=api_response.content.splitlines(), tokens=document.tokens
     )
 
@@ -135,6 +135,7 @@ def annotate_relations(
         document_length=len(document.tokens),
         model=model_name,
         temperature=temperature,
+        errors=len(relation_errors),
         examples_documents=[document.name for document in training_documents],
         tokens=document.tokens,
         api_response=api_response.content,
@@ -192,7 +193,7 @@ def annotate_relations_with_gold_entities(
         {"training_data": training_data, "test_data": test_data}
     )
 
-    recognized_relations = parse_relations(
+    recognized_relations, relation_errors = parse_relations(
         relation_strings=api_response.content.splitlines(), tokens=document.tokens
     )
 
@@ -207,6 +208,7 @@ def annotate_relations_with_gold_entities(
         temperature=temperature,
         examples_documents=[document.name for document in training_documents],
         tokens=document.tokens,
+        errors=len(relation_errors),
         api_response=api_response.content,
         present_entities=document.entities,
         recognized_entities=[],
@@ -284,7 +286,7 @@ def annotate_relations_with_entities(
         {"training_data": training_data, "test_data": test_data}
     )
 
-    recognized_relations = parse_relations(
+    recognized_relations, relation_errors = parse_relations(
         relation_strings=api_response.content.splitlines(), tokens=document.tokens
     )
 
@@ -302,6 +304,7 @@ def annotate_relations_with_entities(
         examples_documents=[document.name for document in training_documents],
         tokens=document.tokens,
         api_response=api_response.content,
+        errors=len(relation_errors),
         present_entities=document.entities,
         recognized_entities=recognized_entities,
         present_relations=document.relations,

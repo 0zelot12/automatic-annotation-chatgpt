@@ -25,33 +25,37 @@ class Relation:
 
 def parse_relations(relation_strings: list[str], tokens: list[str]) -> list[Relation]:
     relations = []
+    errors = []
     for relation_string in relation_strings:
-        items = relation_string.split(",")
+        try:
+            items = relation_string.split(",")
 
-        source_entity_type = str_to_entity_type(items[0])
-        source_start_index = int(items[1].replace("$", ""))
-        source_end_index = int(items[2].replace("$", ""))
+            source_entity_type = str_to_entity_type(items[0])
+            source_start_index = int(items[1].replace("$", ""))
+            source_end_index = int(items[2].replace("$", ""))
 
-        relation_type = str_to_relation_type(items[3])
+            relation_type = str_to_relation_type(items[3])
 
-        target_entity_type = str_to_entity_type(items[4])
-        target_start_index = int(items[5].replace("$", ""))
-        target_end_index = int(items[6].replace("$", ""))
+            target_entity_type = str_to_entity_type(items[4])
+            target_start_index = int(items[5].replace("$", ""))
+            target_end_index = int(items[6].replace("$", ""))
 
-        target = Entity(
-            type=target_entity_type,
-            start_index=target_start_index,
-            end_index=target_end_index,
-            tokens=tokens[target_start_index : target_end_index + 1],
-        )
+            target = Entity(
+                type=target_entity_type,
+                start_index=target_start_index,
+                end_index=target_end_index,
+                tokens=tokens[target_start_index : target_end_index + 1],
+            )
 
-        source = Entity(
-            type=source_entity_type,
-            start_index=source_start_index,
-            end_index=source_end_index,
-            tokens=tokens[source_start_index : source_end_index + 1],
-        )
+            source = Entity(
+                type=source_entity_type,
+                start_index=source_start_index,
+                end_index=source_end_index,
+                tokens=tokens[source_start_index : source_end_index + 1],
+            )
 
-        relations.append(Relation(source=source, target=target, type=relation_type))
+            relations.append(Relation(source=source, target=target, type=relation_type))
+        except:
+            errors.append(relation_string)
 
-    return relations
+    return relations, errors

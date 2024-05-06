@@ -9,8 +9,6 @@ from entity.entity import Entity
 
 from relation.relation import Relation
 
-# TODO: Write a test to check if AnnotationResult can be saved to a file
-
 
 @dataclass
 class AnnotationResult:
@@ -19,6 +17,7 @@ class AnnotationResult:
     metrics: AnnotationMetrics
     temperature: float
     model: str
+    errors: int
     api_response: list[str] = field(default_factory=list)
     examples_documents: list[str] = field(default_factory=list)
     tokens: list[str] = field(default_factory=list)
@@ -46,6 +45,7 @@ class AnnotationResult:
                 relation.to_json() for relation in self.recognized_relations
             ],
             "api_response": self.api_response,
+            "errors": self.errors,
         }
 
     # TODO: Extract a generic method that saves JSON objects
