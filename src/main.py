@@ -73,7 +73,7 @@ def main() -> None:
     annotate_parser.add_argument(
         "--training_documents",
         required=False,
-        default=["doc-1.1"],
+        default=[],
         metavar="string",
         nargs="+",
         help="Documents to use as example",

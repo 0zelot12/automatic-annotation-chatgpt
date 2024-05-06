@@ -12,7 +12,7 @@ Entity definitions:
 
 Relation definitions:
 
-1. ACTOR_PERFOMER: If an actor is responsible for an activity mark it as ACTOR_PERFORMER.
+1. ACTOR_PERFORMER: If an actor is responsible for an activity mark it as ACTOR_PERFORMER.
 2. ACTOR_RECIPIENT: If an actor receives data or a trigger from an ACTIVITY mark it as ACTOR_RECIPIENT.
 3. FURTHER_SPECIFICATION: If there are important details of an ACTIVITY mark it as FURTHER_SPECIFICATION and link it to its ACTIVITY.
 4. USES: If ACTIVITY_DATA is an object or data that is used by an ACTIVITY. 
@@ -55,7 +55,7 @@ Entity definitions:
 
 Relation definitions:
 
-1. ACTOR_PERFOMER: If an actor is responsible for an activity mark it as ACTOR_PERFORMER.
+1. ACTOR_PERFORMER: If an actor is responsible for an activity mark it as ACTOR_PERFORMER.
 2. ACTOR_RECIPIENT: If an actor receives data or a trigger from an ACTIVITY mark it as ACTOR_RECIPIENT.
 3. FURTHER_SPECIFICATION: If there are important details of an ACTIVITY mark it as FURTHER_SPECIFICATION and link it to its ACTIVITY.
 4. USES: If ACTIVITY_DATA is an object or data that is used by an ACTIVITY. 
