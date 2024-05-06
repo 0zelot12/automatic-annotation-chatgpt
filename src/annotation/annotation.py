@@ -30,6 +30,49 @@ from utils.helper import (
 )
 
 
+def get_failure_annotation(
+    document: PetDocument,
+    training_documents: list[PetDocument],
+    model_name: str,
+    temperature: float,
+) -> AnnotationResult:
+    recognized_relations = []
+    recognized_entities = []
+
+    for relation in recognized_relations:
+        recognized_entities.extend([relation.source, relation.target])
+    recognized_entities = list(set(recognized_entities))
+
+    entity_metrics = calculate_entity_metrics(
+        model_entities=recognized_entities, reference_entities=document.entities
+    )
+
+    relation_metrics = calculate_relation_metrics(
+        model_relations=recognized_relations, reference_relations=document.relations
+    )
+
+    overall_metrics = calculate_overall_metrics(entity_metrics, relation_metrics)
+
+    return AnnotationResult(
+        document_name=document.name,
+        document_length=len(document.tokens),
+        model=model_name,
+        temperature=temperature,
+        examples_documents=[document.name for document in training_documents],
+        tokens=document.tokens,
+        api_response="",
+        present_entities=document.entities,
+        recognized_entities=recognized_entities,
+        present_relations=document.relations,
+        recognized_relations=recognized_relations,
+        metrics=AnnotationMetrics(
+            overall_metrics=overall_metrics,
+            entity_metrics=entity_metrics,
+            relation_metrics=relation_metrics,
+        ),
+    )
+
+
 def annotate_relations(
     document: PetDocument,
     training_documents: list[PetDocument],

@@ -1,7 +1,6 @@
 from datetime import datetime
 
 import logging
-import pickle
 import traceback
 import os
 
@@ -9,7 +8,7 @@ import numpy as np
 
 from dotenv import load_dotenv
 
-from annotation.annotation import annotate_relations
+from annotation.annotation import annotate_relations, get_failure_annotation
 
 from pet.pet_dataset import PetDataset
 from utils.helper import k_fold
@@ -60,3 +59,11 @@ for j in range(5):
                     print(f"\t\t Processing {test_document.name} failed ❌")
                     logging.error("An exception occurred: %s", str(e))
                     logging.error(traceback.format_exc())
+                    if i == 4:
+                        annotation_result = get_failure_annotation(
+                            document=test_document,
+                            model_name="gpt-3.5-turbo",
+                            training_documents=training_documents[0:2],
+                            temperature=1.1,
+                        )
+                        annotation_result.save_to_file(f"{folder_path}/{k}")
