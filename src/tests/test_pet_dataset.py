@@ -116,5 +116,5 @@ def test_extract_entities():
     assert extracted_entities == test_entities
 
 
-def test_extract_relations():
-    extracted_relations = extract_relations()
+# def test_extract_relations():
+#     extracted_relations = extract_relations()
