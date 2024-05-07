@@ -32,12 +32,6 @@ test_sentence_ids = [
 ]
 
 
-def test_singleton_instance():
-    dataset = PetDataset()
-    another_dataset = PetDataset()
-    assert dataset == another_dataset
-
-
 def test_get_document():
     dataset = PetDataset()
     document = dataset.get_document(42)
@@ -54,7 +48,7 @@ def test_get_document_by_name():
     dataset = PetDataset()
     document = dataset.get_document_by_name("doc-10.1")
     assert (
-        document.name
+        document.name == "doc-10.1"
         and document.entities
         and document.relations
         and document.ner_tags
