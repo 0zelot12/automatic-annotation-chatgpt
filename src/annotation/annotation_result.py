@@ -18,6 +18,7 @@ class AnnotationResult:
     temperature: float
     model: str
     errors: int
+    context_length: int
     api_response: list[str] = field(default_factory=list)
     examples_documents: list[str] = field(default_factory=list)
     tokens: list[str] = field(default_factory=list)
@@ -46,6 +47,7 @@ class AnnotationResult:
             ],
             "api_response": self.api_response,
             "errors": self.errors,
+            "context_legnth": self.context_length,
         }
 
     # TODO: Extract a generic method that saves JSON objects
