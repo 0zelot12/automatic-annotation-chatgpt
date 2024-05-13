@@ -47,7 +47,7 @@ class AnnotationResult:
             ],
             "api_response": self.api_response,
             "errors": self.errors,
-            "context_legnth": self.context_length,
+            "context_length": self.context_length,
         }
 
     # TODO: Extract a generic method that saves JSON objects
