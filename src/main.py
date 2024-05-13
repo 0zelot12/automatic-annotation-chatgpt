@@ -158,7 +158,7 @@ def main() -> None:
                 for j in range(int(args.retries)):
                     print(f"Processing {document.name}")
                     try:
-                        annotation_result = annotate_relations_and_entities(
+                        annotation_result = annotate_relations(
                             document=document,
                             model_name=args.model,
                             training_documents=training_documents,
