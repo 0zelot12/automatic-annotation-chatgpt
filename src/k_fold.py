@@ -49,8 +49,8 @@ for j in range(5):
                     annotation_result = annotate_relations(
                         document=test_document,
                         model_name="gpt-3.5-turbo",
-                        training_documents=training_documents[0:1],
-                        temperature=0.7,
+                        training_documents=training_documents[0:2],
+                        temperature=0.3,
                     )
                     annotation_result.save_to_file(f"{folder_path}/{k}")
                     print(f"\t\t Processing {test_document.name} completed ✅")
