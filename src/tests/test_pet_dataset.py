@@ -114,7 +114,3 @@ def test_extract_entities():
         ner_tags=test_ner_tags, entity_type=EntityType.ACTOR, tokens=test_tokens
     )
     assert extracted_entities == test_entities
-
-
-# def test_extract_relations():
-#     extracted_relations = extract_relations()
