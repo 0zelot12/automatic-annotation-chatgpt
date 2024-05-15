@@ -24,7 +24,6 @@ from entity.entity import parse_entities
 
 from utils.helper import (
     calculate_entity_metrics,
-    calculate_entity_partial,
     calculate_overall_metrics,
     calculate_relation_metrics,
 )
