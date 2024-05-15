@@ -42,3 +42,9 @@ def test_parse_relations():
     assert errors == []
     for relation, test_relation in zip(relations, test_relation_strings):
         assert str(relation).replace("\n", "") == test_relation
+
+    recognized_entities = []
+    for relation in relations:
+        recognized_entities.extend([relation.source, relation.target])
+    recognized_entities = list(set(recognized_entities))
+    assert len(recognized_entities) == 3
