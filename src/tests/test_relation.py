@@ -1,4 +1,4 @@
-from relation.relation import parse_relations, Relation
+from relation.relation import parse_relations
 
 test_relation_strings = [
     "ACTIVITY,$1,$1,ACTOR_PERFORMER,ACTOR,$0,$0",
